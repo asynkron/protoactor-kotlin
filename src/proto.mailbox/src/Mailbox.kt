@@ -35,20 +35,21 @@ open internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: I
         }
     }
     private fun runAsync () : Unit {
-        val done : Boolean = processMessages()
-        if (done)
-            return
+        processMessages()
 
         _status.set(MailboxStatus.Idle)
         if (_systemMessages.hasMessages || _suspended && _userMailbox.hasMessages) {
             schedule()
+        } else {
+            for (stat in _stats) {
+                stat.mailboxEmpty()
+            }
         }
-        return
     }
-    private fun processMessages () : Boolean {
+    private fun processMessages ()  {
         var msg : Any? = null
         try {
-            for (i in 0..300 /*_dispatcher?.throughput*/) {
+            for (i in 0.._dispatcher!!.throughput) {
                 msg = _systemMessages.pop()
                 if (msg != null) {
                     if (msg is SuspendMailbox) {
@@ -78,7 +79,6 @@ open internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: I
         catch (e : Exception) {
             _invoker!!.escalateFailure(e, msg!!)
         }
-        return true
     }
 
     protected fun schedule () {
