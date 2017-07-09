@@ -1,7 +1,7 @@
 package proto.mailbox
 
 interface IMessageInvoker {
-    fun invokeSystemMessageAsync (msg : Any) : Task
-    fun invokeUserMessageAsync (msg : Any) : Task
+    fun invokeSystemMessageAsync (msg : Any) : Unit
+    fun invokeUserMessageAsync (msg : Any) : Unit
     fun escalateFailure (reason : Exception, message : Any)
 }

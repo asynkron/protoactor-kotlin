@@ -2,20 +2,15 @@ package proto.mailbox
 
 import java.util.concurrent.atomic.AtomicInteger
 
-open internal class DefaultMailbox : IMailbox {
-    private val _stats : Array<IMailboxStatistics>
-    private val _systemMessages : IMailboxQueue
-    private val _userMailbox : IMailboxQueue
+open internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailboxQueue, stats: Array<IMailboxStatistics>) : IMailbox {
+    private val _stats : Array<IMailboxStatistics> = stats
+    private val _systemMessages : IMailboxQueue = systemMessages
+    private val _userMailbox : IMailboxQueue = userMailbox
+    private val _status : AtomicInteger = AtomicInteger(MailboxStatus.Idle)
     private var _dispatcher : IDispatcher? = null
     private var _invoker : IMessageInvoker? = null
-    private var _status : AtomicInteger = AtomicInteger(MailboxStatus.Idle)
     private var _suspended : Boolean = false
 
-    constructor(systemMessages : IMailboxQueue, userMailbox : IMailboxQueue, stats : Array<IMailboxStatistics>)  {
-        _systemMessages = systemMessages
-        _userMailbox = userMailbox
-        _stats = stats
-    }
     override fun postUserMessage (msg : Any) {
         _userMailbox.push(msg)
         for (stats in _stats) {
@@ -39,69 +34,57 @@ open internal class DefaultMailbox : IMailbox {
             stats.mailboxStarted()
         }
     }
-    private fun runAsync () : Task {
+    private fun runAsync () : Unit {
         val done : Boolean = processMessages()
         if (done)
-            return Task.fromResult(0)
+            return
 
         _status.set(MailboxStatus.Idle)
         if (_systemMessages.hasMessages || _suspended && _userMailbox.hasMessages) {
             schedule()
         }
-        return Task.fromResult(0)
+        return
     }
     private fun processMessages () : Boolean {
         var msg : Any? = null
-        try  {
-            for () {
-                if (msg = _systemMessages.pop() != null) {
+        try {
+            for (i in 0..300 /*_dispatcher?.throughput*/) {
+                msg = _systemMessages.pop()
+                if (msg != null) {
                     if (msg is SuspendMailbox) {
                         _suspended = true
+                    } else if (msg is ResumeMailbox){
+                        _suspended = false
                     }
-                    var t : Task = _invoker.invokeSystemMessageAsync(msg)
-                    if (t.isFaulted) {
-                        _invoker.escalateFailure(t.exception, msg)
-                    }
-                    if (t.isCompleted) {
-                        t.continueWith(rescheduleOnTaskComplete, msg)
-                        return false
-                    }
-                    for () {
-                        _stats[si].messageReceived(msg)
+                    _invoker!!.invokeSystemMessageAsync(msg)
+
+                    for (stat in _stats) {
+                        stat.messageReceived(msg)
                     }
                 }
                 if (_suspended) {
-                }
-                if (msg = _userMailbox.pop() != null) {
-                    var t : Task = _invoker.invokeUserMessageAsync(msg)
-                    if (t.isFaulted) {
-                        _invoker.escalateFailure(t.exception, msg)
-                    }
-                    if (t.isCompleted) {
-                        t.continueWith(rescheduleOnTaskComplete, msg)
-                        return false
-                    }
-                    for () {
-                        _stats[si].messageReceived(msg)
+                } else {
+                    msg = _userMailbox.pop()
+                    if (msg != null) {
+                        _invoker!!.invokeUserMessageAsync(msg)
+
+                        for (stat in _stats) {
+                            stat.messageReceived(msg)
+                        }
                     }
                 }
             }
         }
         catch (e : Exception) {
-            _invoker.escalateFailure(e, msg)
+            _invoker!!.escalateFailure(e, msg!!)
         }
         return true
     }
-    private fun rescheduleOnTaskComplete (task : Task, message : Any) {
-        if (task.isFaulted) {
-            _invoker.escalateFailure(task.exception, message)
-        }
-        _dispatcher.schedule(this::runAsync)
-    }
+
     protected fun schedule () {
         val wasIdle = _status.compareAndSet(MailboxStatus.Idle,MailboxStatus.Busy)
         if (wasIdle) {
-            _dispatcher?.schedule(this::runAsync)
+            _dispatcher!!.schedule(this::runAsync)
         }
     }
 }

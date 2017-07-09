@@ -7,7 +7,7 @@ open class UnboundedMailboxQueue : IMailboxQueue {
     override fun push (message : Any) {
         _messages.add(message)
     }
-    override fun pop () : Any {
+    override fun pop () : Any? {
         return _messages.poll()
     }
     override val hasMessages : Boolean
