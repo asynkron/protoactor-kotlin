@@ -2,6 +2,6 @@ package proto.mailbox
 
 class Dispatchers {
     companion object {
-        val defaultDispatcher : ThreadPoolDispatcher = ThreadPoolDispatcher()
+        val defaultDispatcher: ThreadPoolDispatcher = ThreadPoolDispatcher()
     }
 }
