@@ -3,7 +3,7 @@ package proto
 import java.time.Duration
 import java.util.*
 
-open class RestartStatistics(var failureCount: Int, lastFailureTime: Date) {
+open class RestartStatistics(var failureCount: Int, lastFailureTime: Date?) {
     var lastFailureTime: Date? = lastFailureTime
     fun fail() {
         failureCount++

@@ -115,14 +115,13 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         target.continueWith{t -> 
             self.sendSystemMessage(cont)
         }
-
     }
     override fun escalateFailure (reason : Exception, who : PID) {
         if (_restartStatistics == null) {
             _restartStatistics = RestartStatistics(0, null)
         }
-        var failure : Failure = Failure(who, reason, _restartStatistics)
-        if (parent == null) {
+        val failure : Failure = Failure(who, reason, _restartStatistics!!)
+        if (parent == NullPid) {
             handleRootFailure(failure)
         } else {
             self.sendSystemMessage(SuspendMailbox.Instance)
@@ -146,53 +145,17 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     override fun invokeSystemMessageAsync (msg : Any)  {
         try  {
-            val tmp = msg
-            when (tmp) {
-                is Started -> {
-                    val s = tmp
-                    invokeUserMessageAsync(s)
-                    return
-                }
-                is Stop -> {
-                    handleStopAsync()
-                    return
-                }
-                is Terminated -> {
-                    val t = tmp
-                    handleTerminatedAsync(t)
-                    return
-                }
-                is Watch -> {
-                    val w = tmp
-                    handleWatch(w)
-                    return
-                }
-                is Unwatch -> {
-                    val uw = tmp
-                    handleUnwatch(uw)
-                    return
-                }
-                is Failure -> {
-                    val f = tmp
-                    handleFailure(f)
-                    return
-                }
-                is Restart -> {
-                    handleRestartAsync()
-                    return
-                }
-                is SuspendMailbox -> {
-                    return
-                }
-                is ResumeMailbox -> {
-                    return
-                }
-                is Continuation -> {
-                    val cont = tmp
-                    _message = cont.message
-                    cont.action()
-                    return
-                }
+            when (msg) {
+                is Started -> invokeUserMessageAsync(msg)
+                is Stop -> handleStopAsync()
+                is Terminated -> handleTerminatedAsync(msg)
+                is Watch -> handleWatch(msg)
+                is Unwatch -> handleUnwatch(msg)
+                is Failure -> handleFailure(msg)
+                is Restart -> handleRestartAsync()
+                is SuspendMailbox -> {}
+                is ResumeMailbox -> {}
+                is Continuation -> handleContinuation(msg)
             }
         }
         catch (x : Exception) {
@@ -200,6 +163,12 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
             throw x
         }
     }
+
+    fun handleContinuation(msg : Continuation){
+        _message = msg.message
+        msg.action()
+    }
+
     override fun invokeUserMessageAsync (msg : Any) : Task {
         if (receiveTimeout > Duration.ZERO) {
             if (msg !is INotInfluenceReceiveTimeout) {
@@ -241,7 +210,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         _state = ContextState.Restarting
         invokeUserMessageAsync(Restarting.Instance)
         if (_children != null) {
-            for(child in _children) {
+            for(child in _children!!) {
                 child.stop()
             }
         }
@@ -261,8 +230,8 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
     }
     private fun handleFailure (msg : Failure) {
-        if (actorISupervisorStrategy) {
-            supervisor.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
+        if (actor is ISupervisorStrategy) {
+            actor.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
             return 
         }
         _supervisorStrategy.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
@@ -287,7 +256,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     private fun tryRestartOrTerminateAsync () : Task {
         cancelReceiveTimeout()
-        if (_children?.count > 0) {
+        if (_children != null && _children!!.count() > 0) {
             return 
         }
         val tmp = _state
@@ -322,7 +291,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
     }
     private fun disposeActorIfDisposable () {
-        if (actorIDisposable) {
+        if (actor is Disposable) {
             disposableActor.dispose()
         }
     }
