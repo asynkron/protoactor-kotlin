@@ -5,6 +5,8 @@ import proto.mailbox.SystemMessage
 abstract class AutoReceiveMessage {
 }
 
+class PoisonPill { //TODO: this is proto
+}
 class Terminated : SystemMessage() {
     //PROTO
 }
@@ -49,6 +51,6 @@ class Failure(val who: PID, val reason: Exception, val restartStatistics: Restar
 class Watch(val watcher: PID) : SystemMessage()
 class Unwatch(val watcher: PID) : SystemMessage()
 class Restart(val reason: Exception) : SystemMessage()
-data class Continuation(val action: () -> Task, val message: Any) : SystemMessage()
+data class Continuation(val action: suspend () -> Unit, val message: Any) : SystemMessage()
 interface INotInfluenceReceiveTimeout
 

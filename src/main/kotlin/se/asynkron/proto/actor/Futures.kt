@@ -1,7 +1,9 @@
 package proto.actor
 
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.channels.produce
 import java.time.Duration
+import kotlin.coroutines.experimental.CoroutineContext
 
 class FutureProcess<T> : Process {
 
@@ -16,17 +18,13 @@ class FutureProcess<T> : Process {
     val pid : PID
     override fun sendUserMessage (pid : PID, message : Any) {
         val (msg,sender,header)   = MessageEnvelope.unwrap(message)
-        if (msg is T) {
-            if (_cts != null && _cts.isCancellationRequested) {
-                return 
-            }
-            _tcs.trySetResult(Tenv.message)
-            pid.stop()
-        } else {
-            throw InvalidOperationException("Unexpected message.  Was type ${env.message.getType()} but expected ${T}")
-        }
+
     }
     override fun sendSystemMessage (pid : PID, message : Any) {
+    }
+
+    fun  deferred(): Deferred<T> {
+        return null;
     }
 }
 

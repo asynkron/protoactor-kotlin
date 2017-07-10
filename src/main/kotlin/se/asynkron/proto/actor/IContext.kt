@@ -19,7 +19,7 @@ interface IContext {
     fun unwatch (pid : PID)
     fun setReceiveTimeout (duration : Duration)
     fun cancelReceiveTimeout ()
-    suspend fun receiveAsync (message : Any) : Task
+    suspend fun receiveAsync (message : Any) : Unit
     fun tell (target : PID, message : Any)
     fun request (target : PID, message : Any)
 

@@ -1,7 +1,6 @@
 package proto.actor
 
 import kotlinx.coroutines.experimental.Deferred
-import proto.mailbox.UnboundedMailbox
 import java.time.Duration
 
 class PID(val address: String, val id: String) {
@@ -34,9 +33,10 @@ class PID(val address: String, val id: String) {
     fun <T> requestAsync(message: Any): Deferred<T> {
         return requestAsync(message, FutureProcess<T>())
     }
+
     private fun <T> requestAsync(message: Any, future: FutureProcess<T>): Deferred<T> {
         request(message, future.pid)
-        return //TODO
+        return future.deferred()
     }
 
     fun stop() {

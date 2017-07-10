@@ -1,39 +1,45 @@
 package proto.actor
 
+import kotlinx.coroutines.experimental.Deferred
 import java.time.Duration
 
 class ActorClient : ISenderContext {
-    private val _senderMiddleware : ((ISenderContext, PID, MessageEnvelope) -> Task)? = null
-    constructor(messageHeader : MessageHeader, middleware : Array<((ISenderContext, PID, MessageEnvelope) -> Task) -> (ISenderContext, PID, MessageEnvelope) -> Task>)  {
-        _senderMiddleware = (defaultSender, {inner, outer -> outer(inner)})
+    private var _senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
+
+    constructor(messageHeader: MessageHeader, middleware: Array<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit>) {
+        //_senderMiddleware = defaultSender, {inner, outer -> outer(inner)})
         headers = messageHeader
     }
-    override val message : Any?
+
+    override val message: Any?
         get() = null
-    override val headers : MessageHeader
-    private fun defaultSender (context : ISenderContext, target : PID, message : MessageEnvelope) : Task {
+    override val headers: MessageHeader
+    private fun defaultSender(context: ISenderContext, target: PID, message: MessageEnvelope): Unit {
         target.tell(message)
-        return Actor.Done
     }
-    fun tell (target : PID, message : Any) {
+
+    fun tell(target: PID, message: Any) {
         if (_senderMiddleware != null) {
             if (message is MessageEnvelope) {
-                _senderMiddleware.invoke(this, target, message)
+                _senderMiddleware!!.invoke(this, target, message)
             } else {
-                _senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
+                _senderMiddleware!!.invoke(this, target, MessageEnvelope(message, null, null))
             }
         } else {
             target.tell(message)
         }
     }
-    fun request (target : PID, message : Any, sender : PID) {
-        val envelope : MessageEnvelope = MessageEnvelope(message, sender, null)
+
+    fun request(target: PID, message: Any, sender: PID) {
+        val envelope: MessageEnvelope = MessageEnvelope(message, sender, null)
         tell(target, envelope)
     }
-    fun requestAsync (target : PID, message : Any, timeout : Duration) : Task {
+
+    fun <T> requestAsync(target: PID, message: Any, timeout: Duration): Deferred<T> {
         throw Exception()
     }
-    fun requestAsync (target : PID, message : Any) : Task {
+
+    fun <T> requestAsync(target: PID, message: Any): Deferred<T> {
         throw Exception()
     }
 }

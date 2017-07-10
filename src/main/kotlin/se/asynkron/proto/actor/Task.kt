@@ -4,5 +4,4 @@
 
 package proto.actor
 
-class Task{}
 

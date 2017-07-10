@@ -9,7 +9,6 @@ abstract class EventStreamImpl<T> {
     fun subscribe(action: (T) -> Unit, dispatcher: IDispatcher): EventSubscription<T> {
         val sub: EventSubscription<T> = EventSubscription(this, dispatcher, { x ->
             action(x)
-            Actor.Done
         })
 
         _subscriptions.put(sub.id, sub)

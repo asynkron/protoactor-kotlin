@@ -11,6 +11,7 @@ open class ProcessRegistry {
     private val _localActorRefs : HashedConcurrentDictionary = HashedConcurrentDictionary()
     private val _sequenceId : AtomicInteger = AtomicInteger(0)
     var address : String = NoHost
+
     fun registerHostResolver (resolver : (PID) -> Process) {
         _hostResolvers.add(resolver)
     }

@@ -2,20 +2,20 @@ package proto.actor
 
 import java.util.*
 
-class Behavior(receive: (IContext) -> Task) {
-    private val _behaviors : Stack<(IContext) -> Task> = Stack()
-    fun become (receive : (IContext) -> Task) {
+class Behavior( receive: suspend (IContext) -> Unit) {
+    private val _behaviors : Stack<suspend (IContext) -> Unit> = Stack()
+    fun become (receive : suspend (IContext) -> Unit) {
         _behaviors.clear()
         _behaviors.push(receive)
     }
-    fun becomeStacked (receive : (IContext) -> Task) {
+    fun becomeStacked (receive : suspend (IContext) -> Unit) {
         _behaviors.push(receive)
     }
     fun unbecomeStacked () {
         _behaviors.pop()
     }
-    fun receiveAsync (context : IContext) : Task {
-        val behavior : (IContext) -> Task = _behaviors.peek()
+    suspend fun receiveAsync (context : IContext) : Unit {
+        val behavior : suspend (IContext) -> Unit = _behaviors.peek()
         return behavior(context)
     }
 

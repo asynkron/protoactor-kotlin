@@ -11,15 +11,15 @@ internal enum class ContextState {
     None, Alive, Restarting, Stopping
 }
 
-class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: (IContext) -> Task, senderMiddleware: (ISenderContext, PID, MessageEnvelope) -> Unit, override val parent: PID?) : IMessageInvoker, IContext,ISenderContext, ISupervisor {
+class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: (IContext) -> Unit, senderMiddleware: (ISenderContext, PID, MessageEnvelope) -> Unit, override val parent: PID?) : IMessageInvoker, IContext,ISenderContext, ISupervisor {
     companion object {
-        internal fun defaultReceive (context : IContext) : Task {
+        suspend internal fun defaultReceive (context : IContext)  {
             val c : LocalContext = context as LocalContext
             if (c.message is PoisonPill) {
                 c.self.stop()
-                return Actor.Done
+                return
             }
-            return c.actor.receiveAsync(context)
+            c.actor.receiveAsync(context)
         }
         internal fun defaultSender (_ : ISenderContext, target : PID, envelope : MessageEnvelope) {
             target.ref()?.sendUserMessage(target, envelope)
@@ -27,7 +27,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     val EmptyChildren : Collection<PID> = listOf()
     private val _producer : () -> IActor = producer
-    private val _receiveMiddleware : (IContext) -> Task = receiveMiddleware
+    private val _receiveMiddleware : (IContext) -> Unit = receiveMiddleware
     private val _senderMiddleware : (ISenderContext, PID, MessageEnvelope) -> Unit = senderMiddleware
     private val _supervisorStrategy : ISupervisorStrategy = supervisorStrategy
     private var _children : MutableSet<PID>? = null
@@ -47,7 +47,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
             val (_,sender,_) = MessageEnvelope.unwrap(_message)
             return sender
         }
-    override val headers : MessageHeader = NullMessageHeader
+    override val headers : MessageHeader? = null
     override var receiveTimeout : Duration = Duration.ZERO
     override fun stash () {
         if (_stash == null) {
@@ -103,14 +103,14 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         _receiveTimeoutTimer = null
         receiveTimeout = Duration.ZERO
     }
-    suspend override fun receiveAsync (message : Any) : Task {
+    suspend override fun receiveAsync (message : Any) : Unit {
         return processMessageAsync(message)
     }
     override fun tell (target : PID, message : Any) {
         sendUserMessage(target, message)
     }
     override fun request (target : PID, message : Any) {
-        val messageEnvelope : MessageEnvelope = MessageEnvelope(message, self, NullMessageHeader)
+        val messageEnvelope : MessageEnvelope = MessageEnvelope(message, self, null)
         sendUserMessage(target, messageEnvelope)
     }
     override fun <T> requestAsync (target : PID, message : Any, timeout : Duration) : Deferred<T> {
@@ -190,14 +190,14 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     suspend override fun escalateFailure (reason : Exception, message : Any) {
         escalateFailure(reason, self)
     }
-    suspend private fun processMessageAsync (msg : Any) : Task {
+    suspend private fun processMessageAsync (msg : Any) : Unit {
         _message = msg
         return if (_receiveMiddleware != null) _receiveMiddleware(this) else defaultReceive(this)
     }
-    suspend private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : Deferred<T> {
+    private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : Deferred<T> {
         val messageEnvelope : MessageEnvelope = MessageEnvelope(message, future.pid, null)
         sendUserMessage(target, messageEnvelope)
-        return //TODO:
+        return future.deferred()
     }
     private fun sendUserMessage (target : PID, message : Any) {
         if (_senderMiddleware != null) {
