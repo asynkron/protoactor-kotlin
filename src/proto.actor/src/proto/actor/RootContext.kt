@@ -2,7 +2,7 @@ package proto.actor
 
 import java.time.Duration
 
-open class ActorClient : ISenderContext {
+class ActorClient : ISenderContext {
     private val _senderMiddleware : ((ISenderContext, PID, MessageEnvelope) -> Task)? = null
     constructor(messageHeader : MessageHeader, middleware : Array<((ISenderContext, PID, MessageEnvelope) -> Task) -> (ISenderContext, PID, MessageEnvelope) -> Task>)  {
         _senderMiddleware = (SenderdefaultSender, {inner, outer -> outer(inner)})
@@ -20,14 +20,14 @@ open class ActorClient : ISenderContext {
             if (message is MessageEnvelope) {
                 _senderMiddleware.invoke(this, target, message)
             } else {
-                _senderMiddleware.invoke(this, target, MessageEnvelope(message, NullPid, NullMessageHeader))
+                _senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
             }
         } else {
             target.tell(message)
         }
     }
     fun request (target : PID, message : Any, sender : PID) {
-        val envelope : MessageEnvelope = MessageEnvelope(message, sender, NullMessageHeader)
+        val envelope : MessageEnvelope = MessageEnvelope(message, sender, null)
         tell(target, envelope)
     }
     fun requestAsync (target : PID, message : Any, timeout : Duration) : Task {

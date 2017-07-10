@@ -10,7 +10,7 @@ internal enum class ContextState {
     None, Alive, Restarting, Stopping
 }
 
-class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: (IContext) -> Task, senderMiddleware: (ISenderContext, PID, MessageEnvelope) -> Task, override val parent: PID) : IMessageInvoker, IContext, ISupervisor {
+class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: (IContext) -> Task, senderMiddleware: (ISenderContext, PID, MessageEnvelope) -> Task, override val parent: PID?) : IMessageInvoker, IContext, ISupervisor {
     companion object {
         internal fun defaultReceive (context : IContext) : Task {
             val c : LocalContext = context as LocalContext
@@ -117,16 +117,16 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     override fun reenterAfter (target : Task, action : (Task) -> Task) {
         val msg : Any = _message!!
         val cont : Continuation = Continuation({ -> action(target) }, msg)
-        target.continueWith{t -> 
-            self.sendSystemMessage(cont)
-        }
+//        target.continueWith{t ->
+//            self.sendSystemMessage(cont)
+//        }
     }
     override fun escalateFailure (reason : Exception, who : PID) {
         if (_restartStatistics == null) {
             _restartStatistics = RestartStatistics(0, null)
         }
         val failure : Failure = Failure(who, reason, _restartStatistics!!)
-        if (parent == NullPid) {
+        if (parent == null) {
             handleRootFailure(failure)
         } else {
             self.sendSystemMessage(SuspendMailbox.Instance)
@@ -174,15 +174,13 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         msg.action()
     }
 
-    override fun invokeUserMessageAsync (msg : Any) : Task {
+    override fun invokeUserMessageAsync (msg : Any)  {
         if (receiveTimeout > Duration.ZERO) {
             if (msg !is INotInfluenceReceiveTimeout) {
                 stopReceiveTimeout()
             }
         }
         processMessageAsync(msg)
-
-        return Task()
     }
     override fun escalateFailure (reason : Exception, message : Any) {
         escalateFailure(reason, self)
@@ -191,7 +189,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         _message = msg
         return if (_receiveMiddleware != null) _receiveMiddleware(this) else defaultReceive(this)
     }
-    private fun requestAsync (target : PID, message : Any, future : FutureProcess<T>) : Task<T> {
+    private fun requestAsync (target : PID, message : Any, future : FutureProcess<T>) : Task {
         var messageEnvelope : MessageEnvelope = MessageEnvelope(message, future.pid, null)
         sendUserMessage(target, messageEnvelope)
         return future.task
@@ -235,8 +233,9 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
     }
     private fun handleFailure (msg : Failure) {
-        if (actor is ISupervisorStrategy) {
-            actor.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
+        val a = actor
+        if (a is ISupervisorStrategy) {
+            a.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
             return 
         }
         _supervisorStrategy.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
@@ -252,14 +251,16 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private fun handleStopAsync () {
         _state = ContextState.Stopping
         invokeUserMessageAsync(Stopping.Instance)
-        if (_children != null) {
-            for(child in _children!!) child.stop()
+        val c = _children
+        if (c != null) {
+            for(child in c) child.stop()
         }
         tryRestartOrTerminateAsync()
     }
     private fun tryRestartOrTerminateAsync () {
         cancelReceiveTimeout()
-        if (_children != null && _children!!.count() > 0) {
+        val c= _children
+        if (c != null && c.count() > 0) {
             return
         }
         when (_state) {
@@ -274,11 +275,13 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private fun stopAsync () {
         ProcessRegistry.instance.remove(self)
         invokeUserMessageAsync(Stopped.Instance)
-        if (_watchers != null) {
+        val w = _watchers
+        if (w != null) {
             val terminated : Terminated = Terminated() //TODO: init message
-            for(watcher in _watchers!!) watcher.sendSystemMessage(terminated)
+            for(watcher in w) watcher.sendSystemMessage(terminated)
         }
-        if (parent != NullPid) {
+
+        if (parent != null) {
             val terminated : Terminated = Terminated() //TODO: init message
             parent.sendSystemMessage(terminated)
         }
@@ -287,22 +290,23 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         incarnateActor()
         self.sendSystemMessage(ResumeMailbox.Instance)
         invokeUserMessageAsync(Started.Instance)
-        if (_stash != null) {
-            while (_stash!!.any()) {
-                val msg : Any = _stash!!.pop()
+        val s = _stash
+        if (s != null) {
+            while (s.any()) {
+                val msg : Any = s.pop()
                 invokeUserMessageAsync(msg)
             }
         }
     }
 
     private fun resetReceiveTimeout () {
-        _receiveTimeoutTimer?.change(receiveTimeout, receiveTimeout)
+      //  _receiveTimeoutTimer?.change(receiveTimeout, receiveTimeout)
     }
     private fun stopReceiveTimeout () {
-        _receiveTimeoutTimer?.change(1, 1)
+      //  _receiveTimeoutTimer?.change(1, 1)
     }
     private fun receiveTimeoutCallback (_ : Any) {
-        self.request(ReceiveTimeout.Instance, null)
+        //self.request(ReceiveTimeout.Instance, null)
     }
 
     init {

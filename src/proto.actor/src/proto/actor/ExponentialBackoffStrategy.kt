@@ -13,9 +13,9 @@ open class ExponentialBackoffStrategy(backoffWindow: Duration, initialBackoff: D
         val backoff: Long = rs.failureCount * _initialBackoff.toNanos()
         val noise: Int = _random.nextInt(500)
         val duration: Duration = Duration.ofMillis(toMilliseconds(backoff + noise))
-        Task.delay(duration).continueWith { t ->
+        /*Task.delay(duration).continueWith { t ->
             supervisor.restartChildren(reason, arrayOf(child))
-        }
+        }*/
 
     }
 

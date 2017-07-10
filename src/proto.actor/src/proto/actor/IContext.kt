@@ -3,7 +3,7 @@ package proto.actor
 import java.time.Duration
 
 interface IContext {
-    val parent : PID
+    val parent : PID?
     val self : PID
     val sender : PID?
     val actor : IActor

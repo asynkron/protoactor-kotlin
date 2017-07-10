@@ -1,6 +1,6 @@
 package proto.actor
 
-class MessageEnvelope(val message: Any, val sender: PID, var header: MessageHeader) {
+class MessageEnvelope(val message: Any, val sender: PID?, var header: MessageHeader?) {
     companion object {
         fun unwrap (message : Any) : Triple<Any, PID?, MessageHeader?> {
             if (message is MessageEnvelope) {
@@ -11,10 +11,16 @@ class MessageEnvelope(val message: Any, val sender: PID, var header: MessageHead
     }
 
     fun getHeader (key : String, default : String) : String {
-        return header.getOrDefault(key,default)
+        if (header == null)
+            return default
+
+        return header!!.getOrDefault(key,default)
     }
     fun setHeader (key : String, value : String) {
-        header.set(key,value)
+        if (header == null)
+            header = MessageHeader()
+
+        header!!.set(key,value)
     }
 }
 
