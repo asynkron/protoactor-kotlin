@@ -2,11 +2,8 @@ package proto.actor
 
 import java.util.concurrent.atomic.AtomicInteger
 
-open class ProcessRegistry {
-    companion object {
-        private val NoHost : String = "nonhost"
-        val instance : ProcessRegistry = ProcessRegistry()
-    }
+object ProcessRegistry {
+    private val NoHost : String = "nonhost"
     private val _hostResolvers : MutableList<(PID) -> Process> = mutableListOf()
     private val _localActorRefs : HashedConcurrentDictionary = HashedConcurrentDictionary()
     private val _sequenceId : AtomicInteger = AtomicInteger(0)

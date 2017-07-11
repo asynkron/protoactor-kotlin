@@ -10,7 +10,7 @@ internal enum class ContextState {
     None, Alive, Restarting, Stopping
 }
 
-class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: (IContext) -> Unit, senderMiddleware: (ISenderContext, PID, MessageEnvelope) -> Unit, override val parent: PID?) : IMessageInvoker, IContext,ISenderContext, ISupervisor {
+class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrategy, receiveMiddleware: ((IContext) -> Unit)?, senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : IMessageInvoker, IContext,ISenderContext, ISupervisor {
     companion object {
         suspend internal fun defaultReceive (context : IContext)  {
             val c : LocalContext = context as LocalContext
@@ -26,8 +26,8 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     val EmptyChildren : Collection<PID> = listOf()
     private val _producer : () -> IActor = producer
-    private val _receiveMiddleware : (IContext) -> Unit = receiveMiddleware
-    private val _senderMiddleware : (ISenderContext, PID, MessageEnvelope) -> Unit = senderMiddleware
+    private val _receiveMiddleware : ((IContext) -> Unit)? = receiveMiddleware
+    private val _senderMiddleware : ((ISenderContext, PID, MessageEnvelope) -> Unit)? = senderMiddleware
     private val _supervisorStrategy : ISupervisorStrategy = supervisorStrategy
     private var _children : MutableSet<PID>? = null
     private var _message : Any = Any()
@@ -59,11 +59,11 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         sender!!.tell(message)
     }
     override fun spawn (props : Props) : PID {
-        val id : String = ProcessRegistry.instance.nextId()
+        val id : String = ProcessRegistry.nextId()
         return spawnNamed(props, id)
     }
     override fun spawnPrefix (props : Props, prefix : String) : PID {
-        val name : String = prefix + ProcessRegistry.instance.nextId()
+        val name : String = prefix + ProcessRegistry.nextId()
         return spawnNamed(props, name)
     }
     override fun spawnNamed (props : Props, name : String) : PID {
@@ -195,7 +195,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     suspend private fun processMessageAsync (msg : Any) : Unit {
         _message = msg
-        return if (_receiveMiddleware != null) _receiveMiddleware(this) else defaultReceive(this)
+        return if (_receiveMiddleware != null) _receiveMiddleware.invoke(this) else defaultReceive(this)
     }
     suspend private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : T {
         val messageEnvelope : MessageEnvelope = MessageEnvelope(message, future.pid, null)
@@ -205,9 +205,9 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private fun sendUserMessage (target : PID, message : Any) {
         if (_senderMiddleware != null) {
             if (message is MessageEnvelope) {
-                _senderMiddleware(this, target, message)
+                _senderMiddleware.invoke(this, target, message)
             } else {
-                _senderMiddleware(this, target, MessageEnvelope(message, null, null))
+                _senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
             }
         } else {
             target.tell(message)
@@ -281,7 +281,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
     }
     suspend private fun stopAsync () {
-        ProcessRegistry.instance.remove(self)
+        ProcessRegistry.remove(self)
         invokeUserMessageAsync(Stopped.Instance)
         val w = _watchers
         val terminated : Terminated = Terminated(self,false) //TODO: init message

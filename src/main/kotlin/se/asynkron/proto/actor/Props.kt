@@ -6,36 +6,33 @@ import proto.mailbox.IMailbox
 import proto.mailbox.UnboundedMailbox
 
 class Props {
-    companion object {
-        val empty: Props = Props()
-        private fun produceDefaultMailbox(): IMailbox = UnboundedMailbox.create()
-        fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-            val ctx: LocalContext = LocalContext(props.producer, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
-            val mailbox: IMailbox = props.mailboxProducer()
-            val dispatcher: IDispatcher = props.dispatcher
-            val reff: LocalProcess = LocalProcess(mailbox)
-            val (pid, absent) = ProcessRegistry.instance.tryAdd(name, reff)
-            if (absent) {
-                throw ProcessNameExistException(name)
-            }
-            ctx.self = pid
-            mailbox.registerHandlers(ctx, dispatcher)
-            mailbox.postSystemMessage(Started.Instance)
-            mailbox.start()
-            return pid
+    private fun produceDefaultMailbox(): IMailbox = UnboundedMailbox.create()
+    private fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
+        val ctx: LocalContext = LocalContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+        val mailbox: IMailbox = props.mailboxProducer()
+        val dispatcher: IDispatcher = props.dispatcher
+        val reff: LocalProcess = LocalProcess(mailbox)
+        val (pid, absent) = ProcessRegistry.tryAdd(name, reff)
+        if (absent) {
+            throw ProcessNameExistException(name)
         }
+        ctx.self = pid
+        mailbox.registerHandlers(ctx, dispatcher)
+        mailbox.postSystemMessage(Started.Instance)
+        mailbox.start()
+        return pid
     }
 
-    private var _spawner: (String, Props, PID) -> PID? = { name, props, pid -> defaultSpawner(name, props, pid) }
-    lateinit var producer: () -> IActor
+    private var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
+    var producer: (() -> IActor)? = null
     var mailboxProducer: () -> IMailbox = { -> produceDefaultMailbox() }
     var supervisorStrategy: ISupervisorStrategy = Supervision.defaultStrategy
     var dispatcher: IDispatcher = Dispatchers.defaultDispatcher
     var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
     var senderMiddleware: List<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
-    lateinit var receiveMiddlewareChain: (IContext) -> Unit
-    lateinit var senderMiddlewareChain: (ISenderContext, PID, MessageEnvelope) -> Unit
-    var spawner: (String, Props, PID?) -> PID = { name, props, parent -> defaultSpawner(name, props, parent) }
+    var receiveMiddlewareChain: ((IContext) -> Unit)? = null
+    var senderMiddlewareChain: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
+
     fun withProducer(producer: () -> IActor): Props = copy { props -> props.producer = producer }
     fun withDispatcher(dispatcher: IDispatcher): Props = copy { props -> props.dispatcher = dispatcher }
     fun withMailbox(mailboxProducer: () -> IMailbox): Props = copy { props -> props.mailboxProducer = mailboxProducer }
@@ -54,15 +51,15 @@ class Props {
 
     private fun copy(mutator: (Props) -> Unit): Props {
         val props: Props = Props().apply {
-            dispatcher = dispatcher
-            mailboxProducer = mailboxProducer
-            producer = producer
-            receiveMiddleware = receiveMiddleware
-            receiveMiddlewareChain = receiveMiddlewareChain
-            senderMiddleware = senderMiddleware
-            senderMiddlewareChain = senderMiddlewareChain
-            spawner = spawner
-            supervisorStrategy = supervisorStrategy
+            dispatcher = this.dispatcher
+            mailboxProducer = this.mailboxProducer
+            producer = this.producer
+            receiveMiddleware = this.receiveMiddleware
+          //  receiveMiddlewareChain = this.receiveMiddlewareChain
+            senderMiddleware = this.senderMiddleware
+          //  senderMiddlewareChain = this.senderMiddlewareChain
+            spawner = this.spawner
+            supervisorStrategy = this.supervisorStrategy
         }
         mutator(props)
         return props

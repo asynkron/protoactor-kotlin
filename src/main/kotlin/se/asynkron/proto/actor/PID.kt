@@ -6,22 +6,21 @@ import java.time.Duration
 class PID(val address: String, val id: String) {
     private var _p: Process? = null
     internal fun ref(): Process? {
-        throw Exception("Not implemented")
-        _p = null //TODO: fix
+        return null
     }
 
     fun tell(message: Any) {
-        val reff: Process = ref() ?: ProcessRegistry.instance.get(this)
+        val reff: Process = ref() ?: ProcessRegistry.get(this)
         reff.sendUserMessage(this, message)
     }
 
     fun sendSystemMessage(sys: Any) {
-        val reff: Process = ref() ?: ProcessRegistry.instance.get(this)
+        val reff: Process = ref() ?: ProcessRegistry.get(this)
         reff.sendSystemMessage(this, sys)
     }
 
     fun request(message: Any, sender: PID) {
-        val reff: Process = ref() ?: ProcessRegistry.instance.get(this)
+        val reff: Process = ref() ?: ProcessRegistry.get(this)
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, sender, null)
         reff.sendUserMessage(this, messageEnvelope)
     }
@@ -40,7 +39,7 @@ class PID(val address: String, val id: String) {
     }
 
     fun stop() {
-        val reff: Process = ProcessRegistry.instance.get(this)
+        val reff: Process = ProcessRegistry.get(this)
         reff.stop(this)
     }
 

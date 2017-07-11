@@ -18,8 +18,8 @@ class FutureProcess<T>(timeout: Duration? = null) : Process() {
     }
 
     init {
-        val name : String = ProcessRegistry.instance.nextId()
-        val (pid, absent) = ProcessRegistry.instance.tryAdd(name, this)
+        val name : String = ProcessRegistry.nextId()
+        val (pid, absent) = ProcessRegistry.tryAdd(name, this)
         if (absent) {
             throw ProcessNameExistException(name)
         }
