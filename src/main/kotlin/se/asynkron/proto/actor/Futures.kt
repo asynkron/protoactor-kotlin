@@ -1,9 +1,7 @@
 package proto.actor
 
 import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.channels.produce
 import java.time.Duration
-import kotlin.coroutines.experimental.CoroutineContext
 
 class FutureProcess<T> : Process {
 
@@ -16,15 +14,16 @@ class FutureProcess<T> : Process {
         this.pid = pid
     }
     val pid : PID
+    val cd : CompletableDeferred<T> = CompletableDeferred()
     override fun sendUserMessage (pid : PID, message : Any) {
         val (msg,sender,header)   = MessageEnvelope.unwrap(message)
-
+        cd.set(msg)
     }
     override fun sendSystemMessage (pid : PID, message : Any) {
     }
 
     fun  deferred(): Deferred<T> {
-        return null;
+        return cd.deferred;
     }
 }
 

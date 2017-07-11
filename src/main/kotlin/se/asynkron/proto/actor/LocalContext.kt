@@ -21,7 +21,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
             }
             c.actor.receiveAsync(context)
         }
-        internal fun defaultSender (_ : ISenderContext, target : PID, envelope : MessageEnvelope) {
+        internal fun defaultSender (ctx : ISenderContext, target : PID, envelope : MessageEnvelope) {
             target.ref()?.sendUserMessage(target, envelope)
         }
     }
@@ -174,7 +174,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
     }
 
-    fun handleContinuation(msg : Continuation){
+    suspend fun handleContinuation(msg : Continuation){
         _message = msg.message
         msg.action()
     }

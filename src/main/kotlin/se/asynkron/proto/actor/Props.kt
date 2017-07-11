@@ -33,8 +33,8 @@ class Props {
     var dispatcher: IDispatcher = Dispatchers.defaultDispatcher
     var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
     var senderMiddleware: List<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
-    var receiveMiddlewareChain: (IContext) -> Unit
-    var senderMiddlewareChain: (ISenderContext, PID, MessageEnvelope) -> Unit
+    lateinit var receiveMiddlewareChain: (IContext) -> Unit
+    lateinit var senderMiddlewareChain: (ISenderContext, PID, MessageEnvelope) -> Unit
     var  spawner: (String, Props, PID?) -> PID = {name,props,parent -> defaultSpawner(name,props,parent)}
     fun withProducer(producer: () -> IActor): Props = copy { props -> props.producer = producer }
     fun withDispatcher(dispatcher: IDispatcher): Props = copy { props -> props.dispatcher = dispatcher }
