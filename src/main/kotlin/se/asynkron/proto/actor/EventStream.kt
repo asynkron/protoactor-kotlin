@@ -2,11 +2,7 @@ package proto.actor
 
 import proto.mailbox.Dispatchers
 
-class EventStream : EventStreamImpl<Any>() {
-    companion object {
-        val Instance: EventStream = EventStream()
-    }
-
+object EventStream : EventStreamImpl<Any>() {
     init {
         subscribe({
             if (it is DeadLetterEvent) {

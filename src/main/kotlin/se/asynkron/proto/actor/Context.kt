@@ -24,16 +24,29 @@ class Context(private val producer: () -> IActor, private val supervisorStrategy
 
     override val message: Any
         get() {
-            val (m, _, _) = MessageEnvelope.unwrap(_message)
-            return m
+            val m = _message
+            return when(m){
+                is MessageEnvelope -> m.message
+                else -> m
+            }
         }
 
     override val sender: PID?
         get() {
-            val (_, sender, _) = MessageEnvelope.unwrap(_message)
-            return sender
+            val m = _message
+            return when(m){
+                is MessageEnvelope -> m.sender
+                else -> null
+            }
         }
-    override val headers: MessageHeader? = null
+    override val headers: MessageHeader?
+        get() {
+            val m = _message
+            return when(m){
+                is MessageEnvelope -> m.header
+                else -> null
+            }
+        }
 
     override fun stash() {
         ensureStash().push(message)

@@ -1,8 +1,5 @@
 package proto.actor
 
-val eventStream: EventStream
-    get() = EventStream.Instance
-
 fun fromProducer(producer: () -> IActor): Props = Props().withProducer(producer)
 fun fromFunc(receive: suspend (IContext) -> Unit): Props = fromProducer { -> FunActor(receive) }
 fun spawn(props: Props): PID {

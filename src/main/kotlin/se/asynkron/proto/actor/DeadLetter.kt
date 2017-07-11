@@ -10,12 +10,16 @@ open class DeadLetterProcess : Process() {
     }
 
     override fun sendUserMessage(pid: PID, message: Any) {
-        val (msg, sender, _) = MessageEnvelope.unwrap(message)
-        EventStream.Instance.publish(DeadLetterEvent(pid, msg, sender))
+        val dle = when (message){
+            is MessageEnvelope -> DeadLetterEvent(pid, message.message, message.sender)
+            else -> DeadLetterEvent(pid, message, null)
+        }
+        EventStream.publish(dle)
+
     }
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {
-        EventStream.Instance.publish(DeadLetterEvent(pid, message, null))
+        EventStream.publish(DeadLetterEvent(pid, message, null))
     }
 }
 

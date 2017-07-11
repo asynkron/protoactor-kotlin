@@ -9,8 +9,11 @@ class FutureProcess<T>(timeout: Duration? = null) : Process() {
     val pid: PID
     val cd: CompletableDeferred<T>? = null
     override fun sendUserMessage(pid: PID, message: Any) {
-        val (msg, sender, header) = MessageEnvelope.unwrap(message)
-        cd!!.set(msg)
+        val m = when (message){
+            is MessageEnvelope -> message.message
+            else -> message
+        }
+        cd!!.set(m)
     }
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
