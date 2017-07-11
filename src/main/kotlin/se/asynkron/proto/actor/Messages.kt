@@ -19,10 +19,10 @@ object Stop : SystemMessage()
 object Restarting
 object Stopping : AutoReceiveMessage()
 
-class Failure(val who: PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage()
-class Watch(val watcher: PID) : SystemMessage()
-class Unwatch(val watcher: PID) : SystemMessage()
-class Restart(val reason: Exception) : SystemMessage()
+data class Failure(val who: PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage()
+data class Watch(val watcher: PID) : SystemMessage()
+data class Unwatch(val watcher: PID) : SystemMessage()
+data class Restart(val reason: Exception) : SystemMessage()
 data class Continuation(val action: suspend () -> Unit, val message: Any) : SystemMessage()
 interface INotInfluenceReceiveTimeout
 

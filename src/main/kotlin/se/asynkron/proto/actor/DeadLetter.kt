@@ -4,10 +4,7 @@ import proto.mailbox.SystemMessage
 
 class DeadLetterEvent(val pid: PID, val message: Any, val sender: PID?)
 
-open class DeadLetterProcess : Process() {
-    companion object {
-        val Instance: DeadLetterProcess = DeadLetterProcess()
-    }
+object DeadLetterProcess : Process() {
 
     override fun sendUserMessage(pid: PID, message: Any) {
         val dle = when (message){

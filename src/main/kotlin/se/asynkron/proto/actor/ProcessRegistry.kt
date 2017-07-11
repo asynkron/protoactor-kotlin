@@ -21,7 +21,7 @@ object ProcessRegistry {
 
             throw Exception("Unknown host")
         }
-        return localActorRefs.tryGetValue(pid.id) ?: DeadLetterProcess.Instance
+        return localActorRefs.tryGetValue(pid.id) ?: DeadLetterProcess
     }
 
     fun tryAdd(id: String, aref: Process): Pair<PID, Boolean> {
