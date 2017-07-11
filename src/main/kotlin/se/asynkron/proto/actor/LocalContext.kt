@@ -1,11 +1,15 @@
 package proto.actor
 
+import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import proto.mailbox.IMessageInvoker
 import proto.mailbox.ResumeMailbox
 import proto.mailbox.SuspendMailbox
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 internal enum class ContextState {
     None, Alive, Restarting, Stopping
@@ -36,6 +40,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private var _restartStatistics : RestartStatistics? = null
     private var _stash : Stack<Any>? = null
     private var _state : ContextState = ContextState.None
+    private var _receiveTimeout : Duration = Duration.ZERO
     private var _watchers : MutableSet<PID>? = null
     override val children : Collection<PID>
         get() = _children?.toList() ?: EmptyChildren
@@ -48,7 +53,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
             return sender
         }
     override val headers : MessageHeader? = null
-    override var receiveTimeout : Duration = Duration.ZERO
+
     override fun stash () {
         if (_stash == null) {
             _stash = Stack<Any>()
@@ -80,17 +85,20 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     override fun unwatch (pid : PID) {
         pid.sendSystemMessage(Unwatch(self))
     }
+
+    override fun getReceiveTimeout() : Duration = _receiveTimeout
+
     override fun setReceiveTimeout (duration : Duration) {
         if (duration <= Duration.ZERO) {
             throw IllegalArgumentException("duration")
         }
-        if (duration == receiveTimeout) {
+        if (duration == _receiveTimeout) {
             return 
         }
         stopReceiveTimeout()
-        receiveTimeout = duration
+        _receiveTimeout = duration
         if (_receiveTimeoutTimer == null) {
-            _receiveTimeoutTimer = Timer(receiveTimeoutCallback, null, receiveTimeout, receiveTimeout)
+            _receiveTimeoutTimer = AsyncTimer({-> self.tell(ReceiveTimeout.Instance) }, _receiveTimeout)
         } else {
             resetReceiveTimeout()
         }
@@ -101,7 +109,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         }
         stopReceiveTimeout()
         _receiveTimeoutTimer = null
-        receiveTimeout = Duration.ZERO
+        _receiveTimeout = Duration.ZERO
     }
     suspend override fun receiveAsync (message : Any) : Unit {
         return processMessageAsync(message)
@@ -113,10 +121,10 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         val messageEnvelope : MessageEnvelope = MessageEnvelope(message, self, null)
         sendUserMessage(target, messageEnvelope)
     }
-    override fun <T> requestAsync (target : PID, message : Any, timeout : Duration) : Deferred<T> {
+    suspend override fun <T> requestAsync (target : PID, message : Any, timeout : Duration) : T {
         return requestAsync<T>(target, message, FutureProcess<T>(timeout))
     }
-    override fun <T> requestAsync (target : PID, message : Any) : Deferred<T> {
+    suspend override fun <T> requestAsync (target : PID, message : Any) : T {
         return requestAsync<T>(target, message, FutureProcess<T>())
     }
 //    override fun reenterAfter (target : Task, action : (Task) -> Task) {
@@ -180,7 +188,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
 
     suspend override fun invokeUserMessageAsync (msg : Any)  {
-        if (receiveTimeout > Duration.ZERO) {
+        if (_receiveTimeout > Duration.ZERO) {
             if (msg !is INotInfluenceReceiveTimeout) {
                 stopReceiveTimeout()
             }
@@ -194,10 +202,10 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         _message = msg
         return if (_receiveMiddleware != null) _receiveMiddleware(this) else defaultReceive(this)
     }
-    private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : Deferred<T> {
+    suspend private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : T {
         val messageEnvelope : MessageEnvelope = MessageEnvelope(message, future.pid, null)
         sendUserMessage(target, messageEnvelope)
-        return future.deferred()
+        return future.deferred().await()
     }
     private fun sendUserMessage (target : PID, message : Any) {
         if (_senderMiddleware != null) {
@@ -229,7 +237,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
     private fun handleWatch (w : Watch) {
         if (_state == ContextState.Stopping) {
-            w.watcher.sendSystemMessage(Terminated) //TODO: init
+            w.watcher.sendSystemMessage(Terminated(self,false)) //TODO: init
         } else {
             if (_watchers == null) {
                 _watchers = mutableSetOf()
@@ -281,15 +289,12 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         ProcessRegistry.instance.remove(self)
         invokeUserMessageAsync(Stopped.Instance)
         val w = _watchers
+        val terminated : Terminated = Terminated(self,false) //TODO: init message
         if (w != null) {
-            val terminated : Terminated = Terminated() //TODO: init message
             for(watcher in w) watcher.sendSystemMessage(terminated)
         }
 
-        if (parent != null) {
-            val terminated : Terminated = Terminated() //TODO: init message
-            parent.sendSystemMessage(terminated)
-        }
+        parent?.sendSystemMessage(terminated)
     }
     suspend private fun restartAsync () {
         incarnateActor()
@@ -310,12 +315,12 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private fun stopReceiveTimeout () {
       //  _receiveTimeoutTimer?.change(1, 1)
     }
-    private fun receiveTimeoutCallback (state : Any) {
-        //self.request(ReceiveTimeout.Instance, null)
-    }
-
     init {
         incarnateActor()
     }
+}
+
+class AsyncTimer(receiveTimeoutCallback: () -> Unit, _receiveTimeout: Duration) : Timer() {
+
 }
 

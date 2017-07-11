@@ -35,12 +35,12 @@ class ActorClient : ISenderContext {
         tell(target, envelope)
     }
 
-    fun <T> requestAsync(target: PID, message: Any, timeout: Duration): Deferred<T> {
-        throw Exception()
-    }
-
-    fun <T> requestAsync(target: PID, message: Any): Deferred<T> {
-        throw Exception()
-    }
+//    suspend fun <T> requestAsync(target: PID, message: Any, timeout: Duration): T {
+//        throw Exception()
+//    }
+//
+//    suspend fun <T> requestAsync(target: PID, message: Any): T {
+//        throw Exception()
+//    }
 }
 

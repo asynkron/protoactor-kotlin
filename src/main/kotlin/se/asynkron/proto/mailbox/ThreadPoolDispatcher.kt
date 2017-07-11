@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.launch
 
 class ThreadPoolDispatcher : IDispatcher {
      override fun schedule(runner: suspend () -> Unit) {
-        val job = launch(CommonPool){
+        launch(CommonPool){
             runner()
         }
     }

@@ -8,7 +8,7 @@ interface IContext {
     val self : PID
     val sender : PID?
     val actor : IActor
-    val receiveTimeout : Duration
+
     val children : Collection<PID>
     fun respond (message : Any)
     fun stash ()
@@ -18,13 +18,14 @@ interface IContext {
     fun watch (pid : PID)
     fun unwatch (pid : PID)
     fun setReceiveTimeout (duration : Duration)
+    fun getReceiveTimeout() : Duration
     fun cancelReceiveTimeout ()
     suspend fun receiveAsync (message : Any) : Unit
     fun tell (target : PID, message : Any)
     fun request (target : PID, message : Any)
 
-    fun <T> requestAsync (target : PID, message : Any, timeout : Duration) : Deferred<T>
-    fun <T> requestAsync (target : PID, message : Any) : Deferred<T>
+    suspend fun <T> requestAsync (target : PID, message : Any, timeout : Duration) : T
+    suspend fun <T> requestAsync (target : PID, message : Any) : T
    // fun reenterAfter (target : Task, action : (Task) -> Task)
 }
 

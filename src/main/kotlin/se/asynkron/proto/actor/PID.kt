@@ -26,17 +26,17 @@ class PID(val address: String, val id: String) {
         reff.sendUserMessage(this, messageEnvelope)
     }
 
-    fun <T> requestAsync(message: Any, timeout: Duration): Deferred<T> {
+    suspend fun <T> requestAsync(message: Any, timeout: Duration): T {
         return requestAsync(message, FutureProcess<T>(timeout))
     }
 
-    fun <T> requestAsync(message: Any): Deferred<T> {
+    suspend fun <T> requestAsync(message: Any): T {
         return requestAsync(message, FutureProcess<T>())
     }
 
-    private fun <T> requestAsync(message: Any, future: FutureProcess<T>): Deferred<T> {
+    suspend private fun <T> requestAsync(message: Any, future: FutureProcess<T>): T {
         request(message, future.pid)
-        return future.deferred()
+        return future.deferred().await()
     }
 
     fun stop() {

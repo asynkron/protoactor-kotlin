@@ -7,7 +7,7 @@ abstract class AutoReceiveMessage {
 
 class PoisonPill { //TODO: this is proto
 }
-class Terminated : SystemMessage() {
+class Terminated(val who: PID,val addressWasTerminated: Boolean) : SystemMessage() {
     //PROTO
 }
 
