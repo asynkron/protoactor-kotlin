@@ -9,7 +9,7 @@ internal object ContextHelper {
         }
     }
 
-    internal fun defaultSender(ctx: ISenderContext, target: PID, envelope: MessageEnvelope) {
+    internal fun defaultSender(ctx: SenderContext, target: PID, envelope: MessageEnvelope) {
         target.ref()?.sendUserMessage(target, envelope)
     }
 }

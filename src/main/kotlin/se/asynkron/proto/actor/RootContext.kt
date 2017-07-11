@@ -1,9 +1,9 @@
 package proto.actor
 
-class ActorClient : ISenderContext {
-    private var _senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
+class ActorClient : SenderContext {
+    private var _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 
-    constructor(messageHeader: MessageHeader, middleware: Array<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit>) {
+    constructor(messageHeader: MessageHeader, middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) {
         //_senderMiddleware = defaultSender, {inner, outer -> outer(inner)})
         headers = messageHeader
     }
@@ -11,7 +11,7 @@ class ActorClient : ISenderContext {
     override val message: Any?
         get() = null
     override val headers: MessageHeader
-    private fun defaultSender(context: ISenderContext, target: PID, message: MessageEnvelope): Unit {
+    private fun defaultSender(context: SenderContext, target: PID, message: MessageEnvelope): Unit {
         target.tell(message)
     }
 

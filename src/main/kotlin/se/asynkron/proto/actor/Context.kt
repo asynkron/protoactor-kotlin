@@ -7,7 +7,7 @@ import proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-class Context(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, ISenderContext, Supervisor {
+class Context(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, SenderContext, Supervisor {
     val EmptyChildren: Collection<PID> = listOf()
     private var _children: MutableSet<PID>? = null
     private var _receiveTimeoutTimer: Timer? = null

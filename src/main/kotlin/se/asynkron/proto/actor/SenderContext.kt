@@ -1,6 +1,6 @@
 package proto.actor
 
-interface ISenderContext {
+interface SenderContext {
     val message: Any?
     val headers: MessageHeader?
 }
