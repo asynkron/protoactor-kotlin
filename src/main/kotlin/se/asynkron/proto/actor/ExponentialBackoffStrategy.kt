@@ -1,22 +1,24 @@
 package proto.actor
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.TimeUnit
 
-open class ExponentialBackoffStrategy(backoffWindow: Duration, initialBackoff: Duration) : ISupervisorStrategy {
-    private val _backoffWindow: Duration = backoffWindow
-    private val _initialBackoff: Duration = initialBackoff
-    private val _random: Random = Random()
+open class ExponentialBackoffStrategy(private val backoffWindow: Duration, private val initialBackoff: Duration) : ISupervisorStrategy {
+    private val random: Random = Random()
 
     override fun handleFailure(supervisor: ISupervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         setFailureCount(rs)
-        val backoff: Long = rs.failureCount * _initialBackoff.toNanos()
-        val noise: Int = _random.nextInt(500)
+        val backoff: Long = rs.failureCount * initialBackoff.toNanos()
+        val noise: Int = random.nextInt(500)
         val duration: Duration = Duration.ofMillis(toMilliseconds(backoff + noise))
-        /*Task.delay(duration).continueWith { t ->
-            supervisor.restartChildren(reason, arrayOf(child))
-        }*/
-
+        launch(CommonPool) {
+            delay(duration.toNanos(),TimeUnit.NANOSECONDS)
+            supervisor.restartChildren(reason, child)
+        }
     }
 
     private fun toMilliseconds(nanoseconds: Long): Long {
@@ -24,7 +26,7 @@ open class ExponentialBackoffStrategy(backoffWindow: Duration, initialBackoff: D
     }
 
     private fun setFailureCount(rs: RestartStatistics) {
-        if (rs.isWithinDuration(_backoffWindow)) {
+        if (rs.isWithinDuration(backoffWindow)) {
             rs.fail()
             return
         }

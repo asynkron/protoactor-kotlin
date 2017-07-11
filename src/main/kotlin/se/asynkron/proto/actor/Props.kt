@@ -24,30 +24,30 @@ class Props {
     }
 
     private var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
-    var producer: (() -> IActor)? = null
-    var mailboxProducer: () -> IMailbox = { -> produceDefaultMailbox() }
-    var supervisorStrategy: ISupervisorStrategy = Supervision.defaultStrategy
-    var dispatcher: IDispatcher = Dispatchers.defaultDispatcher
-    var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
-    var senderMiddleware: List<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
-    var receiveMiddlewareChain: ((IContext) -> Unit)? = null
-    var senderMiddlewareChain: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
+    private var producer: (() -> IActor)? = null
+    private var mailboxProducer: () -> IMailbox = { -> produceDefaultMailbox() }
+    private var supervisorStrategy: ISupervisorStrategy = Supervision.defaultStrategy
+    private var dispatcher: IDispatcher = Dispatchers.defaultDispatcher
+    private var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
+    private var senderMiddleware: List<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
+    private var receiveMiddlewareChain: ((IContext) -> Unit)? = null
+    private var senderMiddlewareChain: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
 
-    fun withProducer(producer: () -> IActor): Props = copy { props -> props.producer = producer }
-    fun withDispatcher(dispatcher: IDispatcher): Props = copy { props -> props.dispatcher = dispatcher }
-    fun withMailbox(mailboxProducer: () -> IMailbox): Props = copy { props -> props.mailboxProducer = mailboxProducer }
-    fun withChildSupervisorStrategy(supervisorStrategy: ISupervisorStrategy): Props = copy { props -> props.supervisorStrategy = supervisorStrategy }
-    fun withReceiveMiddleware(middleware: Array<((IContext) -> Unit) -> (IContext) -> Unit>): Props = copy { props ->
-        props.receiveMiddleware = (middleware).toList()
+    fun withProducer(producer: () -> IActor): Props = copy { it.producer = producer }
+    fun withDispatcher(dispatcher: IDispatcher): Props = copy { it.dispatcher = dispatcher }
+    fun withMailbox(mailboxProducer: () -> IMailbox): Props = copy { it.mailboxProducer = mailboxProducer }
+    fun withChildSupervisorStrategy(supervisorStrategy: ISupervisorStrategy): Props = copy { it.supervisorStrategy = supervisorStrategy }
+    fun withReceiveMiddleware(middleware: Array<((IContext) -> Unit) -> (IContext) -> Unit>): Props = copy {
+        it.receiveMiddleware = (middleware).toList()
         // props.receiveMiddlewareChain = (ReceiveLocalContext.defaultReceive, { inner, outer -> outer(inner) })
     }
 
-    fun withSenderMiddleware(middleware: Array<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit>): Props = copy { props ->
-        props.senderMiddleware = (middleware).toList()
+    fun withSenderMiddleware(middleware: Array<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit>): Props = copy {
+        it.senderMiddleware = (middleware).toList()
         //props.senderMiddlewareChain = (SenderLocalContext.defaultSender, { inner, outer -> outer(inner) })
     }
 
-    fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy { props -> props.spawner = spawner }
+    fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy { it.spawner = spawner }
 
     private fun copy(mutator: (Props) -> Unit): Props {
         val props: Props = Props().apply {

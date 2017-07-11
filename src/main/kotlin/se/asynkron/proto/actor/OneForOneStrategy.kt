@@ -2,25 +2,24 @@ package proto.actor
 
 import java.time.Duration
 
-open class OneForOneStrategy(decider: (PID, Exception) -> SupervisorDirective, maxNrOfRetries: Int, withinTimeSpan: Duration?) : ISupervisorStrategy {
-    private val _decider: (PID, Exception) -> SupervisorDirective = decider
-    private val _maxNrOfRetries: Int = maxNrOfRetries
-    private val _withinTimeSpan: Duration? = withinTimeSpan
+open class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirective, private val maxNrOfRetries: Int, private val withinTimeSpan: Duration?) : ISupervisorStrategy {
     override fun handleFailure(supervisor: ISupervisor, child: PID, rs: RestartStatistics, reason: Exception) {
-        val directive: SupervisorDirective = _decider(child, reason)
-        val tmp = directive
-        when (tmp) {
-        //TODO: convert
+        val directive: SupervisorDirective = decider(child, reason)
+        when (directive) {
+            SupervisorDirective.Resume -> TODO()
+            SupervisorDirective.Restart -> TODO()
+            SupervisorDirective.Stop -> TODO()
+            SupervisorDirective.Escalate -> TODO()
         }
     }
 
     private fun requestRestartPermission(rs: RestartStatistics): Boolean {
-        if (_maxNrOfRetries == 0) {
+        if (maxNrOfRetries == 0) {
             return false
         }
         rs.fail()
-        if (_withinTimeSpan == null || rs.isWithinDuration(_withinTimeSpan)) {
-            return rs.failureCount <= _maxNrOfRetries
+        if (withinTimeSpan == null || rs.isWithinDuration(withinTimeSpan)) {
+            return rs.failureCount <= maxNrOfRetries
         }
         rs.reset()
         return true
