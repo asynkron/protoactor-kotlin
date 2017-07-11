@@ -7,7 +7,7 @@ import proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-class Context(private val producer: () -> IActor, private val supervisorStrategy: ISupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, ISenderContext, ISupervisor {
+class Context(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, ISenderContext, Supervisor {
     val EmptyChildren: Collection<PID> = listOf()
     private var _children: MutableSet<PID>? = null
     private var _receiveTimeoutTimer: Timer? = null
@@ -16,7 +16,7 @@ class Context(private val producer: () -> IActor, private val supervisorStrategy
     private var state: ContextState = ContextState.None
 
     private var watchers: MutableSet<PID>? = null
-    override lateinit var actor: IActor
+    override lateinit var actor: Actor
     override lateinit var self: PID
     var _message : Any = Any()
     override val children: Collection<PID>
@@ -244,7 +244,7 @@ class Context(private val producer: () -> IActor, private val supervisorStrategy
     private fun handleFailure(msg: Failure) {
         val a = actor
         when (a) {
-            is ISupervisorStrategy -> {
+            is SupervisorStrategy -> {
                 a.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
                 return
             }

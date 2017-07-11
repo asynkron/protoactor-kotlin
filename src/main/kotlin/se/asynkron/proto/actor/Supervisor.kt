@@ -1,6 +1,6 @@
 package proto.actor
 
-interface ISupervisor {
+interface Supervisor {
     val children: Collection<PID>
     fun escalateFailure(reason: Exception, who: PID)
     fun restartChildren(reason: Exception, vararg pids: PID)

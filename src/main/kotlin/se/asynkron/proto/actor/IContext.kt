@@ -6,7 +6,7 @@ interface IContext {
     val parent: PID?
     val self: PID
     val sender: PID?
-    val actor: IActor
+    val actor: Actor
 
     val children: Collection<PID>
     val message: Any

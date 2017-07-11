@@ -7,10 +7,10 @@ import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-open class ExponentialBackoffStrategy(private val backoffWindow: Duration, private val initialBackoff: Duration) : ISupervisorStrategy {
+open class ExponentialBackoffStrategy(private val backoffWindow: Duration, private val initialBackoff: Duration) : SupervisorStrategy {
     private val random: Random = Random()
 
-    override fun handleFailure(supervisor: ISupervisor, child: PID, rs: RestartStatistics, reason: Exception) {
+    override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         setFailureCount(rs)
         val backoff: Long = rs.failureCount * initialBackoff.toNanos()
         val noise: Int = random.nextInt(500)

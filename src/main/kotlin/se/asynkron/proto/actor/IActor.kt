@@ -1,5 +1,5 @@
 package proto.actor
 
-interface IActor {
+interface Actor {
     suspend fun receiveAsync(context: IContext)
 }
