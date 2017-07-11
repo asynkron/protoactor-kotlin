@@ -18,7 +18,7 @@ class Props {
         }
         ctx.self = pid
         mailbox.registerHandlers(ctx, dispatcher)
-        mailbox.postSystemMessage(Started.Instance)
+        mailbox.postSystemMessage(Started)
         mailbox.start()
         return pid
     }

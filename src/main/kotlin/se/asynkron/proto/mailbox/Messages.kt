@@ -2,16 +2,5 @@ package proto.mailbox
 
 abstract class SystemMessage
 
-class SuspendMailbox : SystemMessage() {
-    companion object {
-        val Instance: SuspendMailbox = SuspendMailbox()
-    }
-}
-
-
-class ResumeMailbox : SystemMessage() {
-    companion object {
-        val Instance: ResumeMailbox = ResumeMailbox()
-    }
-}
-
+object SuspendMailbox : SystemMessage()
+object ResumeMailbox : SystemMessage()

@@ -6,7 +6,7 @@ import proto.mailbox.SystemMessage
 abstract class Process {
     abstract fun sendUserMessage(pid: PID, message: Any)
     open fun stop(pid: PID) {
-        sendSystemMessage(pid, Stop())
+        sendSystemMessage(pid, Stop)
     }
 
     abstract fun sendSystemMessage(pid: PID, message: SystemMessage)

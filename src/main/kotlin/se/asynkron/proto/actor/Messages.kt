@@ -12,41 +12,12 @@ class Terminated(val who: PID, val addressWasTerminated: Boolean) : SystemMessag
     //PROTO
 }
 
-class ReceiveTimeout : SystemMessage() {
-    companion object {
-        val Instance: ReceiveTimeout = ReceiveTimeout()
-    }
-}
-
-class Stopped : AutoReceiveMessage() {
-    companion object {
-        val Instance: Stopped = Stopped()
-    }
-}
-
-class Started : SystemMessage() {
-    companion object {
-        val Instance: Started = Started()
-    }
-}
-
-class Stop : SystemMessage() {
-    companion object {
-        val Instance: Stop = Stop()
-    }
-}
-
-class Restarting {
-    companion object {
-        val Instance: Restarting = Restarting()
-    }
-}
-
-class Stopping : AutoReceiveMessage() {
-    companion object {
-        val Instance: Stopping = Stopping()
-    }
-}
+object ReceiveTimeout : SystemMessage()
+object Stopped : AutoReceiveMessage()
+object Started : SystemMessage()
+object Stop : SystemMessage()
+object Restarting
+object Stopping : AutoReceiveMessage()
 
 class Failure(val who: PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage()
 class Watch(val watcher: PID) : SystemMessage()
