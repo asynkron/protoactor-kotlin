@@ -10,7 +10,7 @@ open class OneForOneStrategy(decider: (PID, Exception) -> SupervisorDirective, m
         val directive: SupervisorDirective = _decider(child, reason)
         val tmp = directive
         when (tmp) {
-            //TODO: convert
+        //TODO: convert
         }
     }
 

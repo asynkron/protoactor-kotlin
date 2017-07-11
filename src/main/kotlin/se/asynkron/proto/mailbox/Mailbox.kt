@@ -54,7 +54,7 @@ internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailb
                     } else if (msg is ResumeMailbox) {
                         _suspended = false
                     }
-                    _invoker.invokeSystemMessageAsync(msg)
+                    _invoker.invokeSystemMessageAsync(msg as SystemMessage)
 
                     for (stat in _stats) stat.messageReceived(msg)
                 }
@@ -76,7 +76,7 @@ internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailb
     protected fun schedule() {
         val wasIdle = _status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
         if (wasIdle) {
-            _dispatcher.schedule( {->runAsync()})
+            _dispatcher.schedule({ -> runAsync() })
         }
     }
 }

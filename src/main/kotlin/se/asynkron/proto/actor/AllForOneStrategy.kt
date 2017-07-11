@@ -10,7 +10,7 @@ class AllForOneStrategy(decider: (PID, Exception) -> SupervisorDirective, maxNrO
         val directive: SupervisorDirective = _decider(child, reason)
         val tmp = directive
         when (tmp) {
-            //TODO: convert
+        //TODO: convert
         }
     }
 

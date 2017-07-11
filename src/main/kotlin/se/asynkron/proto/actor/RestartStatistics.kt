@@ -19,7 +19,7 @@ open class RestartStatistics(var failureCount: Int, lastFailureTime: Date?) {
         lastFailureTime = now()
     }
 
-    private fun now() : Long = currentTimeMillis()
+    private fun now(): Long = currentTimeMillis()
 
     fun isWithinDuration(within: Duration): Boolean = (now() - lastFailureTime) < within.toMillis()
 }

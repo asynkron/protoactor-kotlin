@@ -15,19 +15,19 @@ abstract class EventStreamImpl<T> {
         return sub
     }
 
-    fun publish (msg : T) {
-        for(sub in _subscriptions) {
-            sub.value.dispatcher.schedule{ ->
-                try  {
+    fun publish(msg: T) {
+        for (sub in _subscriptions) {
+            sub.value.dispatcher.schedule { ->
+                try {
                     sub.value.action(msg)
-                }
-                catch (ex : Exception) {
-                   // _logger.logWarning(0, ex, "Exception has occurred when publishing a message.")
+                } catch (ex: Exception) {
+                    // _logger.logWarning(0, ex, "Exception has occurred when publishing a message.")
                 }
             }
         }
     }
-    internal fun unsubscribe (id : UUID) {
+
+    internal fun unsubscribe(id: UUID) {
         _subscriptions.remove(id)
     }
 }

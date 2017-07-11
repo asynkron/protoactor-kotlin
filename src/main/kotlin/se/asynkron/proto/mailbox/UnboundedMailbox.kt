@@ -5,6 +5,7 @@ class UnboundedMailbox {
         fun create(stats: Array<IMailboxStatistics>): IMailbox {
             return DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), stats)
         }
+
         fun create(): IMailbox {
             return DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), arrayOf())
         }

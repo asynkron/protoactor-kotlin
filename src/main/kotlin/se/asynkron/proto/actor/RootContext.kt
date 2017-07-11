@@ -1,8 +1,5 @@
 package proto.actor
 
-import kotlinx.coroutines.experimental.Deferred
-import java.time.Duration
-
 class ActorClient : ISenderContext {
     private var _senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
 

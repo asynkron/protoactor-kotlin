@@ -4,8 +4,8 @@ import proto.mailbox.IDispatcher
 import java.util.*
 
 class EventSubscription<T>(val eventStream: EventStreamImpl<T>, val dispatcher: IDispatcher, val action: (T) -> Unit) {
-    val id : UUID = UUID.randomUUID()
-    fun unsubscribe () {
+    val id: UUID = UUID.randomUUID()
+    fun unsubscribe() {
         eventStream.unsubscribe(id)
     }
 }

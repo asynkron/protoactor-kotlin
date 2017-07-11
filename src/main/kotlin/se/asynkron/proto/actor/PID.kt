@@ -1,7 +1,11 @@
 package proto.actor
 
-import kotlinx.coroutines.experimental.Deferred
+import proto.mailbox.SystemMessage
 import java.time.Duration
+
+infix fun PID.tell(message: Any): Unit {
+    this.tell(message)
+}
 
 class PID(val address: String, val id: String) {
     private var _p: Process? = null
@@ -14,7 +18,7 @@ class PID(val address: String, val id: String) {
         reff.sendUserMessage(this, message)
     }
 
-    fun sendSystemMessage(sys: Any) {
+    fun sendSystemMessage(sys: SystemMessage) {
         val reff: Process = ref() ?: ProcessRegistry.get(this)
         reff.sendSystemMessage(this, sys)
     }

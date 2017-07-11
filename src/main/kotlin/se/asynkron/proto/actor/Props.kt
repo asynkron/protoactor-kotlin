@@ -55,9 +55,9 @@ class Props {
             mailboxProducer = this.mailboxProducer
             producer = this.producer
             receiveMiddleware = this.receiveMiddleware
-          //  receiveMiddlewareChain = this.receiveMiddlewareChain
+            //  receiveMiddlewareChain = this.receiveMiddlewareChain
             senderMiddleware = this.senderMiddleware
-          //  senderMiddlewareChain = this.senderMiddlewareChain
+            //  senderMiddlewareChain = this.senderMiddlewareChain
             spawner = this.spawner
             supervisorStrategy = this.supervisorStrategy
         }
