@@ -8,8 +8,8 @@ class EventStream : EventStreamImpl<Any>() {
     }
 
     init {
-        subscribe({ msg: Any ->
-            if (msg is DeadLetterEvent) {
+        subscribe({
+            if (it is DeadLetterEvent) {
 //                _logger.logInformation("[DeadLetter] '{0}' got '{1}:{2}' from '{3}'", letter.pid.toShortString(), letter.message.getType().name, letter.message, letter.sender?.toShortString())
             }
         }, Dispatchers.synchronousDispatcher)

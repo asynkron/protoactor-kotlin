@@ -8,7 +8,7 @@ import proto.mailbox.UnboundedMailbox
 class Props {
     private fun produceDefaultMailbox(): IMailbox = UnboundedMailbox.create()
     private fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-        val ctx: LocalContext = LocalContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+        val ctx: Context = Context(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
         val mailbox: IMailbox = props.mailboxProducer()
         val dispatcher: IDispatcher = props.dispatcher
         val reff: LocalProcess = LocalProcess(mailbox)
