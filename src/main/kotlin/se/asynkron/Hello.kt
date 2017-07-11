@@ -1,5 +1,6 @@
 package se.asynkron
 
+import kotlinx.coroutines.experimental.CommonPool
 import proto.actor.Started
 import proto.actor.fromFunc
 import proto.actor.spawn
@@ -11,12 +12,13 @@ fun main(args: Array<String>) {
         val m = ctx.message
         when (m) {
             is Started -> println("started")
-            is String -> println("string " + m)
+            is String -> println("Hello " + m)
             else -> println("unknown " + m.toString())
         }
     }
     val pid = spawn(prop) //spawn the actor from props
-    pid tell "hej"
+    pid tell "Proto.Actor"
+
     //prevent app from exiting before async ops complete
     readLine()
 }

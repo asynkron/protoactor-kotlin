@@ -3,16 +3,16 @@ package proto.mailbox
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class UnboundedMailboxQueue : IMailboxQueue {
-    private val _messages: ConcurrentLinkedQueue<Any> = ConcurrentLinkedQueue()
+    private val messages: ConcurrentLinkedQueue<Any> = ConcurrentLinkedQueue()
     override fun push(message: Any) {
-        _messages.add(message)
+        messages.add(message)
     }
 
     override fun pop(): Any? {
-        return _messages.poll()
+        return messages.poll()
     }
 
     override val hasMessages: Boolean
-        get() = _messages.count() > 0
+        get() = messages.count() > 0
 }
 

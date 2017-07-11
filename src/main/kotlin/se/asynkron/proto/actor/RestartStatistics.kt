@@ -2,13 +2,11 @@ package proto.actor
 
 import java.lang.System.currentTimeMillis
 import java.time.Duration
-import java.util.*
 
-open class RestartStatistics(var failureCount: Int, lastFailureTime: Date?) {
-    var lastFailureTime: Long = 0
+open class RestartStatistics(var failureCount: Int,var lastFailureTimeMillis: Long) {
     fun fail() {
         failureCount++
-        lastFailureTime = now()
+        lastFailureTimeMillis = now()
     }
 
     fun reset() {
@@ -16,11 +14,11 @@ open class RestartStatistics(var failureCount: Int, lastFailureTime: Date?) {
     }
 
     fun restart() {
-        lastFailureTime = now()
+        lastFailureTimeMillis = now()
     }
 
     private fun now(): Long = currentTimeMillis()
 
-    fun isWithinDuration(within: Duration): Boolean = (now() - lastFailureTime) < within.toMillis()
+    fun isWithinDuration(within: Duration): Boolean = (now() - lastFailureTimeMillis) < within.toMillis()
 }
 

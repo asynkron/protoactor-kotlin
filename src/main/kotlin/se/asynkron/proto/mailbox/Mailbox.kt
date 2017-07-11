@@ -2,81 +2,79 @@ package proto.mailbox
 
 import java.util.concurrent.atomic.AtomicInteger
 
-internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailboxQueue, stats: Array<IMailboxStatistics>?) : IMailbox {
-    private val _stats: Array<IMailboxStatistics> = stats ?: arrayOf<IMailboxStatistics>() //TODO: reduce allocs
-    private val _systemMessages: IMailboxQueue = systemMessages
-    private val _userMailbox: IMailboxQueue = userMailbox
-    private val _status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
-    private lateinit var _dispatcher: IDispatcher
-    private lateinit var _invoker: IMessageInvoker
-    private var _suspended: Boolean = false
+internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private val userMailbox: IMailboxQueue, stats: Array<IMailboxStatistics>?) : IMailbox {
+    private val stats: Array<IMailboxStatistics> = stats ?: arrayOf<IMailboxStatistics>() //TODO: reduce allocs
+    private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
+    private lateinit var dispatcher: IDispatcher
+    private lateinit var invoker: IMessageInvoker
+    private var suspended: Boolean = false
 
     override fun postUserMessage(msg: Any) {
-        _userMailbox.push(msg)
-        for (stats in _stats) stats.messagePosted(msg)
+        userMailbox.push(msg)
+        for (stats in stats) stats.messagePosted(msg)
         schedule()
     }
 
     override fun postSystemMessage(msg: Any) {
-        _systemMessages.push(msg)
-        for (stats in _stats) stats.messagePosted(msg)
+        systemMessages.push(msg)
+        for (stats in stats) stats.messagePosted(msg)
         schedule()
     }
 
     override fun registerHandlers(invoker: IMessageInvoker, dispatcher: IDispatcher) {
-        _invoker = invoker
-        _dispatcher = dispatcher
+        this.invoker = invoker
+        this.dispatcher = dispatcher
     }
 
     override fun start() {
-        for (stats in _stats) stats.mailboxStarted()
+        for (stats in stats) stats.mailboxStarted()
     }
 
-    private suspend fun runAsync(): Unit {
+    private suspend fun runAsync() {
         processMessages()
 
-        _status.set(MailboxStatus.Idle)
-        if (_systemMessages.hasMessages || _suspended && _userMailbox.hasMessages) {
+        status.set(MailboxStatus.Idle)
+        if (systemMessages.hasMessages || suspended && userMailbox.hasMessages) {
             schedule()
         } else {
-            for (stat in _stats) stat.mailboxEmpty()
+            for (stat in stats) stat.mailboxEmpty()
         }
     }
 
     private suspend fun processMessages() {
         var msg: Any? = null
         try {
-            for (i in 0.._dispatcher.throughput) {
-                msg = _systemMessages.pop()
+            for (i in 0..dispatcher.throughput) {
+                msg = systemMessages.pop()
                 if (msg != null) {
                     if (msg is SuspendMailbox) {
-                        _suspended = true
+                        suspended = true
                     } else if (msg is ResumeMailbox) {
-                        _suspended = false
+                        suspended = false
                     }
-                    _invoker.invokeSystemMessageAsync(msg as SystemMessage)
+                    invoker.invokeSystemMessageAsync(msg as SystemMessage)
 
-                    for (stat in _stats) stat.messageReceived(msg)
+                    for (stat in stats) stat.messageReceived(msg)
                 }
-                if (_suspended) {
+                if (suspended) {
                 } else {
-                    msg = _userMailbox.pop()
+                    msg = userMailbox.pop()
                     if (msg != null) {
-                        _invoker.invokeUserMessageAsync(msg)
+                        invoker.invokeUserMessageAsync(msg)
 
-                        for (stat in _stats) stat.messageReceived(msg)
+                        for (stat in stats) stat.messageReceived(msg)
                     }
                 }
             }
         } catch (e: Exception) {
-            _invoker.escalateFailure(e, msg!!)
+            invoker.escalateFailure(e, msg!!)
         }
     }
 
-    protected fun schedule() {
-        val wasIdle = _status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
+    private fun schedule() {
+        val wasIdle = status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
         if (wasIdle) {
-            _dispatcher.schedule({ -> runAsync() })
+            dispatcher.schedule({ -> runAsync() })
         }
     }
 }

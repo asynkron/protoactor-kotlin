@@ -138,7 +138,7 @@ class LocalContext(private val producer: () -> IActor, private val supervisorStr
 //    }
     override fun escalateFailure(reason: Exception, who: PID) {
         if (restartStatistics == null) {
-            restartStatistics = RestartStatistics(0, null)
+            restartStatistics = RestartStatistics(0, 0)
         }
         val failure: Failure = Failure(who, reason, restartStatistics!!)
         if (parent == null) {
