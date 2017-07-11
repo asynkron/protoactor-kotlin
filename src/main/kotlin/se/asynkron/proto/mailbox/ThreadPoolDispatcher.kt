@@ -4,7 +4,7 @@ import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 
 
-class ThreadPoolDispatcher : IDispatcher {
+class ThreadPoolDispatcher : Dispatcher {
     override fun schedule(runner: suspend () -> Unit) {
         launch(CommonPool) {
             runner()

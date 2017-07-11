@@ -8,7 +8,7 @@ object EventStream : EventStreamImpl<Any>() {
             if (it is DeadLetterEvent) {
 //                _logger.logInformation("[DeadLetter] '{0}' got '{1}:{2}' from '{3}'", letter.pid.toShortString(), letter.message.getType().name, letter.message, letter.sender?.toShortString())
             }
-        }, Dispatchers.synchronousDispatcher)
+        }, Dispatchers.SYNCHRONOUS_DISPATCHER)
     }
 }
 

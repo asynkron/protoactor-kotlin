@@ -1,6 +1,6 @@
 package proto.mailbox
 
-interface IMailboxStatistics {
+interface MailboxStatistics {
     fun mailboxStarted()
     fun messagePosted(message: Any)
     fun messageReceived(message: Any)

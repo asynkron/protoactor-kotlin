@@ -1,6 +1,6 @@
 package proto.mailbox
 
-interface IDispatcher {
+interface Dispatcher {
     val throughput: Int
     fun schedule(runner: suspend () -> Unit)
 }

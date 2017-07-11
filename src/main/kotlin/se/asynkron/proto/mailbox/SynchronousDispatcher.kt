@@ -2,7 +2,7 @@ package proto.mailbox
 
 import kotlinx.coroutines.experimental.runBlocking
 
-class SynchronousDispatcher : IDispatcher {
+class SynchronousDispatcher : Dispatcher {
     override fun schedule(runner: suspend () -> Unit) {
         runBlocking { runner() }
     }

@@ -1,12 +1,12 @@
 package proto.actor
 
-import proto.mailbox.IDispatcher
+import proto.mailbox.Dispatcher
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 abstract class EventStreamImpl<T> {
     private val subscriptions: ConcurrentHashMap<UUID, EventSubscription<T>> = ConcurrentHashMap()
-    fun subscribe(action: (T) -> Unit, dispatcher: IDispatcher): EventSubscription<T> {
+    fun subscribe(action: (T) -> Unit, dispatcher: Dispatcher): EventSubscription<T> {
         val sub: EventSubscription<T> = EventSubscription(this, dispatcher, { x ->
             action(x)
         })

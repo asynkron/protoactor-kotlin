@@ -1,16 +1,16 @@
 package proto.actor
 
 import proto.mailbox.Dispatchers
-import proto.mailbox.IDispatcher
-import proto.mailbox.IMailbox
+import proto.mailbox.Dispatcher
+import proto.mailbox.Mailbox
 import proto.mailbox.UnboundedMailbox
 
 class Props {
-    private fun produceDefaultMailbox(): IMailbox = UnboundedMailbox.create()
+    private fun produceDefaultMailbox(): Mailbox = UnboundedMailbox.create()
     private fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
         val ctx: Context = Context(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
-        val mailbox: IMailbox = props.mailboxProducer()
-        val dispatcher: IDispatcher = props.dispatcher
+        val mailbox: Mailbox = props.mailboxProducer()
+        val dispatcher: Dispatcher = props.dispatcher
         val reff: LocalProcess = LocalProcess(mailbox)
         val (pid, ok) = ProcessRegistry.tryAdd(name, reff)
         if (!ok) {
@@ -25,17 +25,17 @@ class Props {
 
     private var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
     private var producer: (() -> IActor)? = null
-    private var mailboxProducer: () -> IMailbox = { -> produceDefaultMailbox() }
+    private var mailboxProducer: () -> Mailbox = { -> produceDefaultMailbox() }
     private var supervisorStrategy: ISupervisorStrategy = Supervision.defaultStrategy
-    private var dispatcher: IDispatcher = Dispatchers.defaultDispatcher
+    private var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
     private var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
     private var senderMiddleware: List<((ISenderContext, PID, MessageEnvelope) -> Unit) -> (ISenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
     private var receiveMiddlewareChain: ((IContext) -> Unit)? = null
     private var senderMiddlewareChain: ((ISenderContext, PID, MessageEnvelope) -> Unit)? = null
 
     fun withProducer(producer: () -> IActor): Props = copy { it.producer = producer }
-    fun withDispatcher(dispatcher: IDispatcher): Props = copy { it.dispatcher = dispatcher }
-    fun withMailbox(mailboxProducer: () -> IMailbox): Props = copy { it.mailboxProducer = mailboxProducer }
+    fun withDispatcher(dispatcher: Dispatcher): Props = copy { it.dispatcher = dispatcher }
+    fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy { it.mailboxProducer = mailboxProducer }
     fun withChildSupervisorStrategy(supervisorStrategy: ISupervisorStrategy): Props = copy { it.supervisorStrategy = supervisorStrategy }
     fun withReceiveMiddleware(middleware: Array<((IContext) -> Unit) -> (IContext) -> Unit>): Props = copy {
         it.receiveMiddleware = (middleware).toList()

@@ -1,6 +1,6 @@
 package proto.mailbox
 
 object UnboundedMailbox {
-    fun create(stats: Array<IMailboxStatistics>): IMailbox = DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), stats)
-    fun create(): IMailbox = DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), arrayOf())
+    fun create(stats: Array<MailboxStatistics>): Mailbox = DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), stats)
+    fun create(): Mailbox = DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), arrayOf())
 }

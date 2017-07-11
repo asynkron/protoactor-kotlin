@@ -1,13 +1,13 @@
 package proto.actor
 
-import proto.mailbox.IMessageInvoker
+import proto.mailbox.MessageInvoker
 import proto.mailbox.ResumeMailbox
 import proto.mailbox.SuspendMailbox
 import proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-class Context(private val producer: () -> IActor, private val supervisorStrategy: ISupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : IMessageInvoker, IContext, ISenderContext, ISupervisor {
+class Context(private val producer: () -> IActor, private val supervisorStrategy: ISupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((ISenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, ISenderContext, ISupervisor {
     val EmptyChildren: Collection<PID> = listOf()
     private var _children: MutableSet<PID>? = null
     private var _receiveTimeoutTimer: Timer? = null

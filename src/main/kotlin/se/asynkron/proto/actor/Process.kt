@@ -1,6 +1,6 @@
 package proto.actor
 
-import proto.mailbox.IMailbox
+import proto.mailbox.Mailbox
 import proto.mailbox.SystemMessage
 
 abstract class Process {
@@ -13,7 +13,7 @@ abstract class Process {
 }
 
 
-open class LocalProcess(val mailbox: IMailbox) : Process() {
+open class LocalProcess(val mailbox: Mailbox) : Process() {
     internal var isDead: Boolean = false
     override fun sendUserMessage(pid: PID, message: Any) {
         mailbox.postUserMessage(message)
