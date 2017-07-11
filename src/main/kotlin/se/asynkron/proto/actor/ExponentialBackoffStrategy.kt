@@ -14,15 +14,11 @@ open class ExponentialBackoffStrategy(private val backoffWindow: Duration, priva
         setFailureCount(rs)
         val backoff: Long = rs.failureCount * initialBackoff.toNanos()
         val noise: Int = random.nextInt(500)
-        val duration: Duration = Duration.ofMillis(toMilliseconds(backoff + noise))
+        val duration: Duration = Duration.ofNanos(backoff + noise)
         launch(CommonPool) {
             delay(duration.toNanos(),TimeUnit.NANOSECONDS)
             supervisor.restartChildren(reason, child)
         }
-    }
-
-    private fun toMilliseconds(nanoseconds: Long): Long {
-        return nanoseconds / 1000000
     }
 
     private fun setFailureCount(rs: RestartStatistics) {

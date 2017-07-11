@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
     }
     val pid = spawn(prop) //spawn the actor from props
     pid tell "Proto.Actor"
-
     //prevent app from exiting before async ops complete
     readLine()
 }
