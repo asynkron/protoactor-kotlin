@@ -1,15 +1,10 @@
 package proto.actor
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import proto.mailbox.IMessageInvoker
 import proto.mailbox.ResumeMailbox
 import proto.mailbox.SuspendMailbox
 import java.time.Duration
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 internal enum class ContextState {
     None, Alive, Restarting, Stopping
@@ -46,7 +41,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         get() = _children?.toList() ?: EmptyChildren
     override lateinit var actor : IActor
     override lateinit var self : PID
-    override val message : Any? = null
+    override val message : Any = Any()
     override val sender : PID?
         get() {
             val (_,sender,_) = MessageEnvelope.unwrap(_message)

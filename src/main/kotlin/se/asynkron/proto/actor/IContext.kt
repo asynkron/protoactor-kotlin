@@ -10,6 +10,7 @@ interface IContext {
     val actor : IActor
 
     val children : Collection<PID>
+    val message : Any
     fun respond (message : Any)
     fun stash ()
     fun spawn (props : Props) : PID
