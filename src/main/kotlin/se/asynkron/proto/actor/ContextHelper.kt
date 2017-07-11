@@ -10,6 +10,6 @@ internal object ContextHelper {
     }
 
     internal fun defaultSender(ctx: SenderContext, target: PID, envelope: MessageEnvelope) {
-        target.ref()?.sendUserMessage(target, envelope)
+        target.cachedProcess()?.sendUserMessage(target, envelope)
     }
 }

@@ -8,25 +8,25 @@ infix fun PID.tell(message: Any): Unit {
 }
 
 class PID(val address: String, val id: String) {
-    private var _p: Process? = null
-    internal fun ref(): Process? {
+    private var _cachedProcess: Process? = null
+    internal fun cachedProcess(): Process? {
         return null
     }
 
     fun tell(message: Any) {
-        val reff: Process = ref() ?: ProcessRegistry.get(this)
-        reff.sendUserMessage(this, message)
+        val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
+        process.sendUserMessage(this, message)
     }
 
     fun sendSystemMessage(sys: SystemMessage) {
-        val reff: Process = ref() ?: ProcessRegistry.get(this)
-        reff.sendSystemMessage(this, sys)
+        val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
+        process.sendSystemMessage(this, sys)
     }
 
     fun request(message: Any, sender: PID) {
-        val reff: Process = ref() ?: ProcessRegistry.get(this)
+        val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, sender, null)
-        reff.sendUserMessage(this, messageEnvelope)
+        process.sendUserMessage(this, messageEnvelope)
     }
 
     suspend fun <T> requestAsync(message: Any, timeout: Duration): T {
@@ -48,7 +48,7 @@ class PID(val address: String, val id: String) {
     }
 
     fun toShortString(): String {
-        return address + "/" + id
+        return "$address/$id"
     }
 }
 

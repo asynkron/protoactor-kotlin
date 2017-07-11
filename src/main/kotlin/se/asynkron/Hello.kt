@@ -1,10 +1,7 @@
 package se.asynkron
 
 import kotlinx.coroutines.experimental.CommonPool
-import proto.actor.Started
-import proto.actor.fromFunc
-import proto.actor.spawn
-import proto.actor.tell
+import proto.actor.*
 
 fun main(args: Array<String>) {
     val prop = fromFunc { ctx ->
@@ -12,7 +9,12 @@ fun main(args: Array<String>) {
         val m = ctx.message
         when (m) {
             is Started -> println("started")
-            is String -> println("Hello " + m)
+            is String -> {
+                println("Hello " + m)
+                ctx.self.stop()
+            }
+            is Stopping -> println("Stopping")
+            is Stopped -> println("Stopped")
             else -> println("unknown " + m.toString())
         }
     }
