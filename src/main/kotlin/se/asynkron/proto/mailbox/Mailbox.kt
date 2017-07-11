@@ -2,7 +2,7 @@ package proto.mailbox
 
 import java.util.concurrent.atomic.AtomicInteger
 
-open internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailboxQueue, stats: Array<IMailboxStatistics>?) : IMailbox {
+internal class DefaultMailbox(systemMessages: IMailboxQueue, userMailbox: IMailboxQueue, stats: Array<IMailboxStatistics>?) : IMailbox {
     private val _stats: Array<IMailboxStatistics> = stats ?: arrayOf<IMailboxStatistics>() //TODO: reduce allocs
     private val _systemMessages: IMailboxQueue = systemMessages
     private val _userMailbox: IMailboxQueue = userMailbox

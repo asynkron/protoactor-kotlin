@@ -30,7 +30,6 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     private val _senderMiddleware : ((ISenderContext, PID, MessageEnvelope) -> Unit)? = senderMiddleware
     private val _supervisorStrategy : ISupervisorStrategy = supervisorStrategy
     private var _children : MutableSet<PID>? = null
-    private var _message : Any = Any()
     private var _receiveTimeoutTimer : Timer? = null
     private var _restartStatistics : RestartStatistics? = null
     private var _stash : Stack<Any>? = null
@@ -41,10 +40,10 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         get() = _children?.toList() ?: EmptyChildren
     override lateinit var actor : IActor
     override lateinit var self : PID
-    override val message : Any = Any()
+    override var message : Any = Any()
     override val sender : PID?
         get() {
-            val (_,sender,_) = MessageEnvelope.unwrap(_message)
+            val (_,sender,_) = MessageEnvelope.unwrap(message)
             return sender
         }
     override val headers : MessageHeader? = null
@@ -178,7 +177,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
     }
 
     suspend fun handleContinuation(msg : Continuation){
-        _message = msg.message
+        message = msg.message
         msg.action()
     }
 
@@ -194,7 +193,7 @@ class LocalContext(producer: () -> IActor, supervisorStrategy: ISupervisorStrate
         escalateFailure(reason, self)
     }
     suspend private fun processMessageAsync (msg : Any) : Unit {
-        _message = msg
+        message = msg
         return if (_receiveMiddleware != null) _receiveMiddleware.invoke(this) else defaultReceive(this)
     }
     suspend private  fun <T> requestAsync (target : PID, message : Any, future : FutureProcess<T>) : T {
