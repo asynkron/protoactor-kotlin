@@ -23,7 +23,7 @@ object ProcessRegistry {
         return _localActorRefs.tryGetValue(pid.id) ?: DeadLetterProcess.Instance
     }
     fun tryAdd (id : String, aref : Process) : Pair<PID,Boolean> {
-        val pid : PID = PID(id,address)
+        val pid : PID = PID(address,id)
         val ok : Boolean = _localActorRefs.tryAdd(pid.id, aref)
         return Pair(pid,ok)
     }

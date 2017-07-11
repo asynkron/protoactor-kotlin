@@ -12,8 +12,8 @@ class Props {
         val mailbox: IMailbox = props.mailboxProducer()
         val dispatcher: IDispatcher = props.dispatcher
         val reff: LocalProcess = LocalProcess(mailbox)
-        val (pid, absent) = ProcessRegistry.tryAdd(name, reff)
-        if (absent) {
+        val (pid, ok) = ProcessRegistry.tryAdd(name, reff)
+        if (!ok) {
             throw ProcessNameExistException(name)
         }
         ctx.self = pid
