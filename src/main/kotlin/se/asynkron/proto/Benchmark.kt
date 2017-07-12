@@ -1,5 +1,7 @@
 package se.asynkron.proto
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import proto.actor.*
 import proto.mailbox.ThreadPoolDispatcher
 import proto.mailbox.mpscMailbox
