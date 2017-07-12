@@ -1,9 +1,9 @@
 package se.asynkron.proto
 
 import proto.actor.*
-import proto.mailbox.Dispatchers
 import proto.mailbox.ThreadPoolDispatcher
-import java.lang.System.*
+import se.asynkron.proto.mailbox.MpscQueue
+import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
 fun main(args: Array<String>){
@@ -17,12 +17,10 @@ fun run() {
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
     val tps: Array<Int> = arrayOf(300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
-        val d = ThreadPoolDispatcher()
-        d.throughput = t
-        
+        val d = ThreadPoolDispatcher(throughput = t)
         val clientCount: Int = Runtime.getRuntime().availableProcessors() * 2
 
-        val echoProps: Props = fromFunc({
+        val echoProps: Props = fromFunc {
             val tmp = message
             when (tmp) {
                 is Msg -> {
@@ -30,11 +28,11 @@ fun run() {
                     msg.sender.tell(msg)
                 }
             }
-        }).withDispatcher(d)
+        }.withDispatcher(d).withMailbox { -> MpscQueue.create(capacity = 20000) }
 
         var pairs: List<Pair<PID,PID>> = listOf()
         val latch: CountDownLatch = CountDownLatch(clientCount)
-        val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d)
+        val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { -> MpscQueue.create(capacity = 20000) }
         for (i in 0..clientCount) {
             pairs += Pair(spawn(clientProps),spawn(echoProps))
         }
@@ -55,7 +53,6 @@ fun run() {
 
         Thread.sleep(500)
     }
-
 }
 
 class Msg(val sender: PID)
@@ -83,7 +80,7 @@ class PingActor(val latch: CountDownLatch, var messageCount: Int, val batchSize:
             }
             else -> {
                 val m: Msg = Msg(context.self)
-                (0..batchSize).forEach { sender.tell(m) }
+                repeat(batchSize) {sender.tell(m)}
                 messageCount -= batchSize
                 batch = batchSize
                 return true
