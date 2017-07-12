@@ -7,7 +7,7 @@ import proto.mailbox.Mailbox
 import proto.router.routers.RouterState
 import se.asynkron.proto.router.RouterManagementMessage
 
-open class RouterProcess(val state: RouterState, mailbox: Mailbox) : LocalProcess(mailbox) {
+class RouterProcess(val state: RouterState, mailbox: Mailbox) : LocalProcess(mailbox) {
     override fun sendUserMessage(pid: PID, message: Any) {
         val msg = when (message) {
             is MessageEnvelope -> message.message

@@ -2,7 +2,7 @@ package proto.actor
 
 typealias Partition = MutableMap<String, Process>
 
-open internal class HashedConcurrentDictionary {
+internal class HashedConcurrentDictionary {
     companion object {
         private val HashSize: Int = 1024
         /*fun calculateHash (read : String) : Long {

@@ -1,6 +1,6 @@
 package proto.router.routers
 
-open internal class ConsistentHashPoolRouterConfig(poolSize: Int, private val hash: (String) -> Int, val replicaCount: Int) : PoolRouterConfig(poolSize) {
+internal class ConsistentHashPoolRouterConfig(poolSize: Int, private val hash: (String) -> Int, val replicaCount: Int) : PoolRouterConfig(poolSize) {
     override fun createRouterState(): RouterState = ConsistentHashRouterState(hash, replicaCount)
 
     init {

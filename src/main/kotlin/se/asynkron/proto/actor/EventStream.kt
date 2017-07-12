@@ -5,8 +5,8 @@ import proto.mailbox.Dispatchers
 object EventStream : EventStreamImpl<Any>() {
     init {
         subscribe({
-            if (it is DeadLetterEvent) {
-//                _logger.logInformation("[DeadLetter] '{0}' got '{1}:{2}' from '{3}'", letter.pid.toShortString(), letter.message.getType().name, letter.message, letter.sender?.toShortString())
+            when (it) {
+                is DeadLetterEvent -> Logger.logInformation("[DeadLetter] '${it.pid.toShortString()}' got '${it.message.javaClass.name}:${it.message}' from '${it.sender?.toShortString()}'")
             }
         }, Dispatchers.SYNCHRONOUS_DISPATCHER)
     }

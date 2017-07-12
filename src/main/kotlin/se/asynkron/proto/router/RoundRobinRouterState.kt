@@ -3,7 +3,7 @@ package proto.router.routers
 import proto.actor.PID
 import java.util.concurrent.atomic.AtomicInteger
 
-open internal class RoundRobinRouterState : RouterState() {
+internal class RoundRobinRouterState : RouterState() {
     private var currentIndex: AtomicInteger = AtomicInteger(0)
     private lateinit var routees: Set<PID>
     private lateinit var values: Array<PID>

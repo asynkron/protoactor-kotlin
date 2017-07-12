@@ -5,7 +5,7 @@ import proto.actor.PID
 import proto.router.HashRing
 import proto.router.IHashable
 
-open internal class ConsistentHashRouterState(private val hash: (String) -> Int, private var replicaCount: Int) : RouterState() {
+internal class ConsistentHashRouterState(private val hash: (String) -> Int, private var replicaCount: Int) : RouterState() {
     private lateinit var hashRing: HashRing
     private lateinit var routeeMap: Map<String, PID>
     override fun getRoutees(): Set<PID> {
