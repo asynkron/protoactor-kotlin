@@ -11,18 +11,23 @@ object MD5Hasher {
     }
 }
 
+data class HashEntry(val hashKey: Int, val node : String)
 
-open class HashRing {
-    private val _hash: (String) -> Int
-    private val _ring: List<Pair<Int, String>>
+ class HashRing (nodes: Set<String>,val hash: (String) -> Int,val replicaCount: Int) {
+    private val ring: Array<HashEntry>
 
-    constructor(nodes: Iterable<String>, hash: (String) -> Int, replicaCount: Int) {
-        _hash = hash
-        _ring = nodes.toList() //TODO fix
-    }
+    fun getNode(key: String): String = ring.first {it.hashKey > hash(key)}.node
 
-    fun getNode(key: String): String {
-        return ( ?: ).item2
+    init {
+        val res = mutableListOf<HashEntry>()
+        for(n in nodes){
+            for(i in (0..replicaCount)){
+                val hashKey = ""+i+n
+                res.add(HashEntry(hash(hashKey),n))
+            }
+        }
+        res.sortBy({ it.hashKey })
+        ring = res.toTypedArray()
     }
 }
 

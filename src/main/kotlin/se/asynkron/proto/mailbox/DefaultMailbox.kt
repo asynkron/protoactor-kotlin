@@ -47,22 +47,20 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
             for (i in 0..dispatcher.throughput) {
                 msg = systemMessages.pop()
                 if (msg != null) {
-                    if (msg is SuspendMailbox) {
-                        suspended = true
-                    } else if (msg is ResumeMailbox) {
-                        suspended = false
+                    when (msg) {
+                        is SuspendMailbox -> suspended = true
+                        is ResumeMailbox -> suspended = false
                     }
                     invoker.invokeSystemMessageAsync(msg as SystemMessage)
-
                     for (stat in stats) stat.messageReceived(msg)
                 }
-                if (suspended) {
-                } else {
+                if (!suspended) {
                     msg = userMailbox.pop()
-                    if (msg != null) {
-                        invoker.invokeUserMessageAsync(msg)
-
-                        for (stat in stats) stat.messageReceived(msg)
+                    when {
+                        msg != null -> {
+                            invoker.invokeUserMessageAsync(msg)
+                            for (stat in stats) stat.messageReceived(msg)
+                        }
                     }
                 }
             }
