@@ -1,17 +1,18 @@
 package proto.router
 
 import proto.actor.*
+import proto.router.routers.IGroupRouterConfig
 import proto.router.routers.IRouterConfig
 import proto.router.routers.RouterState
 import se.asynkron.proto.router.*
 import java.util.concurrent.CountDownLatch
 
-class RouterActor(private val routeeProps: Props, private val config: IRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
+class GroupRouterActor(private val config: IGroupRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
     suspend override fun receiveAsync(context: IContext) {
         val message = context.message
         when (message) {
             is Started -> {
-                config.onStarted(context, routeeProps, routerState)
+                config.onStarted(context, routerState)
                 wg.countDown()
                 return
             }

@@ -5,7 +5,7 @@ import proto.actor.PID
 import proto.actor.Props
 
 abstract class GroupRouterConfig(protected var routees: Set<PID>) : IGroupRouterConfig {
-    override fun onStarted(context: IContext, props: Props, router: RouterState) {
+    override fun onStarted(context: IContext, router: RouterState) {
         routees.forEach { context.watch(it) }
         router.setRoutees(routees)
     }

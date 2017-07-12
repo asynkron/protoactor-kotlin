@@ -1,4 +1,9 @@
 package proto.router.routers
 
-interface IGroupRouterConfig : IRouterConfig
+import proto.actor.IContext
+import proto.actor.Props
+
+interface IGroupRouterConfig : IRouterConfig {
+    fun onStarted(context: IContext, router: RouterState)
+}
 
