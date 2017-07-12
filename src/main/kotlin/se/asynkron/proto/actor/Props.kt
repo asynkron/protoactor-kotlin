@@ -6,11 +6,10 @@ import proto.mailbox.Mailbox
 import proto.mailbox.UnboundedMailbox
 
 class Props {
-    private fun produceDefaultMailbox(): Mailbox = UnboundedMailbox.create()
-
+    val name = ProcessRegistry.nextId()
     var spawner: (String, Props, PID?) -> PID = ::defaultSpawner
     var producer: (() -> Actor)? = null
-    var mailboxProducer: () -> Mailbox = { -> produceDefaultMailbox() }
+    var mailboxProducer: () -> Mailbox = { -> UnboundedMailbox.create() }
     var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
     var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
     var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
@@ -35,17 +34,14 @@ class Props {
     fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy { it.spawner = spawner }
 
     private fun copy(mutator: (Props) -> Unit): Props {
-        val props: Props = Props().apply {
-            dispatcher = this.dispatcher
-            mailboxProducer = this.mailboxProducer
-            producer = this.producer
-            receiveMiddleware = this.receiveMiddleware
-            //  receiveMiddlewareChain = this.receiveMiddlewareChain
-            senderMiddleware = this.senderMiddleware
-            //  senderMiddlewareChain = this.senderMiddlewareChain
-            spawner = this.spawner
-            supervisorStrategy = this.supervisorStrategy
-        }
+        val props: Props = Props()
+        props.producer = this.producer
+        props.dispatcher = this.dispatcher
+        props.mailboxProducer = this.mailboxProducer
+        props.receiveMiddleware = this.receiveMiddleware
+        props.senderMiddleware = this.senderMiddleware
+        props.spawner = this.spawner
+        props.supervisorStrategy = this.supervisorStrategy
         mutator(props)
         return props
     }

@@ -6,7 +6,7 @@ import proto.router.routers.RouterState
 import se.asynkron.proto.router.*
 import java.util.concurrent.CountDownLatch
 
-open class RouterActor(private val routeeProps: Props, private val config: IRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
+class RouterActor(private val routeeProps: Props, private val config: IRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
     suspend override fun receiveAsync(context: IContext) {
         val message = context.message
         when (message) {
