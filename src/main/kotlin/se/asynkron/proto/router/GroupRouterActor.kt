@@ -1,8 +1,10 @@
 package proto.router
 
-import proto.actor.*
+import proto.actor.Actor
+import proto.actor.IContext
+import proto.actor.PID
+import proto.actor.Started
 import proto.router.routers.IGroupRouterConfig
-import proto.router.routers.IRouterConfig
 import proto.router.routers.RouterState
 import se.asynkron.proto.router.*
 import java.util.concurrent.CountDownLatch

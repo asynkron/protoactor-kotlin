@@ -1,5 +1,3 @@
 package se.asynkron
 
-class HelloTest {
-
-}
+class HelloTest

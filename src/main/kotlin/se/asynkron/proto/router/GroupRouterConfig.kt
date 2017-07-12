@@ -2,7 +2,6 @@ package proto.router.routers
 
 import proto.actor.IContext
 import proto.actor.PID
-import proto.actor.Props
 
 abstract class GroupRouterConfig(protected var routees: Set<PID>) : IGroupRouterConfig {
     override fun onStarted(context: IContext, router: RouterState) {

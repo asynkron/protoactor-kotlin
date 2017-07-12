@@ -1,6 +1,5 @@
 package se.asynkron
 
-import kotlinx.coroutines.experimental.CommonPool
 import proto.actor.*
 import proto.router.newRoundRobinPool
 

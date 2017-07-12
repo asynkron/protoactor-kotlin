@@ -293,7 +293,5 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     }
 }
 
-class AsyncTimer(receiveTimeoutCallback: () -> Unit, tick: Duration) : Timer() {
-
-}
+class AsyncTimer(receiveTimeoutCallback: () -> Unit, tick: Duration) : Timer()
 

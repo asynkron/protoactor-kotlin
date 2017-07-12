@@ -2,7 +2,6 @@ package proto.router
 
 import proto.actor.*
 import proto.router.routers.IPoolRouterConfig
-import proto.router.routers.IRouterConfig
 import proto.router.routers.RouterState
 import se.asynkron.proto.router.*
 import java.util.concurrent.CountDownLatch

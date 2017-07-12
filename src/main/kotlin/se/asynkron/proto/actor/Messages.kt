@@ -2,8 +2,7 @@ package proto.actor
 
 import proto.mailbox.SystemMessage
 
-abstract class AutoReceiveMessage {
-}
+abstract class AutoReceiveMessage
 
 class PoisonPill { //TODO: this is proto
 }

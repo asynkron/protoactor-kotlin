@@ -32,6 +32,6 @@ class FutureProcess<T>(timeout: Duration? = null) : Process() {
     }
 }
 
-abstract class CompletableDeferred<T> : Deferred<T> {
+abstract class CompletableDeferred<out T> : Deferred<T> {
     abstract fun <T> set(value: T)
 }
