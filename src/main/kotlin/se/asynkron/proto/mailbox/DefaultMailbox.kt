@@ -34,7 +34,7 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
         processMessages()
 
         status.set(MailboxStatus.Idle)
-        if (systemMessages.hasMessages || suspended && userMailbox.hasMessages) {
+        if (systemMessages.hasMessages || (!suspended && userMailbox.hasMessages)) {
             schedule()
         } else {
             for (stat in stats) stat.mailboxEmpty()
