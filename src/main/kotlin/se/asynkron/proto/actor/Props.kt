@@ -3,12 +3,12 @@ package proto.actor
 import proto.mailbox.Dispatchers
 import proto.mailbox.Dispatcher
 import proto.mailbox.Mailbox
-import proto.mailbox.UnboundedMailbox
+import proto.mailbox.unboundedMailbox
 
 class Props {
     var spawner: (String, Props, PID?) -> PID = ::defaultSpawner
     var producer: (() -> Actor)? = null
-    var mailboxProducer: () -> Mailbox = { -> UnboundedMailbox.create() }
+    var mailboxProducer: () -> Mailbox = { unboundedMailbox() }
     var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
     var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
     var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()

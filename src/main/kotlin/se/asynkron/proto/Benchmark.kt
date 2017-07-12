@@ -2,7 +2,7 @@ package se.asynkron.proto
 
 import proto.actor.*
 import proto.mailbox.ThreadPoolDispatcher
-import se.asynkron.proto.mailbox.MpscQueue
+import proto.mailbox.mpscMailbox
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
@@ -28,11 +28,11 @@ fun run() {
                     msg.sender.tell(msg)
                 }
             }
-        }.withDispatcher(d).withMailbox { -> MpscQueue.create(capacity = 20000) }
+        }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
 
         var pairs: List<Pair<PID,PID>> = listOf()
         val latch: CountDownLatch = CountDownLatch(clientCount)
-        val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { -> MpscQueue.create(capacity = 20000) }
+        val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
         for (i in 0..clientCount) {
             pairs += Pair(spawn(clientProps),spawn(echoProps))
         }
