@@ -14,33 +14,23 @@ class PoolRouterActor(private val routeeProps: Props, private val config: IPoolR
             is Started -> {
                 config.onStarted(context, routeeProps, routerState)
                 wg.countDown()
-                return
             }
             is RouterAddRoutee -> {
                 val r: Set<PID> = routerState.getRoutees()
-                if (r.contains(message.pid)) {
-                    return
+                if (!r.contains(message.pid)) {
+                    context.watch(message.pid)
+                    routerState.setRoutees(r + message.pid)
                 }
-                context.watch(message.pid)
-                routerState.setRoutees(r + message.pid)
-                return
             }
             is RouterRemoveRoutee -> {
                 val r: Set<PID> = routerState.getRoutees()
-                if (!r.contains(message.pid)) {
-                    return
+                if (r.contains(message.pid)) {
+                    context.unwatch(message.pid)
+                    routerState.setRoutees(r - message.pid)
                 }
-                context.unwatch(message.pid)
-                routerState.setRoutees(r - message.pid)
-                return
             }
-            is RouterBroadcastMessage -> {
-                routerState.getRoutees().forEach { it.request(message, context.sender!!) }
-                return
-            }
-            is RouterGetRoutees -> {
-                context.sender!!.tell(Routees(routerState.getRoutees()))
-            }
+            is RouterBroadcastMessage -> routerState.getRoutees().forEach { it.request(message, context.sender!!) }
+            is RouterGetRoutees -> context.sender!!.tell(Routees(routerState.getRoutees()))
         }
     }
 }

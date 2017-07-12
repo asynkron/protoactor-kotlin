@@ -8,20 +8,17 @@ import java.time.Duration
 import java.util.*
 
 class Context(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, SenderContext, Supervisor {
-    private var _children: MutableSet<PID>? = null
+    private var _children: Set<PID> = setOf()
+    private var watchers: Set<PID> = setOf()
     private var _receiveTimeoutTimer: Timer? = null
-
-    private var state: ContextState = ContextState.None
-
     private val stash: Stack<Any> by lazy(LazyThreadSafetyMode.NONE) { Stack<Any>() }
     private val restartStatistics: RestartStatistics by lazy(LazyThreadSafetyMode.NONE) { RestartStatistics(0, 0) }
-    private val watchers: MutableSet<PID> by lazy(LazyThreadSafetyMode.NONE) { mutableSetOf<PID>() }
-
+    private var state: ContextState = ContextState.None
     override lateinit var actor: Actor
     override lateinit var self: PID
     var _message: Any = Any()
-    override val children: Collection<PID>
-        get() = _children.orEmpty()
+    override val children: Set<PID>
+        get() = _children
 
     override val message: Any
         get() {
@@ -63,13 +60,8 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
 
     override fun spawnNamed(props: Props, name: String): PID {
         val pid: PID = props.spawn("${self.id}/$name", self)
-        ensureChildren().add(pid)
+        _children += pid
         return pid
-    }
-
-    private fun ensureChildren(): MutableSet<PID> {
-        _children = _children ?: mutableSetOf()
-        return _children!!
     }
 
     override fun watch(pid: PID) = pid.sendSystemMessage(Watch(self))
@@ -213,18 +205,18 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     suspend private fun handleRestartAsync() {
         state = ContextState.Restarting
         invokeUserMessageAsync(Restarting)
-        _children.orEmpty().forEach { it.stop() }
+        _children.forEach { it.stop() }
         tryRestartOrTerminateAsync()
     }
 
     private fun handleUnwatch(uw: Unwatch) {
-        watchers.remove(uw.watcher)
+        watchers -= uw.watcher
     }
 
     private fun handleWatch(w: Watch) {
         when (state) {
             ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false))
-            else -> watchers.add(w.watcher)
+            else -> watchers += w.watcher
         }
     }
 
@@ -240,7 +232,7 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     }
 
     suspend private fun handleTerminatedAsync(msg: Terminated) {
-        _children?.remove(msg.who)
+        _children -= msg.who
         invokeUserMessageAsync(msg)
         tryRestartOrTerminateAsync()
     }

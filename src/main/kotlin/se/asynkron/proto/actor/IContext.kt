@@ -7,8 +7,7 @@ interface IContext {
     val self: PID
     val sender: PID?
     val actor: Actor
-
-    val children: Collection<PID>
+    val children: Set<PID>
     val message: Any
     fun respond(message: Any)
     fun stash()
