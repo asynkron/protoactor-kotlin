@@ -2,13 +2,7 @@ package proto.router.routers
 
 import proto.actor.PID
 
-internal class BroadcastGroupRouterConfig(routees: Array<PID>) : GroupRouterConfig() {
-    override fun createRouterState () : RouterState {
-        return BroadcastRouterState()
-    }
-
-    init {
-        Routees = routees.toMutableSet()
-    }
+internal class BroadcastGroupRouterConfig(routees: Set<PID>) : GroupRouterConfig(routees) {
+    override fun createRouterState(): RouterState = BroadcastRouterState()
 }
 

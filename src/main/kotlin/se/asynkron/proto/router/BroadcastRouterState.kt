@@ -3,13 +3,14 @@ package proto.router.routers
 import proto.actor.PID
 
 internal class BroadcastRouterState : RouterState() {
-    private var _routees : Set<PID>? = null
-    override fun getRoutees () : Set<PID> = _routees.orEmpty()
-    override fun setRoutees (routees : Set<PID>) {
-        _routees = routees
+    private lateinit var routees: Set<PID>
+    override fun getRoutees(): Set<PID> = routees
+    override fun setRoutees(routees: Set<PID>) {
+        this.routees = routees
     }
-    override fun routeMessage (message : Any) {
-        _routees.orEmpty().forEach { it.tell(message) }
+
+    override fun routeMessage(message: Any) {
+        routees.forEach { it.tell(message) }
     }
 }
 

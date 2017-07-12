@@ -1,6 +1,6 @@
 package proto.router
 
 interface IHashable {
-    fun hashBy () : String
+    fun hashBy(): String
 }
 

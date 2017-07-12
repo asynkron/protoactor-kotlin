@@ -4,19 +4,21 @@ import proto.actor.PID
 import java.util.concurrent.atomic.AtomicInteger
 
 open internal class RoundRobinRouterState : RouterState() {
-    private var _currentIndex : AtomicInteger = AtomicInteger(0)
-    private lateinit var _routees : Set<PID>
-    private lateinit var _values : Array<PID>
-    override fun getRoutees () : Set<PID> {
-        return _routees
+    private var currentIndex: AtomicInteger = AtomicInteger(0)
+    private lateinit var routees: Set<PID>
+    private lateinit var values: Array<PID>
+    override fun getRoutees(): Set<PID> {
+        return routees
     }
-    override fun setRoutees (routees : Set<PID>) {
-        _routees = routees
-        _values = routees.toTypedArray()
+
+    override fun setRoutees(routees: Set<PID>) {
+        this.routees = routees
+        values = routees.toTypedArray()
     }
-    override fun routeMessage (message : Any) {
-        val i : Int = _currentIndex.getAndIncrement() % _values.count()
-        val pid : PID = _values[i]
+
+    override fun routeMessage(message: Any) {
+        val i: Int = currentIndex.getAndIncrement() % values.count()
+        val pid: PID = values[i]
         pid.tell(message)
     }
 }

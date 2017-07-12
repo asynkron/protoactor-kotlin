@@ -5,36 +5,36 @@ import proto.actor.PID
 import proto.router.HashRing
 import proto.router.IHashable
 
-open internal class ConsistentHashRouterState(hash: (String) -> Int, replicaCount: Int) : RouterState() {
-    private val _hash : (String) -> Int = hash
-    private var _replicaCount : Int = replicaCount
-    private var _hashRing : HashRing? = null
-    private var _routeeMap : Map<String, PID>? = null
-    override fun getRoutees () : Set<PID> {
-        return setOf(*_routeeMap.values.toTypedArray())
+open internal class ConsistentHashRouterState(private val hash: (String) -> Int, private var replicaCount: Int) : RouterState() {
+    private lateinit var hashRing: HashRing
+    private lateinit var routeeMap: Map<String, PID>
+    override fun getRoutees(): Set<PID> {
+        return routeeMap.values.toSet()
     }
-    fun setRoutees (routees : MutableSet<PID>) {
-        _routeeMap = mapOf<String, PID>()
-        val nodes : MutableList<String> = mutableListOf()
-        for(pid in routees) {
-            val nodeName : String = pid.toShortString()
-            nodes.add(nodeName)
-            _routeeMap[nodeName] = pid
-        }
-        _hashRing = HashRing(nodes, _hash, _replicaCount)
-    }
-    override fun routeMessage (message : Any) {
 
-        val msg = when(message){
+    override fun setRoutees(routees: Set<PID>) {
+        routeeMap = mapOf<String, PID>()
+        var nodes: Set<String> = setOf()
+        for (pid in routees) {
+            val nodeName: String = pid.toShortString()
+            nodes += nodeName
+            routeeMap += Pair(nodeName, pid)
+        }
+        hashRing = HashRing(nodes, hash, replicaCount)
+    }
+
+    override fun routeMessage(message: Any) {
+
+        val msg = when (message) {
             is MessageEnvelope -> message.message
             else -> message
         }
 
-        when (msg){
+        when (msg) {
             is IHashable -> {
                 val key: String = msg.hashBy()
-                val node: String = _hashRing.getNode(key)
-                val routee: PID = _routeeMap[node]
+                val node: String = hashRing.getNode(key)
+                val routee: PID = routeeMap[node]!!
                 routee.tell(message)
             }
             else -> throw Exception("Message is not hashable")

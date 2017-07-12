@@ -1,13 +1,9 @@
 package proto.router
 
 import proto.actor.*
-import proto.router.messages.*
 import proto.router.routers.IRouterConfig
 import proto.router.routers.RouterState
-import se.asynkron.proto.router.Routees
-import se.asynkron.proto.router.RouterAddRoutee
-import se.asynkron.proto.router.RouterBroadcastMessage
-import se.asynkron.proto.router.RouterRemoveRoutee
+import se.asynkron.proto.router.*
 
 open class RouterActor(private val routeeProps: Props, private val config: IRouterConfig, private val routerState: RouterState, private val wg: AutoResetEvent) : Actor {
     suspend override fun receiveAsync(context: IContext) {
