@@ -7,23 +7,8 @@ import proto.mailbox.UnboundedMailbox
 
 class Props {
     private fun produceDefaultMailbox(): Mailbox = UnboundedMailbox.create()
-    private fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-        val ctx: Context = Context(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
-        val mailbox: Mailbox = props.mailboxProducer()
-        val dispatcher: Dispatcher = props.dispatcher
-        val reff: LocalProcess = LocalProcess(mailbox)
-        val (pid, ok) = ProcessRegistry.tryAdd(name, reff)
-        if (!ok) {
-            throw ProcessNameExistException(name)
-        }
-        ctx.self = pid
-        mailbox.registerHandlers(ctx, dispatcher)
-        mailbox.postSystemMessage(Started)
-        mailbox.start()
-        return pid
-    }
 
-    var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
+    var spawner: (String, Props, PID?) -> PID = ::defaultSpawner
     var producer: (() -> Actor)? = null
     var mailboxProducer: () -> Mailbox = { -> produceDefaultMailbox() }
     var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
@@ -66,6 +51,22 @@ class Props {
     }
 
     internal fun spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
+}
+
+fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
+    val ctx: Context = Context(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+    val mailbox: Mailbox = props.mailboxProducer()
+    val dispatcher: Dispatcher = props.dispatcher
+    val reff: LocalProcess = LocalProcess(mailbox)
+    val (pid, ok) = ProcessRegistry.tryAdd(name, reff)
+    if (!ok) {
+        throw ProcessNameExistException(name)
+    }
+    ctx.self = pid
+    mailbox.registerHandlers(ctx, dispatcher)
+    mailbox.postSystemMessage(Started)
+    mailbox.start()
+    return pid
 }
 
 

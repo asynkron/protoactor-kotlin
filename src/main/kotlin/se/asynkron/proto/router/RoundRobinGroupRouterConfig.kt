@@ -1,11 +1,12 @@
 package proto.router.routers
 
-open internal class RoundRobinGroupRouterConfig : GroupRouterConfig {
-    constructor(routees : Array<PID>)  {
-        Routees = MutableSet<PID>(routees)
-    }
-    fun createRouterState () : RouterState {
-        return RoundRobinRouterState()
+import proto.actor.PID
+
+open internal class RoundRobinGroupRouterConfig(routees: Array<PID>) : GroupRouterConfig() {
+    override fun createRouterState () : RouterState = RoundRobinRouterState()
+
+    init {
+        Routees = setOf(*routees)
     }
 }
 

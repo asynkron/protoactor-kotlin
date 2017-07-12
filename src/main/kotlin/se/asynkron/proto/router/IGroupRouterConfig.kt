@@ -1,4 +1,4 @@
 package proto.router.routers
 
-interface IGroupRouterConfig : IRouterConfig {}
+interface IGroupRouterConfig : IRouterConfig
 

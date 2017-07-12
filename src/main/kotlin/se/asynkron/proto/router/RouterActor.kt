@@ -4,6 +4,10 @@ import proto.actor.*
 import proto.router.messages.*
 import proto.router.routers.IRouterConfig
 import proto.router.routers.RouterState
+import se.asynkron.proto.router.Routees
+import se.asynkron.proto.router.RouterAddRoutee
+import se.asynkron.proto.router.RouterBroadcastMessage
+import se.asynkron.proto.router.RouterRemoveRoutee
 
 open class RouterActor(private val routeeProps: Props, private val config: IRouterConfig, private val routerState: RouterState, private val wg: AutoResetEvent) : Actor {
     suspend override fun receiveAsync(context: IContext) {
@@ -16,20 +20,20 @@ open class RouterActor(private val routeeProps: Props, private val config: IRout
             }
             is RouterAddRoutee -> {
                 val r: Set<PID> = routerState.getRoutees()
-                if (r.contains(message.pID)) {
+                if (r.contains(message.pid)) {
                     return
                 }
-                context.watch(message.pID)
-                routerState.setRoutees(r + message.pID)
+                context.watch(message.pid)
+                routerState.setRoutees(r + message.pid)
                 return
             }
             is RouterRemoveRoutee -> {
                 val r: Set<PID> = routerState.getRoutees()
-                if (!r.contains(message.pID)) {
+                if (!r.contains(message.pid)) {
                     return
                 }
-                context.unwatch(message.pID)
-                routerState.setRoutees(r - message.pID)
+                context.unwatch(message.pid)
+                routerState.setRoutees(r - message.pid)
                 return
             }
             is RouterBroadcastMessage -> {
