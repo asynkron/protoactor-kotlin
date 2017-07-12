@@ -4,6 +4,7 @@ import proto.actor.*
 import proto.mailbox.Dispatcher
 import proto.mailbox.Mailbox
 import proto.router.routers.*
+import java.util.concurrent.CountDownLatch
 
 object Router {
     fun newBroadcastGroup(routees: Set<PID>): Props = Props().withSpawner(spawner(BroadcastGroupRouterConfig(routees)))
@@ -17,12 +18,11 @@ object Router {
     fun newRandomPool(props: Props, poolSize: Int, seed: Long): Props = props.withSpawner(spawner(RandomPoolRouterConfig(poolSize, seed)))
     fun newRoundRobinPool(props: Props, poolSize: Int): Props = props.withSpawner(spawner(RoundRobinPoolRouterConfig(poolSize)))
 
-
     fun spawner(config: IRouterConfig): (String, Props, PID?) -> PID {
         fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
             val routeeProps: Props = props.withSpawner(::defaultSpawner)
             val routerState: RouterState = config.createRouterState()
-            val wg: AutoResetEvent = AutoResetEvent(false)
+            val wg: CountDownLatch = CountDownLatch(1)
             val routerProps: Props = fromProducer { -> RouterActor(routeeProps, config, routerState, wg) }.withMailbox(props.mailboxProducer)
             val ctx: Context = Context(routerProps.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
             val mailbox: Mailbox = routerProps.mailboxProducer()
@@ -36,7 +36,7 @@ object Router {
             mailbox.registerHandlers(ctx, dispatcher)
             mailbox.postSystemMessage(Started)
             mailbox.start()
-            wg.waitOne()
+            wg.await()
             return pid
         }
         return ::spawnRouterProcess

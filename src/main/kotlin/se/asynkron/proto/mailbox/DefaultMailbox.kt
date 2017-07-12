@@ -56,8 +56,9 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
                 }
                 if (!suspended) {
                     msg = userMailbox.pop()
-                    when {
-                        msg != null -> {
+                    when (msg) {
+                        null -> return
+                        else -> {
                             invoker.invokeUserMessageAsync(msg)
                             for (stat in stats) stat.messageReceived(msg)
                         }
@@ -65,7 +66,7 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
                 }
             }
         } catch (e: Exception) {
-            invoker.escalateFailure(e, msg!!)
+            if (msg != null) invoker.escalateFailure(e, msg)
         }
     }
 
