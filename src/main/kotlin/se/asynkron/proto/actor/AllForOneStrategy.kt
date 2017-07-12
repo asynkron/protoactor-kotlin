@@ -6,10 +6,29 @@ class AllForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirec
     override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         val directive: SupervisorDirective = decider(child, reason)
         when (directive) {
-            SupervisorDirective.Resume -> TODO()
-            SupervisorDirective.Restart -> TODO()
-            SupervisorDirective.Stop -> TODO()
-            SupervisorDirective.Escalate -> TODO()
+            SupervisorDirective.Resume -> {
+                Logger.logInformation("Resuming ${child.toShortString()} Reason $reason")
+                supervisor.resumeChildren(child)
+            }
+            SupervisorDirective.Restart -> {
+                when {
+                    requestRestartPermission(rs) -> {
+                        Logger.logInformation("Restarting ${child.toShortString()} Reason $reason")
+                        supervisor.restartChildren(reason, *supervisor.children.toTypedArray())
+                    }
+                    else -> {
+                        Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                        supervisor.stopChildren(*supervisor.children.toTypedArray())
+                    }
+                }
+            }
+            SupervisorDirective.Stop -> {
+                Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                supervisor.stopChildren(*supervisor.children.toTypedArray())
+            }
+            SupervisorDirective.Escalate -> {
+                supervisor.escalateFailure(reason, child)
+            }
         }
     }
 

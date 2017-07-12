@@ -23,15 +23,15 @@ class Props {
         return pid
     }
 
-    private var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
-    private var producer: (() -> Actor)? = null
-    private var mailboxProducer: () -> Mailbox = { -> produceDefaultMailbox() }
-    private var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
-    private var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
-    private var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
-    private var senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
-    private var receiveMiddlewareChain: ((IContext) -> Unit)? = null
-    private var senderMiddlewareChain: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
+    var spawner: (String, Props, PID?) -> PID = this::defaultSpawner
+    var producer: (() -> Actor)? = null
+    var mailboxProducer: () -> Mailbox = { -> produceDefaultMailbox() }
+    var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
+    var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
+    var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
+    var senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
+    var receiveMiddlewareChain: ((IContext) -> Unit)? = null
+    var senderMiddlewareChain: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 
     fun withProducer(producer: () -> Actor): Props = copy { it.producer = producer }
     fun withDispatcher(dispatcher: Dispatcher): Props = copy { it.dispatcher = dispatcher }

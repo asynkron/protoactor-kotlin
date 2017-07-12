@@ -6,10 +6,21 @@ open class OneForOneStrategy(private val decider: (PID, Exception) -> Supervisor
     override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         val directive: SupervisorDirective = decider(child, reason)
         when (directive) {
-            SupervisorDirective.Resume -> TODO()
-            SupervisorDirective.Restart -> TODO()
-            SupervisorDirective.Stop -> TODO()
-            SupervisorDirective.Escalate -> TODO()
+            SupervisorDirective.Resume -> supervisor.resumeChildren(child)
+            SupervisorDirective.Restart -> {
+                if (requestRestartPermission(rs)) {
+                    Logger.logInformation("Restarting ${child.toShortString()} Reason $reason")
+                    supervisor.restartChildren(reason, child)
+                } else {
+                    Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                    supervisor.stopChildren(child)
+                }
+            }
+            SupervisorDirective.Stop -> {
+                Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                supervisor.stopChildren(child)
+            }
+            SupervisorDirective.Escalate -> supervisor.escalateFailure(reason, child)
         }
     }
 
@@ -24,4 +35,8 @@ open class OneForOneStrategy(private val decider: (PID, Exception) -> Supervisor
         rs.reset()
         return true
     }
+}
+
+object Logger {
+    fun logInformation(message:String){}
 }

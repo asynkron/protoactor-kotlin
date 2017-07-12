@@ -8,24 +8,25 @@ import java.time.Duration
 import java.util.*
 
 class Context(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((IContext) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, IContext, SenderContext, Supervisor {
-    val EmptyChildren: Collection<PID> = listOf()
     private var _children: MutableSet<PID>? = null
     private var _receiveTimeoutTimer: Timer? = null
-    private var restartStatistics: RestartStatistics? = null
-    private var stash: Stack<Any>? = null
+
     private var state: ContextState = ContextState.None
 
-    private var watchers: MutableSet<PID>? = null
+    private val stash: Stack<Any> by lazy(LazyThreadSafetyMode.NONE) { Stack<Any>() }
+    private val restartStatistics: RestartStatistics by lazy(LazyThreadSafetyMode.NONE) { RestartStatistics(0, 0) }
+    private val watchers: MutableSet<PID> by lazy(LazyThreadSafetyMode.NONE) { mutableSetOf<PID>() }
+
     override lateinit var actor: Actor
     override lateinit var self: PID
-    var _message : Any = Any()
+    var _message: Any = Any()
     override val children: Collection<PID>
         get() = _children.orEmpty()
 
     override val message: Any
         get() {
             val m = _message
-            return when(m){
+            return when (m) {
                 is MessageEnvelope -> m.message
                 else -> m
             }
@@ -34,7 +35,7 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     override val sender: PID?
         get() {
             val m = _message
-            return when(m){
+            return when (m) {
                 is MessageEnvelope -> m.sender
                 else -> null
             }
@@ -42,19 +43,14 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     override val headers: MessageHeader?
         get() {
             val m = _message
-            return when(m){
+            return when (m) {
                 is MessageEnvelope -> m.header
                 else -> null
             }
         }
 
     override fun stash() {
-        ensureStash().push(message)
-    }
-
-    private fun ensureStash() : Stack<Any>{
-        stash = stash ?: Stack<Any>()
-        return stash!!
+        stash.push(message)
     }
 
     override fun respond(message: Any) {
@@ -71,7 +67,7 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
         return pid
     }
 
-    private fun ensureChildren() : MutableSet<PID> {
+    private fun ensureChildren(): MutableSet<PID> {
         _children = _children ?: mutableSetOf()
         return _children!!
     }
@@ -131,7 +127,7 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
 //        }
 //    }
     override fun escalateFailure(reason: Exception, who: PID) {
-        val failure: Failure = Failure(who, reason, ensureRestartStatistics())
+        val failure: Failure = Failure(who, reason, restartStatistics)
         when (parent) {
             null -> handleRootFailure(failure)
             else -> {
@@ -141,10 +137,6 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
         }
     }
 
-    private fun ensureRestartStatistics() : RestartStatistics {
-        restartStatistics = restartStatistics ?: RestartStatistics(0, 0)
-        return restartStatistics!!
-    }
 
     override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { it.sendSystemMessage(Restart(reason)) }
     override fun stopChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(Stop) }
@@ -226,19 +218,14 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
     }
 
     private fun handleUnwatch(uw: Unwatch) {
-        watchers?.remove(uw.watcher)
+        watchers.remove(uw.watcher)
     }
 
     private fun handleWatch(w: Watch) {
         when (state) {
-            ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false)) //TODO: init
-            else -> ensureWatchers().add(w.watcher)
+            ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false))
+            else -> watchers.add(w.watcher)
         }
-    }
-
-    private fun ensureWatchers() : MutableSet<PID> {
-        watchers = watchers ?: mutableSetOf()
-        return watchers!!
     }
 
     private fun handleFailure(msg: Failure) {
@@ -295,9 +282,8 @@ class Context(private val producer: () -> Actor, private val supervisorStrategy:
         incarnateActor()
         self.sendSystemMessage(ResumeMailbox)
         invokeUserMessageAsync(Started)
-        val s = stash
-        while (s != null && s.isNotEmpty()) {
-            val msg: Any = s.pop()
+        while (stash.isNotEmpty()) {
+            val msg: Any = stash.pop()
             invokeUserMessageAsync(msg)
         }
     }
