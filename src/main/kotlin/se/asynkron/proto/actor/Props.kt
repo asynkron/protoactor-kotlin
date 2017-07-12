@@ -6,7 +6,6 @@ import proto.mailbox.Mailbox
 import proto.mailbox.UnboundedMailbox
 
 class Props {
-    val name = ProcessRegistry.nextId()
     var spawner: (String, Props, PID?) -> PID = ::defaultSpawner
     var producer: (() -> Actor)? = null
     var mailboxProducer: () -> Mailbox = { -> UnboundedMailbox.create() }
