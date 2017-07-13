@@ -28,6 +28,16 @@ Other implementations:
 
 **Be fast** - Do not trade performance for magic API trickery.
 
+Inprocess Ping-Pong results:
+```
+Dispatcher		Elapsed		Msg/sec
+300				900.0			35555555
+400				332.0			96385542
+500				215.0			148837209
+600				250.0			128000000
+700				157.0			203821656 <-- 200 mil msg/sec
+```
+
 ## Getting started
 
 The best place currently for learning how to use Proto.Actor is the [examples](https://github.com/AsynkronIT/protoactor-kotlin/tree/dev/examples). Documentation and guidance is under way, but not yet complete, and can be found on the [website](http://proto.actor/docs/kotlin/).
@@ -45,7 +55,7 @@ Define an actor:
 ```kotlin
 class HelloActor : Actor
 {
-    suspend fun ReceiveAsync(context : IContext)
+    suspend override fun receiveAsync(context : IContext)
     {
         val msg = context.Message;
         when (msg)
