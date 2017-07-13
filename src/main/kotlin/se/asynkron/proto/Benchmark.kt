@@ -35,7 +35,7 @@ fun run() {
         var pairs: List<Pair<PID,PID>> = listOf()
         val latch: CountDownLatch = CountDownLatch(clientCount)
         val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
-        for (i in 0..clientCount) {
+        for (i in 0..clientCount-1) {
             pairs += Pair(spawn(clientProps),spawn(echoProps))
         }
         val sw: Long = currentTimeMillis()

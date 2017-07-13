@@ -15,10 +15,10 @@ internal class HashedConcurrentDictionary {
         }*/
     }
 
-    private val _partitions: Array<Partition> = Array(1024, { _ -> mutableMapOf<String, Process>() })
+    private val partitions: Array<Partition> = Array(HashSize, { _ -> mutableMapOf<String, Process>() })
     private fun getPartition(key: String): Partition {
         val hash: Int = Math.abs(key.hashCode()) % HashSize
-        val p = _partitions[hash]
+        val p = partitions[hash]
         return p
     }
 

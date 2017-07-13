@@ -26,6 +26,7 @@ object ProcessRegistry {
 
     fun tryAdd(id: String, process: Process): Pair<PID, Boolean> {
         val pid: PID = PID(address, id)
+        pid._cachedProcess = process //we know what pid points to what process here
         val ok: Boolean = processLookup.tryAdd(pid.id, process)
         return Pair(pid, ok)
     }

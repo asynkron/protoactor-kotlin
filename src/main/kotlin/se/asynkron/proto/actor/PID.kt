@@ -8,9 +8,12 @@ infix fun PID.tell(message: Any): Unit {
 }
 
 class PID(val address: String, val id: String) {
-    private var _cachedProcess: Process? = null
+    internal var _cachedProcess: Process? = null
     internal fun cachedProcess(): Process? {
-        return null
+        if (_cachedProcess == null){
+            _cachedProcess = ProcessRegistry.get(this)
+        }
+        return _cachedProcess
     }
 
     fun tell(message: Any) {
@@ -43,7 +46,7 @@ class PID(val address: String, val id: String) {
     }
 
     fun stop() {
-        val reff: Process = ProcessRegistry.get(this)
+        val reff:  Process = cachedProcess() ?: ProcessRegistry.get(this)
         reff.stop(this)
     }
 

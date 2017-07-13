@@ -44,7 +44,7 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
     private suspend fun processMessages() {
         var msg: Any? = null
         try {
-            for (i in 0..dispatcher.throughput) {
+            for (i in 0..dispatcher.throughput-1) {
                 msg = systemMessages.pop()
                 if (msg != null) {
                     when (msg) {

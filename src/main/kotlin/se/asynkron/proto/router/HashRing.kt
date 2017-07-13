@@ -7,7 +7,7 @@ data class HashEntry(val hashKey: Int, val node : String)
 
      init {
          ring = nodes
-                 .flatMap { n -> (0..replicaCount).map { i -> HashEntry(hash("$i$n"), n) } }
+                 .flatMap { n -> (0..replicaCount-1).map { i -> HashEntry(hash("$i$n"), n) } }
                  .sortedBy { it.hashKey }
                  .toTypedArray()
 
