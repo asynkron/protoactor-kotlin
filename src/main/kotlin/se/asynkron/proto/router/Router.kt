@@ -25,10 +25,7 @@ private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> P
         val mailbox: Mailbox = routerProps.mailboxProducer()
         val dispatcher: Dispatcher = routerProps.dispatcher
         val reff: Process = RouterProcess(routerState, mailbox)
-        val (pid, absent) = ProcessRegistry.tryAdd(name, reff)
-        if (!absent) {
-            throw ProcessNameExistException(name)
-        }
+        val pid = ProcessRegistry.add(name, reff)
         ctx.self = pid
         mailbox.registerHandlers(ctx, dispatcher)
         mailbox.postSystemMessage(Started)
@@ -48,10 +45,7 @@ private fun poolSpawner(config: IPoolRouterConfig, routeeProps : Props): (String
         val mailbox: Mailbox = routerProps.mailboxProducer()
         val dispatcher: Dispatcher = routerProps.dispatcher
         val reff: Process = RouterProcess(routerState, mailbox)
-        val (pid, absent) = ProcessRegistry.tryAdd(name, reff)
-        if (!absent) {
-            throw ProcessNameExistException(name)
-        }
+        val pid = ProcessRegistry.add(name, reff)
         ctx.self = pid
         mailbox.registerHandlers(ctx, dispatcher)
         mailbox.postSystemMessage(Started)

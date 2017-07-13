@@ -27,11 +27,11 @@ object ProcessRegistry {
         //return processLookup.tryGetValue(pid.id) ?: DeadLetterProcess
     }
 
-    fun tryAdd(id: String, process: Process): Pair<PID, Boolean> {
+    fun add(id: String, process: Process):PID {
         val pid: PID = PID(address, id)
         pid._cachedProcess = process //we know what pid points to what process here
-        val ok: Boolean = processLookup.putIfAbsent(pid.id,process) == null
-        return Pair(pid, ok)
+        processLookup.put(pid.id,process)
+        return pid
     }
 
     fun remove(pid: PID) {

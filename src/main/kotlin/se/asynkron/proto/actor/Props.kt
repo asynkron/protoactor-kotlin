@@ -53,10 +53,7 @@ fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
     val mailbox: Mailbox = props.mailboxProducer()
     val dispatcher: Dispatcher = props.dispatcher
     val reff: LocalProcess = LocalProcess(mailbox)
-    val (pid, ok) = ProcessRegistry.tryAdd(name, reff)
-    if (!ok) {
-        throw ProcessNameExistException(name)
-    }
+    val pid = ProcessRegistry.add(name, reff)
     ctx.self = pid
     mailbox.registerHandlers(ctx, dispatcher)
     mailbox.postSystemMessage(Started)
