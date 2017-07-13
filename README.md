@@ -31,11 +31,11 @@ Other implementations:
 Inprocess Ping-Pong results:
 ```
 Dispatcher      Elapsed     Msg/sec
-300         900.0       35555555
-400         332.0       96385542
-500         215.0       148837209
-600         250.0       128000000
-700         157.0       203821656 <-- 200 mil msg/sec
+300             900.0       35555555
+400             332.0       96385542
+500             215.0       148837209
+600             250.0       128000000
+700             157.0       203821656 <-- 200 mil msg/sec
 ```
 
 ## Getting started
