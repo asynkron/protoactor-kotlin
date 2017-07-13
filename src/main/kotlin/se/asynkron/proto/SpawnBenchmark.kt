@@ -68,5 +68,9 @@ fun main(args: Array<String>) {
     val managerPid: PID = spawn(managerProps)
     managerPid.tell(Begin)
     readLine()
+    managerPid.tell(Begin)
+    readLine()
+    managerPid.tell(Begin)
+    readLine()
 }
 

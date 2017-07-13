@@ -1,11 +1,13 @@
 package proto.actor
 
+import com.sun.org.apache.xpath.internal.operations.Bool
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 object ProcessRegistry {
     private val NoHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
-    private val processLookup: HashedConcurrentDictionary = HashedConcurrentDictionary()
+    private val processLookup: ConcurrentHashMap<String,Process> = ConcurrentHashMap<String,Process>()
     private val sequenceId: AtomicInteger = AtomicInteger(0)
     var address: String = NoHost
 
@@ -21,13 +23,14 @@ object ProcessRegistry {
 
             throw Exception("Unknown host")
         }
-        return processLookup.tryGetValue(pid.id) ?: DeadLetterProcess
+        return processLookup.getOrDefault(pid.id,DeadLetterProcess)
+        //return processLookup.tryGetValue(pid.id) ?: DeadLetterProcess
     }
 
     fun tryAdd(id: String, process: Process): Pair<PID, Boolean> {
         val pid: PID = PID(address, id)
         pid._cachedProcess = process //we know what pid points to what process here
-        val ok: Boolean = processLookup.tryAdd(pid.id, process)
+        val ok: Boolean = processLookup.putIfAbsent(pid.id,process) == null
         return Pair(pid, ok)
     }
 
