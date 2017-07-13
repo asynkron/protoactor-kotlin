@@ -1,6 +1,7 @@
 package spawnbenchmark
 
 import proto.actor.*
+import proto.mailbox.mpscMailbox
 
 object Begin
 data class Request(var div: Long, var num: Long, var size: Long, val respondTo : PID)
