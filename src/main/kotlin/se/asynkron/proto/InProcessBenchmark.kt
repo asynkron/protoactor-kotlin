@@ -1,14 +1,12 @@
 package se.asynkron.proto
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
 import proto.actor.*
 import proto.mailbox.ThreadPoolDispatcher
 import proto.mailbox.mpscMailbox
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
-fun main(args: Array<String>){
+fun main(args: Array<String>) {
     run()
     readLine()
 }
@@ -32,14 +30,14 @@ fun run() {
             }
         }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
 
-        var pairs: List<Pair<PID,PID>> = listOf()
+        var pairs: List<Pair<PID, PID>> = listOf()
         val latch: CountDownLatch = CountDownLatch(clientCount)
         val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
-        for (i in 0..clientCount-1) {
-            pairs += Pair(spawn(clientProps),spawn(echoProps))
+        for (i in 0 until clientCount) {
+            pairs += Pair(spawn(clientProps), spawn(echoProps))
         }
         val sw: Long = currentTimeMillis()
-        for ((client,echo) in pairs) {
+        for ((client, echo) in pairs) {
             client.tell(Start(echo))
         }
         latch.await()
@@ -48,7 +46,7 @@ fun run() {
         val totalMessages: Int = messageCount * 2 * clientCount
         val x: Int = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
         println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
-        for ((client,echo) in pairs) {
+        for ((client, echo) in pairs) {
             client.stop()
             echo.stop()
         }
@@ -60,8 +58,8 @@ fun run() {
 class Msg(val sender: PID)
 class Start(val sender: PID)
 
-class PingActor(val latch: CountDownLatch, var messageCount: Int, val batchSize: Int, var batch: Int = 0) : Actor {
-    suspend override fun receiveAsync(context: IContext) {
+class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
+    suspend override fun receiveAsync(context: Context) {
         val msg = context.message
         when (msg) {
             is Start -> sendBatch(context, msg.sender)
@@ -75,14 +73,14 @@ class PingActor(val latch: CountDownLatch, var messageCount: Int, val batchSize:
         }
     }
 
-    private fun sendBatch(context: IContext, sender: PID): Boolean {
+    private fun sendBatch(context: Context, sender: PID): Boolean {
         when (messageCount) {
             0 -> {
                 return false
             }
             else -> {
                 val m: Msg = Msg(context.self)
-                repeat(batchSize) {sender.tell(m)}
+                repeat(batchSize) { sender.tell(m) }
                 messageCount -= batchSize
                 batch = batchSize
                 return true

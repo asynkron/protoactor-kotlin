@@ -11,16 +11,16 @@ class Props {
     var mailboxProducer: () -> Mailbox = { unboundedMailbox() }
     var supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy
     var dispatcher: Dispatcher = Dispatchers.DEFAULT_DISPATCHER
-    var receiveMiddleware: List<((IContext) -> Unit) -> (IContext) -> Unit> = mutableListOf()
+    var receiveMiddleware: List<((Context) -> Unit) -> (Context) -> Unit> = mutableListOf()
     var senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = mutableListOf()
-    var receiveMiddlewareChain: ((IContext) -> Unit)? = null
+    var receiveMiddlewareChain: ((Context) -> Unit)? = null
     var senderMiddlewareChain: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 
     fun withProducer(producer: () -> Actor): Props = copy { it.producer = producer }
     fun withDispatcher(dispatcher: Dispatcher): Props = copy { it.dispatcher = dispatcher }
     fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy { it.mailboxProducer = mailboxProducer }
     fun withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy { it.supervisorStrategy = supervisorStrategy }
-    fun withReceiveMiddleware(middleware: Array<((IContext) -> Unit) -> (IContext) -> Unit>): Props = copy {
+    fun withReceiveMiddleware(middleware: Array<((Context) -> Unit) -> (Context) -> Unit>): Props = copy {
         it.receiveMiddleware = (middleware).toList()
         // props.receiveMiddlewareChain = (ReceiveLocalContext.defaultReceive, { inner, outer -> outer(inner) })
     }
@@ -49,7 +49,7 @@ class Props {
 }
 
 fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-    val ctx: Context = Context(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+    val ctx: ActorContext = ActorContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
     val mailbox: Mailbox = props.mailboxProducer()
     val dispatcher: Dispatcher = props.dispatcher
     val reff: LocalProcess = LocalProcess(mailbox)

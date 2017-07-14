@@ -23,5 +23,5 @@ data class Watch(val watcher: PID) : SystemMessage()
 data class Unwatch(val watcher: PID) : SystemMessage()
 data class Restart(val reason: Exception) : SystemMessage()
 data class Continuation(val action: suspend () -> Unit, val message: Any) : SystemMessage()
-interface INotInfluenceReceiveTimeout
+interface NotInfluenceReceiveTimeout
 

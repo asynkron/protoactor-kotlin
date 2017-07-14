@@ -1,8 +1,8 @@
 package proto.actor
 
 internal object ContextHelper {
-    suspend internal fun defaultReceive(context: IContext) {
-        val c: Context = context as Context
+    suspend internal fun defaultReceive(context: Context) {
+        val c: ActorContext = context as ActorContext
         when (c.message) {
             is PoisonPill -> c.self.stop()
             else -> c.actor.receiveAsync(context)

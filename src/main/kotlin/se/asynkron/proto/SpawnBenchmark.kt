@@ -1,7 +1,6 @@
 package spawnbenchmark
 
 import proto.actor.*
-import proto.mailbox.mpscMailbox
 
 object Begin
 data class Request(var div: Long, var num: Long, var size: Long, val respondTo : PID)
@@ -16,7 +15,7 @@ open internal class SpawnActor : Actor {
     lateinit var replyTo: PID
     var sum: Long = 0
 
-    suspend override fun receiveAsync(context: IContext) {
+    suspend override fun receiveAsync(context: Context) {
         val msg: Any = context.message
         when (msg) {
             is Request -> when {
@@ -27,7 +26,7 @@ open internal class SpawnActor : Actor {
                 else -> {
                     replies = msg.div
                     replyTo = msg.respondTo
-                    for (i in 0..msg.div-1) {
+                    for (i in 0 until msg.div) {
                         val child: PID = spawn(props)
                         val s = msg.size / msg.div
                         child.tell(Request(

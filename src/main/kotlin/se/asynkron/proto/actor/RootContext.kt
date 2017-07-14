@@ -1,7 +1,7 @@
 package proto.actor
 
 class ActorClient (messageHeader: MessageHeader, middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) : SenderContext {
-    private var _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
+    private val _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 
     override val message: Any?
         get() = null
@@ -11,14 +11,12 @@ class ActorClient (messageHeader: MessageHeader, middleware: Array<((SenderConte
     }
 
     fun tell(target: PID, message: Any) {
-        if (_senderMiddleware != null) {
-            if (message is MessageEnvelope) {
-                _senderMiddleware!!.invoke(this, target, message)
-            } else {
-                _senderMiddleware!!.invoke(this, target, MessageEnvelope(message, null, null))
+        when (_senderMiddleware) {
+            null -> target.tell(message)
+            else -> when (message) {
+                is MessageEnvelope -> _senderMiddleware.invoke(this, target, message)
+                else -> _senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
             }
-        } else {
-            target.tell(message)
         }
     }
 

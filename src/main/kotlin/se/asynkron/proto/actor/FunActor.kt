@@ -1,5 +1,5 @@
 package proto.actor
 
-class FunActor(val receive: suspend (IContext) -> Unit) : Actor {
-    override suspend fun receiveAsync(context: IContext) = receive(context)
+class FunActor(val receive: suspend (Context) -> Unit) : Actor {
+    override suspend fun receiveAsync(context: Context) = receive(context)
 }
