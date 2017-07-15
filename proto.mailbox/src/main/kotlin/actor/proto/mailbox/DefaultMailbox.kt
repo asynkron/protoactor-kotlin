@@ -72,7 +72,7 @@ internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private
     private fun schedule() {
         val wasIdle = status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
         if (wasIdle) {
-            dispatcher.schedule({ -> runAsync() })
+            dispatcher.schedule({ runAsync() })
         }
     }
 }
