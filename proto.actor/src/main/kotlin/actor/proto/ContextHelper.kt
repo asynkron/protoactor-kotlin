@@ -9,7 +9,7 @@ internal object ContextHelper {
     }
 
     @Suppress("unused")
-    internal fun defaultSender(@Suppress("UNUSED_PARAMETER") ctx: SenderContext, target: PID, envelope: MessageEnvelope) {
+    internal fun defaultSender(@Suppress("UNUSED_PARAMETER") ctx: SenderContext, target: Protos.PID, envelope: MessageEnvelope) {
         target.cachedProcess()?.sendUserMessage(target, envelope)
     }
 }

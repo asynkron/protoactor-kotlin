@@ -53,12 +53,12 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     override fun respond(message: Any) = sender!!.tell(message)
 
-    override fun spawn(props: Props): PID = spawnNamed(props, ProcessRegistry.nextId())
+    override fun spawnChild(props: Props): PID = spawnNamedChild(props, ProcessRegistry.nextId())
 
-    override fun spawnPrefix(props: Props, prefix: String): PID = spawnNamed(props, prefix + ProcessRegistry.nextId())
+    override fun spawnPrefixChild(props: Props, prefix: String): PID = spawnNamedChild(props, prefix + ProcessRegistry.nextId())
 
-    override fun spawnNamed(props: Props, name: String): PID {
-        val pid: PID = props.spawn("${self.id}/$name", self)
+    override fun spawnNamedChild(props: Props, name: String): PID {
+        val pid = props.spawn("${self.id}/$name", self)
         _children += pid
         return pid
     }
@@ -209,6 +209,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     private fun handleWatch(w: Watch) {
         when (state) {
+
             ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false))
             else -> watchers += w.watcher
         }
@@ -259,7 +260,6 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun stopAsync() {
         ProcessRegistry.remove(self)
         invokeUserMessageAsync(Stopped)
-
         val terminated: Terminated = Terminated(self, false)
         watchers.forEach { it.sendSystemMessage(terminated) }
         parent?.sendSystemMessage(terminated)

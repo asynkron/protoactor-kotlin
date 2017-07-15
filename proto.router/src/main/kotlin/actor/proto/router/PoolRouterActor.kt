@@ -1,9 +1,6 @@
 package actor.proto.router
 
-import actor.proto.Actor
-import actor.proto.Context
-import actor.proto.Props
-import actor.proto.Started
+import actor.proto.*
 import java.util.concurrent.CountDownLatch
 
 

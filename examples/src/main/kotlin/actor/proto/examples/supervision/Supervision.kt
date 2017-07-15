@@ -1,11 +1,18 @@
 package actor.proto.examples.supervision
 
-
 import actor.proto.*
 
 fun main(args: Array<String>) {
-    val props = fromProducer { ParentActor() }
-            .withChildSupervisorStrategy(OneForOneStrategy(::decide, 1, null))
+
+    val decide = { _: PID, reason: Exception ->
+        when (reason) {
+            is RecoverableException -> SupervisorDirective.Restart
+            is FatalException -> SupervisorDirective.Stop
+            else -> SupervisorDirective.Escalate
+        }
+    }
+
+    val props = fromFunc { ParentActor() }.withChildSupervisorStrategy(OneForOneStrategy(decide, 1))
 
     val actor = spawn(props)
     actor.tell(Hello("ProtoActor"))
@@ -22,44 +29,25 @@ class FatalException : Exception()
 object Fatal
 object Recoverable
 
-fun decide(pid: PID, reason: Exception): SupervisorDirective {
-    val tmp = reason
-    when (tmp) {
-        is RecoverableException -> return SupervisorDirective.Restart
-        is FatalException -> return SupervisorDirective.Stop
-        else -> return SupervisorDirective.Escalate
-    }
-}
-
-
-open internal class ParentActor : Actor {
-    private lateinit var _child: PID
+class ParentActor : Actor {
+    private lateinit var child: PID
     suspend override fun receiveAsync(context: Context) {
-        val tmp = context.message
-        when (tmp) {
-            is Started -> {
-                val props: Props = fromProducer { -> ChildActor() }
-                _child = context.spawn(props)
-            }
-            is Hello -> _child.tell(tmp)
-            is Recoverable -> _child.tell(tmp)
-            is Fatal -> _child.tell(tmp)
-            is Terminated -> {
-                val r = tmp
-                println("Watched actor was Terminated " + r.who.toShortString())
-            }
+        val msg = context.message
+        when (msg) {
+            is Started -> child = context.spawnChild(fromProducer { ChildActor() })
+            is Hello -> child.tell(msg)
+            is Recoverable -> child.tell(msg)
+            is Fatal -> child.tell(msg)
+            is Terminated -> println("Watched actor was Terminated ${msg.who.toShortString()}")
         }
     }
 }
 
-open internal class ChildActor : Actor {
+class ChildActor : Actor {
     suspend override fun receiveAsync(context: Context) {
-        val tmp = context.message
-        when (tmp) {
-            is Hello -> {
-                val r = tmp
-                println("Hello ${r.who}")
-            }
+        val msg = context.message
+        when (msg) {
+            is Hello -> println("Hello ${msg.who}")
             is Recoverable -> throw RecoverableException()
             is Fatal -> throw FatalException()
             is Started -> println("Started, initialize actor here")

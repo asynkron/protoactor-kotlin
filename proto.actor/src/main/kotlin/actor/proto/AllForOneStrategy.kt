@@ -2,8 +2,8 @@ package actor.proto
 
 import java.time.Duration
 
-class AllForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirective, private val maxNrOfRetries: Int, private val withinTimeSpan: Duration?) : SupervisorStrategy {
-    override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
+class AllForOneStrategy(private val decider: (Protos.PID, Exception) -> SupervisorDirective, private val maxNrOfRetries: Int, private val withinTimeSpan: Duration?) : SupervisorStrategy {
+    override fun handleFailure(supervisor: Supervisor, child: Protos.PID, rs: RestartStatistics, reason: Exception) {
         val directive: SupervisorDirective = decider(child, reason)
         when (directive) {
             SupervisorDirective.Resume -> {

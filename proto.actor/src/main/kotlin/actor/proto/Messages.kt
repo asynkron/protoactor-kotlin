@@ -2,26 +2,28 @@ package actor.proto
 
 import actor.proto.mailbox.SystemMessage
 
-abstract class AutoReceiveMessage
+interface AutoReceiveMessage
+typealias PoisonPill = Protos.PoisonPill
+typealias Terminated = Protos.Terminated
 
-class PoisonPill { //TODO: this is proto
+fun Terminated(who : Protos.PID , addressTerminated : Boolean) : Terminated {
+    val t = Terminated.newBuilder()
+    t.who = who
+    t.addressTerminated = addressTerminated
+    return t.build()
 }
 
-class Terminated(val who: PID, val addressWasTerminated: Boolean) : SystemMessage() {
-    //PROTO
-}
-
-object ReceiveTimeout : SystemMessage()
-object Stopped : AutoReceiveMessage()
-object Started : SystemMessage()
-object Stop : SystemMessage()
+object ReceiveTimeout : SystemMessage
+object Stopped : AutoReceiveMessage
+object Started : SystemMessage
+object Stop : SystemMessage
 object Restarting
-object Stopping : AutoReceiveMessage()
+object Stopping : AutoReceiveMessage
 
-data class Failure(val who: PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage()
-data class Watch(val watcher: PID) : SystemMessage()
-data class Unwatch(val watcher: PID) : SystemMessage()
-data class Restart(val reason: Exception) : SystemMessage()
-data class Continuation(val action: suspend () -> Unit, val message: Any) : SystemMessage()
+data class Failure(val who: Protos.PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage
+data class Watch(val watcher: Protos.PID) : SystemMessage
+data class Unwatch(val watcher: Protos.PID) : SystemMessage
+data class Restart(val reason: Exception) : SystemMessage
+data class Continuation(val action: suspend () -> Unit, val message: Any) : SystemMessage
 interface NotInfluenceReceiveTimeout
 

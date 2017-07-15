@@ -17,6 +17,6 @@ fun main(args: Array<String>) {
     }
 
     val pid = spawn(prop)
-    pid tell "Proto.Actor"
+    pid.tell("Proto.Actor")
     readLine()
 }

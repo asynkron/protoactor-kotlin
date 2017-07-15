@@ -11,9 +11,9 @@ interface Context {
     val message: Any
     fun respond(message: Any)
     fun stash()
-    fun spawn(props: Props): PID
-    fun spawnPrefix(props: Props, prefix: String): PID
-    fun spawnNamed(props: Props, name: String): PID
+    fun spawnChild(props: Props): PID
+    fun spawnPrefixChild(props: Props, prefix: String): PID
+    fun spawnNamedChild(props: Props, name: String): PID
     fun watch(pid: PID)
     fun unwatch(pid: PID)
     fun setReceiveTimeout(duration: Duration)

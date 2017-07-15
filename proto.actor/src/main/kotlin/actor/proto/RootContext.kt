@@ -1,17 +1,17 @@
 package actor.proto
 
 @Suppress("unused")
-class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) : SenderContext {
-    private val _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
+class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") middleware: Array<((SenderContext, Protos.PID, MessageEnvelope) -> Unit) -> (SenderContext, Protos.PID, MessageEnvelope) -> Unit>) : SenderContext {
+    private val _senderMiddleware: ((SenderContext, Protos.PID, MessageEnvelope) -> Unit)? = null
 
     override val message: Any?
         get() = null
     override val headers: MessageHeader = messageHeader
-    private fun defaultSender(@Suppress("UNUSED_PARAMETER") context: SenderContext, target: PID, message: MessageEnvelope): Unit {
+    private fun defaultSender(@Suppress("UNUSED_PARAMETER") context: SenderContext, target: Protos.PID, message: MessageEnvelope): Unit {
         target.tell(message)
     }
 
-    fun tell(target: PID, message: Any) {
+    fun tell(target: Protos.PID, message: Any) {
         when (_senderMiddleware) {
             null -> target.tell(message)
             else -> when (message) {
@@ -21,7 +21,7 @@ class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") mi
         }
     }
 
-    fun request(target: PID, message: Any, sender: PID) {
+    fun request(target: Protos.PID, message: Any, sender: Protos.PID) {
         val envelope = MessageEnvelope(message, sender, null)
         tell(target, envelope)
     }

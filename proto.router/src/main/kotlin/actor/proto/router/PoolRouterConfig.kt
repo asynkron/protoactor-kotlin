@@ -5,7 +5,7 @@ import actor.proto.Props
 
 abstract class PoolRouterConfig(private val poolSize: Int) : RouterConfig {
     open fun onStarted(context: Context, props: Props, router: RouterState) {
-        val routees = (0 until poolSize).map { context.spawn(props) }.toSet()
+        val routees = (0 until poolSize).map { context.spawnChild(props) }.toSet()
         router.setRoutees(routees)
     }
 }

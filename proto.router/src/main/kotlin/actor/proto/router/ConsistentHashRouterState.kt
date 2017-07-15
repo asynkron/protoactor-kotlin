@@ -2,6 +2,8 @@ package actor.proto.router
 
 import actor.proto.MessageEnvelope
 import actor.proto.PID
+import actor.proto.tell
+import actor.proto.toShortString
 
 internal class ConsistentHashRouterState(private val hash: (String) -> Int, private var replicaCount: Int) : RouterState() {
     private lateinit var hashRing: HashRing
