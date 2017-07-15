@@ -3,7 +3,7 @@ package actor.proto.router
 import actor.proto.LocalProcess
 import actor.proto.MessageEnvelope
 import actor.proto.PID
-import proto.mailbox.Mailbox
+import actor.proto.mailbox.Mailbox
 
 
 class RouterProcess(private val state: RouterState, mailbox: Mailbox) : LocalProcess(mailbox) {

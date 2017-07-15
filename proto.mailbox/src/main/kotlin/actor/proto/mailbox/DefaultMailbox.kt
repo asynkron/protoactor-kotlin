@@ -1,6 +1,5 @@
 package actor.proto.mailbox
 
-import proto.mailbox.Mailbox
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private val userMailbox: IMailboxQueue, private val stats: Array<MailboxStatistics> = arrayOf()) : Mailbox {

@@ -1,4 +1,4 @@
-package proto.mailbox
+package actor.proto.mailbox
 
 import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.MessageInvoker

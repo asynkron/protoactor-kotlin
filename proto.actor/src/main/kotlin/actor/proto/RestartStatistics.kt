@@ -3,7 +3,7 @@ package actor.proto
 import java.lang.System.currentTimeMillis
 import java.time.Duration
 
-class RestartStatistics(var failureCount: Int, var lastFailureTimeMillis: Long) {
+class RestartStatistics(var failureCount: Int, private var lastFailureTimeMillis: Long) {
     fun fail() {
         failureCount++
         lastFailureTimeMillis = now()

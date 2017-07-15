@@ -1,7 +1,7 @@
 package actor.proto
 
 import actor.proto.mailbox.SystemMessage
-import proto.mailbox.Mailbox
+import actor.proto.mailbox.Mailbox
 
 abstract class Process {
     abstract fun sendUserMessage(pid: PID, message: Any)

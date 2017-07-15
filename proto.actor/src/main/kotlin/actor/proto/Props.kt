@@ -2,16 +2,16 @@ package actor.proto
 
 import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.unboundedMailbox
-import proto.mailbox.Mailbox
+import actor.proto.mailbox.Mailbox
 
 data class Props(
-        val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
+        private val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
         val producer: (() -> Actor)? = null,
         val mailboxProducer: () -> Mailbox = { unboundedMailbox() },
         val supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy,
         val dispatcher: Dispatcher = actor.proto.mailbox.Dispatchers.DEFAULT_DISPATCHER,
-        val receiveMiddleware: List<((Context) -> Unit) -> (Context) -> Unit> = listOf(),
-        val senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = listOf(),
+        private val receiveMiddleware: List<((Context) -> Unit) -> (Context) -> Unit> = listOf(),
+        private val senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = listOf(),
         val receiveMiddlewareChain: ((Context) -> Unit)? = null,
         val senderMiddlewareChain: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 ) {
