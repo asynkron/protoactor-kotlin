@@ -1,6 +1,6 @@
 package actor.proto.router
 
-interface IRouterConfig {
+interface RouterConfig {
 
     fun createRouterState(): RouterState
 }

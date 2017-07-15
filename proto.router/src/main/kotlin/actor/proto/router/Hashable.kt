@@ -1,6 +1,6 @@
 package actor.proto.router
 
-interface IHashable {
+interface Hashable {
     fun hashBy(): String
 }
 

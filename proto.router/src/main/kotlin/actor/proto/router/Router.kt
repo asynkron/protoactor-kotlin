@@ -14,7 +14,7 @@ fun newConsistentHashPool(props: Props, poolSize: Int, hash: (String) -> Int, re
 fun newRandomPool(props: Props, poolSize: Int, seed: Long): Props = Props().withSpawner(poolSpawner(RandomPoolRouterConfig(poolSize, seed), props))
 fun newRoundRobinPool(props: Props, poolSize: Int): Props = Props().withSpawner(poolSpawner(RoundRobinPoolRouterConfig(poolSize), props))
 
-private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> PID {
+private fun groupSpawner(config: GroupRouterConfig): (String, Props, PID?) -> PID {
     fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
         val routerState = config.createRouterState()
         val wg = CountDownLatch(1)
@@ -34,7 +34,7 @@ private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> P
     return { name, props, parent -> spawnRouterProcess(name, props, parent) }
 }
 
-private fun poolSpawner(config: IPoolRouterConfig, routeeProps: Props): (String, Props, PID?) -> PID {
+private fun poolSpawner(config: PoolRouterConfig, routeeProps: Props): (String, Props, PID?) -> PID {
     fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
         val routerState = config.createRouterState()
         val wg = CountDownLatch(1)

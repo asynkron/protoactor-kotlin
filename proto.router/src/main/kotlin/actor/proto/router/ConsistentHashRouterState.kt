@@ -29,7 +29,7 @@ internal class ConsistentHashRouterState(private val hash: (String) -> Int, priv
         }
 
         when (msg) {
-            is IHashable -> {
+            is Hashable -> {
                 val key = msg.hashBy()
                 val node = hashRing.getNode(key)
                 val routee = routeeMap[node]!!
