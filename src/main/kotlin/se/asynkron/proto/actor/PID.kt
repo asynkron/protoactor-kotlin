@@ -46,8 +46,8 @@ class PID(val address: String, val id: String) {
     }
 
     fun stop() {
-        val reff:  Process = cachedProcess() ?: ProcessRegistry.get(this)
-        reff.stop(this)
+        val process:  Process = cachedProcess() ?: ProcessRegistry.get(this)
+        process.stop(this)
     }
 
     fun toShortString(): String {

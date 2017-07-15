@@ -7,13 +7,13 @@ data class Request(var div: Long, var num: Long, var size: Long, val respondTo :
 
 open internal class SpawnActor : Actor {
     companion object Foo{
-        fun produce() = SpawnActor()
+        private fun produce() = SpawnActor()
         val props: Props = fromProducer(SpawnActor.Foo::produce)
     }
 
-    var replies: Long = 0
-    lateinit var replyTo: PID
-    var sum: Long = 0
+    private var replies: Long = 0
+    private lateinit var replyTo: PID
+    private var sum: Long = 0
 
     suspend override fun receiveAsync(context: Context) {
         val msg: Any = context.message

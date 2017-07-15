@@ -13,7 +13,7 @@ internal class ConsistentHashRouterState(private val hash: (String) -> Int, priv
     }
 
     override fun setRoutees(routees: Set<PID>) {
-        routeeMap = mapOf<String, PID>()
+        routeeMap = mapOf()
         var nodes: Set<String> = setOf()
         for (pid in routees) {
             val nodeName: String = pid.toShortString()

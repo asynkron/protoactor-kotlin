@@ -11,7 +11,7 @@ abstract class Process {
 }
 
 
-open class LocalProcess(val mailbox: Mailbox) : Process() {
+open class LocalProcess(private val mailbox: Mailbox) : Process() {
     internal var isDead: Boolean = false
     override fun sendUserMessage(pid: PID, message: Any) {
         mailbox.postUserMessage(message)

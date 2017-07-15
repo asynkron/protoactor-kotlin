@@ -52,9 +52,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         stash.push(message)
     }
 
-    override fun respond(message: Any) {
-        sender!!.tell(message)
-    }
+    override fun respond(message: Any) = sender!!.tell(message)
 
     override fun spawn(props: Props): PID = spawnNamed(props, ProcessRegistry.nextId())
 
@@ -78,8 +76,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
             else -> {
                 receiveTimeout = duration
                 cancelReceiveTimeout()
-                _receiveTimeoutTimer = AsyncTimer({ self.tell(ReceiveTimeout) }, duration)
-                _receiveTimeoutTimer!!.start()
+                _receiveTimeoutTimer = AsyncTimer({ self.tell(ReceiveTimeout) }, duration).apply { start() }
             }
         }
     }

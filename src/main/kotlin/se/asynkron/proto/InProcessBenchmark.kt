@@ -12,10 +12,10 @@ fun main(args: Array<String>) {
 }
 
 fun run() {
-    val messageCount: Int = 1_000_000
-    val batchSize: Int = 500
+    val messageCount = 1_000_000
+    val batchSize = 500
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
-    val tps: Array<Int> = arrayOf(300, 400, 500, 600, 700, 800, 900)
+    val tps = arrayOf(300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
         val d = ThreadPoolDispatcher(throughput = t)
         val clientCount: Int = Runtime.getRuntime().availableProcessors() * 2
@@ -28,23 +28,28 @@ fun run() {
                     msg.sender.tell(msg)
                 }
             }
-        }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
-
-        var pairs: List<Pair<PID, PID>> = listOf()
-        val latch: CountDownLatch = CountDownLatch(clientCount)
-        val clientProps: Props = fromProducer { PingActor(latch, messageCount, batchSize) }.withDispatcher(d).withMailbox { mpscMailbox(capacity = 20000) }
-        for (i in 0 until clientCount) {
-            pairs += Pair(spawn(clientProps), spawn(echoProps))
         }
-        val sw: Long = currentTimeMillis()
+                .withDispatcher(d)
+                .withMailbox { mpscMailbox(capacity = 20000) }
+
+        val latch = CountDownLatch(clientCount)
+        val clientProps = fromProducer { PingActor(latch, messageCount, batchSize) }
+                .withDispatcher(d)
+                .withMailbox { mpscMailbox(capacity = 20000) }
+
+        val pairs = (0 until clientCount)
+                .map { Pair(spawn(clientProps), spawn(echoProps)) }
+                .toTypedArray()
+
+        val sw = currentTimeMillis()
         for ((client, echo) in pairs) {
             client.tell(Start(echo))
         }
         latch.await()
 
         val elapsedMillis = (currentTimeMillis() - sw).toDouble()
-        val totalMessages: Int = messageCount * 2 * clientCount
-        val x: Int = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
+        val totalMessages = messageCount * 2 * clientCount
+        val x = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
         println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
         for ((client, echo) in pairs) {
             client.stop()
@@ -55,8 +60,8 @@ fun run() {
     }
 }
 
-class Msg(val sender: PID)
-class Start(val sender: PID)
+data class Msg(val sender: PID)
+data class Start(val sender: PID)
 
 class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
     suspend override fun receiveAsync(context: Context) {
@@ -75,11 +80,9 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
 
     private fun sendBatch(context: Context, sender: PID): Boolean {
         when (messageCount) {
-            0 -> {
-                return false
-            }
+            0 -> return false
             else -> {
-                val m: Msg = Msg(context.self)
+                val m = Msg(context.self)
                 repeat(batchSize) { sender.tell(m) }
                 messageCount -= batchSize
                 batch = batchSize

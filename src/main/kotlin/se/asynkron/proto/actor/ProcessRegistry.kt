@@ -1,15 +1,14 @@
 package proto.actor
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 object ProcessRegistry {
     private val NoHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
-    private val processLookup: ConcurrentHashMap<String,Process> = ConcurrentHashMap<String,Process>()
+    private val processLookup: ConcurrentHashMap<String,Process> = ConcurrentHashMap()
     private val sequenceId: AtomicInteger = AtomicInteger(0)
-    var address: String = NoHost
+    public var address: String = NoHost
 
     fun registerHostResolver(resolver: (PID) -> Process) {
         hostResolvers.add(resolver)
