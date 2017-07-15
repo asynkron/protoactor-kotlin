@@ -5,7 +5,7 @@ import actor.proto.mailbox.Mailbox
 
 abstract class Process {
     abstract fun sendUserMessage(pid: PID, message: Any)
-    open fun stop(pid: PID) = sendSystemMessage(pid, Stop)
+    open fun stop(pid: PID) = sendSystemMessage(pid, StopInstance)
 
     abstract fun sendSystemMessage(pid: PID, message: SystemMessage)
 }

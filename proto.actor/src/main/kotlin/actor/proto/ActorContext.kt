@@ -121,7 +121,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
 
     override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { it.sendSystemMessage(Restart(reason)) }
-    override fun stopChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(Stop) }
+    override fun stopChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(StopInstance) }
     override fun resumeChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(ResumeMailbox) }
 
     suspend override fun invokeSystemMessageAsync(msg: SystemMessage): Unit {
