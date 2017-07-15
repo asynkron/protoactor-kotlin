@@ -1,5 +1,3 @@
 package actor.proto.mailbox
 
-class HelloTest {
-
-}
+class HelloTest

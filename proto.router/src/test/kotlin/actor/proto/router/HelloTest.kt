@@ -1,5 +1,3 @@
 package actor.proto.router
 
-class HelloTest {
-
-}
+class HelloTest

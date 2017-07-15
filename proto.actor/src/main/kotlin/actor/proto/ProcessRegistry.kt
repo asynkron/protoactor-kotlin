@@ -8,7 +8,7 @@ object ProcessRegistry {
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
     private val processLookup: ConcurrentHashMap<String, Process> = ConcurrentHashMap()
     private val sequenceId: AtomicInteger = AtomicInteger(0)
-    public var address: String = NoHost
+    var address: String = NoHost
 
     fun registerHostResolver(resolver: (PID) -> Process) {
         hostResolvers.add(resolver)

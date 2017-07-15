@@ -1,5 +1,3 @@
 package actor.proto
 
-class HelloTest {
-
-}
+class HelloTest
