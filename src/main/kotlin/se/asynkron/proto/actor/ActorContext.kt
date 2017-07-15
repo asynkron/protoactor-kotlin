@@ -23,27 +23,25 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         get() = _children
 
     override val message: Any
-        get() {
-            val m = _message
-            return when (m) {
-                is MessageEnvelope -> m.message
-                else -> m
+        get() = _message.let {
+            when (it) {
+                is MessageEnvelope -> it.message
+                else -> it
             }
         }
 
     override val sender: PID?
-        get() {
-            val m = _message
-            return when (m) {
-                is MessageEnvelope -> m.sender
+        get() = _message.let {
+            when (it) {
+                is MessageEnvelope -> it.sender
                 else -> null
             }
         }
+
     override val headers: MessageHeader?
-        get() {
-            val m = _message
-            return when (m) {
-                is MessageEnvelope -> m.header
+        get()  = _message.let {
+            when (it) {
+                is MessageEnvelope -> it.header
                 else -> null
             }
         }
@@ -92,17 +90,11 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         }
     }
 
-    suspend override fun receiveAsync(message: Any): Unit {
-        return processMessageAsync(message)
-    }
+    suspend override fun receiveAsync(message: Any): Unit = processMessageAsync(message)
 
-    override fun tell(target: PID, message: Any) {
-        sendUserMessage(target, message)
-    }
+    override fun tell(target: PID, message: Any) = sendUserMessage(target, message)
 
-    override fun request(target: PID, message: Any) {
-        sendUserMessage(target, MessageEnvelope(message, self, null))
-    }
+    override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
     suspend override fun <T> requestAsync(target: PID, message: Any, timeout: Duration): T = requestAsync(target, message, FutureProcess(timeout))
 
@@ -221,13 +213,14 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     }
 
     private fun handleFailure(msg: Failure) {
-        val a = actor
-        when (a) {
-            is SupervisorStrategy -> {
-                a.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
-                return
+        actor.let {
+            when (it) {
+                is SupervisorStrategy -> {
+                    it.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
+                    return
+                }
+                else -> supervisorStrategy.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
             }
-            else -> supervisorStrategy.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
         }
     }
 
@@ -244,14 +237,14 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun handleStopAsync() {
         state = ContextState.Stopping
         invokeUserMessageAsync(Stopping)
-        _children.orEmpty().forEach { it.stop() }
+        _children.forEach { it.stop() }
         tryRestartOrTerminateAsync()
     }
 
     suspend private fun tryRestartOrTerminateAsync() {
         cancelReceiveTimeout()
         when {
-            _children.orEmpty().any() -> return
+            _children.any() -> return
             else -> when (state) {
                 ContextState.Restarting -> restartAsync()
                 ContextState.Stopping -> stopAsync()
@@ -265,8 +258,8 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         ProcessRegistry.remove(self)
         invokeUserMessageAsync(Stopped)
 
-        val terminated: Terminated = Terminated(self, false) //TODO: init message
-        watchers.orEmpty().forEach { it.sendSystemMessage(terminated) }
+        val terminated: Terminated = Terminated(self, false)
+        watchers.forEach { it.sendSystemMessage(terminated) }
         parent?.sendSystemMessage(terminated)
     }
 
