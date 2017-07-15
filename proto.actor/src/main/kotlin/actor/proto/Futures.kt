@@ -7,9 +7,9 @@ import java.time.Duration
 @Suppress("UNUSED_PARAMETER")
 class FutureProcess<out T>(timeout: Duration? = null) : Process() {
 
-    val pid: Protos.PID
+    val pid: PID
     private lateinit var cd: CompletableDeferred<T>
-    override fun sendUserMessage(pid: Protos.PID, message: Any) {
+    override fun sendUserMessage(pid: PID, message: Any) {
         val m = when (message) {
             is MessageEnvelope -> message.message
             else -> message
@@ -17,7 +17,7 @@ class FutureProcess<out T>(timeout: Duration? = null) : Process() {
         cd.set(m)
     }
 
-    override fun sendSystemMessage(pid: Protos.PID, message: SystemMessage) {}
+    override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
 
     fun deferred(): Deferred<T> {
         return cd

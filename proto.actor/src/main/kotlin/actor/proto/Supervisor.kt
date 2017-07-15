@@ -1,9 +1,9 @@
 package actor.proto
 
 interface Supervisor {
-    val children: Collection<Protos.PID>
-    fun escalateFailure(reason: Exception, who: Protos.PID)
-    fun restartChildren(reason: Exception, vararg pids: Protos.PID)
-    fun stopChildren(vararg pids: Protos.PID)
-    fun resumeChildren(vararg pids: Protos.PID)
+    val children: Collection<PID>
+    fun escalateFailure(reason: Exception, who: PID)
+    fun restartChildren(reason: Exception, vararg pids: PID)
+    fun stopChildren(vararg pids: PID)
+    fun resumeChildren(vararg pids: PID)
 }
