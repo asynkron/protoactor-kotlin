@@ -35,10 +35,10 @@ data class Props(
 }
 
 fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-    val ctx: ActorContext = ActorContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
-    val mailbox: Mailbox = props.mailboxProducer()
-    val dispatcher: Dispatcher = props.dispatcher
-    val process: LocalProcess = LocalProcess(mailbox)
+    val ctx = ActorContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+    val mailbox = props.mailboxProducer()
+    val dispatcher = props.dispatcher
+    val process = LocalProcess(mailbox)
     val pid = ProcessRegistry.add(name, process)
     ctx.self = pid
     mailbox.registerHandlers(ctx, dispatcher)

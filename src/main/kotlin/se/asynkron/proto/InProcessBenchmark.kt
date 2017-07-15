@@ -18,9 +18,9 @@ fun run() {
     val tps = arrayOf(300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
         val d = ThreadPoolDispatcher(throughput = t)
-        val clientCount: Int = Runtime.getRuntime().availableProcessors() * 2
+        val clientCount = Runtime.getRuntime().availableProcessors() * 2
 
-        val echoProps: Props = fromFunc {
+        val echoProps = fromFunc {
             val tmp = message
             when (tmp) {
                 is Msg -> {

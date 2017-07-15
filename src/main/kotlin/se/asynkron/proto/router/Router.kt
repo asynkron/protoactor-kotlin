@@ -18,13 +18,13 @@ fun newRoundRobinPool(props: Props, poolSize: Int): Props = Props().withSpawner(
 
 private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> PID {
     fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
-        val routerState: RouterState = config.createRouterState()
-        val wg: CountDownLatch = CountDownLatch(1)
-        val routerProps: Props = fromProducer { -> GroupRouterActor(config, routerState, wg) }
-        val ctx: ActorContext = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddlewareChain, routerProps.senderMiddlewareChain, parent)
-        val mailbox: Mailbox = routerProps.mailboxProducer()
-        val dispatcher: Dispatcher = routerProps.dispatcher
-        val reff: Process = RouterProcess(routerState, mailbox)
+        val routerState = config.createRouterState()
+        val wg = CountDownLatch(1)
+        val routerProps = fromProducer { -> GroupRouterActor(config, routerState, wg) }
+        val ctx = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddlewareChain, routerProps.senderMiddlewareChain, parent)
+        val mailbox = routerProps.mailboxProducer()
+        val dispatcher = routerProps.dispatcher
+        val reff = RouterProcess(routerState, mailbox)
         val pid = ProcessRegistry.add(name, reff)
         ctx.self = pid
         mailbox.registerHandlers(ctx, dispatcher)
@@ -38,13 +38,13 @@ private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> P
 
 private fun poolSpawner(config: IPoolRouterConfig, routeeProps : Props): (String, Props, PID?) -> PID {
     fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
-        val routerState: RouterState = config.createRouterState()
-        val wg: CountDownLatch = CountDownLatch(1)
-        val routerProps: Props = fromProducer { -> PoolRouterActor(routeeProps, config, routerState, wg) }
-        val ctx: ActorContext = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddlewareChain, routerProps.senderMiddlewareChain, parent)
-        val mailbox: Mailbox = routerProps.mailboxProducer()
-        val dispatcher: Dispatcher = routerProps.dispatcher
-        val reff: Process = RouterProcess(routerState, mailbox)
+        val routerState = config.createRouterState()
+        val wg = CountDownLatch(1)
+        val routerProps = fromProducer { -> PoolRouterActor(routeeProps, config, routerState, wg) }
+        val ctx = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddlewareChain, routerProps.senderMiddlewareChain, parent)
+        val mailbox = routerProps.mailboxProducer()
+        val dispatcher = routerProps.dispatcher
+        val reff = RouterProcess(routerState, mailbox)
         val pid = ProcessRegistry.add(name, reff)
         ctx.self = pid
         mailbox.registerHandlers(ctx, dispatcher)

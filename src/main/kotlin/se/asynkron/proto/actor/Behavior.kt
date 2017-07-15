@@ -18,7 +18,7 @@ class Behavior(receive: suspend (Context) -> Unit) {
     }
 
     suspend fun receiveAsync(context: Context): Unit {
-        val behavior: suspend (Context) -> Unit = behaviors.peek()
+        val behavior = behaviors.peek()
         return behavior(context)
     }
 

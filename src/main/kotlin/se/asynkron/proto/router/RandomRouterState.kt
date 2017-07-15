@@ -17,8 +17,8 @@ internal class RandomRouterState(seed: Long?) : RouterState() {
     }
 
     override fun routeMessage(message: Any) {
-        val i: Int = random.nextInt(values.count())
-        val pid: PID = values[i]
+        val i = random.nextInt(values.count())
+        val pid = values[i]
         pid.tell(message)
     }
 

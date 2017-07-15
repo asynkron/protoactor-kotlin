@@ -27,7 +27,7 @@ object ProcessRegistry {
     }
 
     fun add(id: String, process: Process):PID {
-        val pid: PID = PID(address, id)
+        val pid = PID(address, id)
         pid._cachedProcess = process //we know what pid points to what process here
         processLookup.put(pid.id,process)
         return pid

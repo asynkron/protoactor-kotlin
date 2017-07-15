@@ -3,12 +3,12 @@ package proto.actor
 fun fromProducer(producer: () -> Actor): Props = Props().withProducer(producer)
 fun fromFunc(receive: suspend Context.() -> Unit): Props = fromProducer { -> FunActor(receive) }
 fun spawn(props: Props): PID {
-    val name: String = ProcessRegistry.nextId()
+    val name = ProcessRegistry.nextId()
     return spawnNamed(props, name)
 }
 
 fun spawnPrefix(props: Props, prefix: String): PID {
-    val name: String = prefix + ProcessRegistry.nextId()
+    val name = prefix + ProcessRegistry.nextId()
     return spawnNamed(props, name)
 }
 

@@ -21,7 +21,7 @@ class ActorClient (messageHeader: MessageHeader, middleware: Array<((SenderConte
     }
 
     fun request(target: PID, message: Any, sender: PID) {
-        val envelope: MessageEnvelope = MessageEnvelope(message, sender, null)
+        val envelope = MessageEnvelope(message, sender, null)
         tell(target, envelope)
     }
 

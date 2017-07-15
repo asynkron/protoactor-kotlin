@@ -27,8 +27,8 @@ class PID(val address: String, val id: String) {
     }
 
     fun request(message: Any, sender: PID) {
-        val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
-        val messageEnvelope: MessageEnvelope = MessageEnvelope(message, sender, null)
+        val process = cachedProcess() ?: ProcessRegistry.get(this)
+        val messageEnvelope = MessageEnvelope(message, sender, null)
         process.sendUserMessage(this, messageEnvelope)
     }
 
@@ -46,7 +46,7 @@ class PID(val address: String, val id: String) {
     }
 
     fun stop() {
-        val process:  Process = cachedProcess() ?: ProcessRegistry.get(this)
+        val process = cachedProcess() ?: ProcessRegistry.get(this)
         process.stop(this)
     }
 

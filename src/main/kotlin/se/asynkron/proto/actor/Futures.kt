@@ -23,7 +23,7 @@ class FutureProcess<out T>(timeout: Duration? = null) : Process() {
     }
 
     init {
-        val name: String = ProcessRegistry.nextId()
+        val name = ProcessRegistry.nextId()
         val pid = ProcessRegistry.add(name, this)
         this.pid = pid
     }

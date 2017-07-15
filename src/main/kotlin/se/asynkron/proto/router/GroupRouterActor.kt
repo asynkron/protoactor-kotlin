@@ -18,14 +18,14 @@ class GroupRouterActor(private val config: IGroupRouterConfig, private val route
                 wg.countDown()
             }
             is RouterAddRoutee -> {
-                val r: Set<PID> = routerState.getRoutees()
+                val r = routerState.getRoutees()
                 if (!r.contains(message.pid)) {
                     context.watch(message.pid)
                     routerState.setRoutees(r + message.pid)
                 }
             }
             is RouterRemoveRoutee -> {
-                val r: Set<PID> = routerState.getRoutees()
+                val r = routerState.getRoutees()
                 if (r.contains(message.pid)) {
                     context.unwatch(message.pid)
                     routerState.setRoutees(r - message.pid)
