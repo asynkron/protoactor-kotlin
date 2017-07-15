@@ -15,7 +15,7 @@ fun newRandomPool(props: Props, poolSize: Int, seed: Long): Props = Props().with
 fun newRoundRobinPool(props: Props, poolSize: Int): Props = Props().withSpawner(poolSpawner(RoundRobinPoolRouterConfig(poolSize), props))
 
 private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> PID {
-    fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
+    fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
         val routerState = config.createRouterState()
         val wg = CountDownLatch(1)
         val routerProps = fromProducer { -> GroupRouterActor(config, routerState, wg) }
@@ -35,7 +35,7 @@ private fun groupSpawner(config: IGroupRouterConfig): (String, Props, PID?) -> P
 }
 
 private fun poolSpawner(config: IPoolRouterConfig, routeeProps: Props): (String, Props, PID?) -> PID {
-    fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
+    fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
         val routerState = config.createRouterState()
         val wg = CountDownLatch(1)
         val routerProps = fromProducer { -> PoolRouterActor(routeeProps, config, routerState, wg) }

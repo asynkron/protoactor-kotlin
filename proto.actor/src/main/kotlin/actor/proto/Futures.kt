@@ -4,6 +4,7 @@ import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.Deferred
 import java.time.Duration
 
+@Suppress("UNUSED_PARAMETER")
 class FutureProcess<out T>(timeout: Duration? = null) : Process() {
 
     val pid: PID

@@ -10,6 +10,5 @@ class ThreadPoolDispatcher(override var throughput: Int = 300) : Dispatcher {
             runner()
         }
     }
-
 }
 

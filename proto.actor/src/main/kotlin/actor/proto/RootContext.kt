@@ -1,12 +1,13 @@
 package actor.proto
 
-class ActorClient(messageHeader: MessageHeader, middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) : SenderContext {
+@Suppress("unused")
+class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) : SenderContext {
     private val _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
 
     override val message: Any?
         get() = null
     override val headers: MessageHeader = messageHeader
-    private fun defaultSender(context: SenderContext, target: PID, message: MessageEnvelope): Unit {
+    private fun defaultSender(@Suppress("UNUSED_PARAMETER") context: SenderContext, target: PID, message: MessageEnvelope): Unit {
         target.tell(message)
     }
 
