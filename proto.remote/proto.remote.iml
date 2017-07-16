@@ -13,6 +13,7 @@
           <option name="pluginClasspaths">
             <array />
           </option>
+          <option name="coroutinesState" value="enable" />
         </compilerArguments>
       </configuration>
     </facet>
@@ -33,5 +34,10 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.jetbrains.kotlin:kotlin-test:1.1.3-2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="module" module-name="proto.actor" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jetbrains.kotlinx:kotlinx-coroutines-core:0.16" level="project" />
+    <orderEntry type="module" module-name="proto.mailbox" />
+    <orderEntry type="library" name="Maven: org.jctools:jctools-core:2.0.2" level="project" />
   </component>
 </module>
