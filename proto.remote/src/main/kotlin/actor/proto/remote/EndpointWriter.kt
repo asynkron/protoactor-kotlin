@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.launch
 class EndpointWriter(private val address: String) : Actor {
     private var serializerId: Int = 0
     private var channel: ManagedChannel? = null
-    private var client: RemotingClient? = null
+    private var client: RemotingGrpc.RemotingStub = RemotingGrpc.newStub(channel)
     private var stream: AsyncDuplexStreamingCall<RemoteProtos.MessageBatch, Unit>? = null
     private var streamWriter: ClientStreamWriter? = null
     suspend override fun receiveAsync (context : Context) {
@@ -73,8 +73,7 @@ class EndpointWriter(private val address: String) : Actor {
         val port = parts[1].toInt()
         channel =  ManagedChannelBuilder.forAddress(host,port).build()
         client = RemotingClient(channel)
-        val req = ConnectRequest()
-        val res : RemoteProtos.ConnectResponse = client.connectAsync(req)
+        val res : RemoteProtos.ConnectResponse = client.connect(connectRequest())
         serializerId = res.defaultSerializerId
         stream = client.receive()
         launch(CommonPool){

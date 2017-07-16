@@ -19,12 +19,6 @@
     <dependencies>
         <dependency>
             <groupId>io.grpc</groupId>
-            <artifactId>protoc-gen-grpc-java</artifactId>
-            <version>1.4.0</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
             <version>1.4.0</version>
         </dependency>
@@ -94,6 +88,14 @@
                 </executions>
                 <configuration>
                     <experimentalCoroutines>enable</experimentalCoroutines>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
             </plugin>
         </plugins>

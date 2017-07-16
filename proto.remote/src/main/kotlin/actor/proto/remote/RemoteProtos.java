@@ -3,6 +3,7 @@
 
 package actor.proto.remote;
 
+@SuppressWarnings("ALL")
 public final class RemoteProtos {
     private RemoteProtos() {}
     public static void registerAllExtensions(
@@ -2293,6 +2294,7 @@ public final class RemoteProtos {
         /**
          * Protobuf type {@code remote.ActorPidRequest}
          */
+        @SuppressWarnings("Since15")
         public static final class Builder extends
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.ActorPidRequest)

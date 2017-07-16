@@ -27,7 +27,7 @@ fun MessageEnvelope(bytes: ByteString, sender: PID?, targetId: Int, typeId: Int,
     return builder.build()
 }
 
-fun ConnectRequest(): RemoteProtos.ConnectRequest {
+fun connectRequest(): RemoteProtos.ConnectRequest {
     val builder = RemoteProtos.ConnectRequest.newBuilder()
     return builder.build()
 }

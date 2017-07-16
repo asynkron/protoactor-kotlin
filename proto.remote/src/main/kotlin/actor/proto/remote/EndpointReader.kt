@@ -11,13 +11,11 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
     }
 
     override fun receive(responseObserver: StreamObserver<RemoteProtos.Unit>): StreamObserver<RemoteProtos.MessageBatch> {
-
         return object : StreamObserver<RemoteProtos.MessageBatch> {
             override fun onCompleted() = responseObserver.onCompleted()
             override fun onError(p0: Throwable): Unit = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             override fun onNext(batch: RemoteProtos.MessageBatch) = receiveBatch(batch)
         }
-
     }
 
     fun receiveBatch(batch:RemoteProtos.MessageBatch) {
