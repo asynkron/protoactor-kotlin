@@ -1,6 +1,9 @@
-package proto.remote
+package actor.proto.remote
 
 import actor.proto.*
+import proto.remote.ActorPidRequest
+import proto.remote.ActorPidResponse
+import proto.remote.Remote
 
 class Activator : Actor {
     suspend override fun receiveAsync (context : Context) {
@@ -13,9 +16,7 @@ class Activator : Actor {
                     name = ProcessRegistry.nextId()
                 }
                 val pid : PID = spawnNamed(props, name)
-                val response : ActorPidResponse = ActorPidResponse.apply {
-                    //TODO
-                }
+                val response : ActorPidResponse = TODO("fix")
                 context.respond(response)
             }
             else -> {            }

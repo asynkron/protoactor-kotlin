@@ -1,52 +1,48 @@
 package proto.remote
 
-import actor.proto.PID
-import actor.proto.ProcessRegistry
-import actor.proto.Props
-import actor.proto.remote.EndpointTerminatedEvent
-import actor.proto.remote.RemoteDeliver
-import actor.proto.remote.RemoteProcess
+import actor.proto.*
+import actor.proto.MessageEnvelope
+import actor.proto.remote.*
+import java.time.Duration
 
 object Remote {
     private var _server : Server? = null
-    private val Kinds : Dictionary<String, Props> = Dictionary<String, Props>()
-    var endpointManagerPid : PID
-    var activatorPid : PID
-    fun getKnownKinds () : Array<String> {
-        return 
-    }
+    private val Kinds : HashMap<String, Props> = HashMap()
+    lateinit var endpointManagerPid : PID
+    lateinit var activatorPid : PID
+    fun getKnownKinds () : Set<String> = Kinds.keys
     fun registerKnownKind (kind : String, props : Props) {
-        Kinds.add(kind, props)
+        Kinds.put(kind, props)
     }
     fun getKnownKind (kind : String) : Props {
-        if (Kinds.tryGetValue(kind, var props)) {
-            return props
+        return Kinds.getOrElse(kind){
+            throw IllegalArgumentException("No Props found for kind '$kind'")
         }
-        throw IllegalArgumentException("No Props found for kind '${kind}'")
     }
-    fun start (hostname : String, port : Int) {
-        start(hostname, port, RemoteConfig())
-    }
-    fun start (hostname : String, port : Int, config : RemoteConfig) {
+    fun start (hostname : String, port : Int, config : RemoteConfig = RemoteConfig()) {
         ProcessRegistry.registerHostResolver{ pid -> RemoteProcess(pid) }
         _server = Server
         _server.start()
-        val boundPort : Int = .boundPort
-        val boundAddr : String = "${hostname}:${boundPort}"
+        val boundPort : Int = _server.boundPort
+        val boundAddr : String = "$hostname:$boundPort"
         val addr : String = "${config.advertisedHostname ?: hostname}:${config.advertisedPort ?: boundPort}"
-        ProcessRegistry.instance.address = addr
+        ProcessRegistry.address = addr
         spawnEndpointManager(config)
         spawnActivator()
-        Logger.logDebug("Starting Proto.Actor server on ${boundAddr} (${addr})")
+        println("Starting Proto.Actor server on $boundAddr ($addr)")
     }
     private fun spawnActivator () {
-        val props : Props = Actor.fromProducer{ -> Activator()}
-        activatorPid = Actor.spawnNamed(props, "activator")
+        val props = fromProducer{ Activator() }
+        activatorPid = spawnNamed(props, "activator")
     }
     private fun spawnEndpointManager (config : RemoteConfig) {
-        val props : Props = Actor.fromProducer{ -> EndpointManager(config)}
-        endpointManagerPid = Actor.spawn(props)
-        EventStream.Instance.subscribe<EndpointTerminatedEvent>(endpointManagerPid.tell)
+        val props = fromProducer{ EndpointManager(config) }
+        endpointManagerPid = spawn(props)
+        EventStream.subscribe({
+            if (it is EndpointTerminatedEvent) {
+                endpointManagerPid.tell(it)
+            }
+        })
     }
     fun activatorForAddress (address : String) : PID {
         return PID(address, "activator")
@@ -56,11 +52,14 @@ object Remote {
     }
     suspend fun spawnNamedAsync (address : String, name : String, kind : String, timeout : Duration) : PID {
         val activator : PID = activatorForAddress(address)
-        val res : ActorPidResponse = activator.requestAsync<ActorPidResponse>(ActorPidRequest, timeout)
+        val res = activator.requestAsync<ActorPidResponse>(ActorPidRequest(kind,name), timeout)
         return res.pid
     }
     fun sendMessage (pid : PID, msg : Any, serializerId : Int) {
-        var (message, sender, _) = Proto.MessageEnvelope.unwrap(msg)
+        val (message, sender) = when (msg) {
+            is MessageEnvelope -> Pair(msg.message,msg.sender)
+            else -> Pair(msg,null)
+        }
         val env : RemoteDeliver = RemoteDeliver(message, pid, sender, serializerId)
         endpointManagerPid.tell(env)
     }

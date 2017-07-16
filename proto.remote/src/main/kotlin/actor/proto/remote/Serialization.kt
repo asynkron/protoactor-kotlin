@@ -1,6 +1,14 @@
-package proto.remote
+@file:Suppress("MemberVisibilityCanPrivate")
 
-import actor.proto.remote.JsonMessage
+package actor.proto.remote
+
+import com.google.protobuf.ByteString
+import com.google.protobuf.Descriptors
+import com.google.protobuf.Message
+import com.google.protobuf.Parser
+import proto.remote.ProtosReflection
+import java.util.*
+import kotlin.collections.HashMap
 
 interface Serializer {
     fun serialize (obj : Any) : ByteString
@@ -11,74 +19,75 @@ interface Serializer {
 
 open class JsonSerializer : Serializer {
     override fun serialize (obj : Any) : ByteString {
-        if (obj is JsonMessage /* jsonMessage  */) {
-            return ByteString.copyFromUtf8(jsonMessage.json)
+        when (obj) {
+            is JsonMessage -> return ByteString.copyFromUtf8(obj.json)
+            else -> {
+                val message = obj as Message
+                val json: String = JsonFormatter.default.format(message)
+                return ByteString.copyFromUtf8(json)
+            }
         }
-        val message : Message = obj as IMessage
-        val json : String = JsonFormatter.default.format(message)
-        return ByteString.copyFromUtf8(json)
     }
     override fun deserialize (bytes : ByteString, typeName : String) : Any {
         val json : String = bytes.toStringUtf8()
-        val parser : MessageParser = Serialization.TypeLookup[typeName]
-        val o : Message = parser.parseJson(json)
+        val parser : Parser<Message> = Serialization.TypeLookup[typeName]!!
+        val o = parser.parseJson(json)
         return o
     }
     override fun getTypeName (obj : Any) : String {
-        if (obj is JsonMessage /* jsonMessage  */) {
-            return jsonMessage.typeName
+        when (obj) {
+            is JsonMessage -> return obj.typeName
+            else -> {
+                val message = obj as Message
+                return message.descriptorForType.file.`package` + "." + message.descriptorForType.name
+            }
         }
-        val message : Message = obj as IMessage
-        if (message == null) {
-            throw IllegalArgumentException("obj must be of type IMessage", nameof(obj))
-        }
-        return message.descriptor.file.package + "." + message.descriptor.name
     }
 }
 
 
 open class ProtobufSerializer : Serializer {
     override fun serialize (obj : Any) : ByteString {
-        val message : Message = obj as IMessage
+        val message = obj as Message
         return message.toByteString()
     }
     override fun deserialize (bytes : ByteString, typeName : String) : Any {
-        val parser : MessageParser = Serialization.TypeLookup[typeName]
-        val o : Message = parser.parseFrom(bytes)
+        val parser : Parser<Message> = Serialization.TypeLookup[typeName]!!
+        val o = parser.parseFrom(bytes)
         return o
     }
     override fun getTypeName (obj : Any) : String {
-        val message : Message = obj as IMessage
-        if (message == null) {
-            throw IllegalArgumentException("obj must be of type IMessage", nameof(obj))
-        }
-        return message.descriptor.file.package + "." + message.descriptor.name
+        val message = obj as Message
+        return message.descriptorForType.file.`package` + "." + message.descriptorForType.name
     }
 }
 
 
 object Serialization {
-    internal val TypeLookup : Dictionary<String, MessageParser> = Dictionary<String, MessageParser>()
+    var defaultSerializerId : Int = 0
+    internal val TypeLookup : HashMap<String, Parser<Message>> = HashMap()
     private val Serializers : MutableList<Serializer> = mutableListOf()
     private val ProtobufSerializer : ProtobufSerializer = ProtobufSerializer()
     private val JsonSerializer : JsonSerializer = JsonSerializer()
-    constructor()  {
-        registerFileDescriptor(Proto.ProtosReflection.descriptor)
+    init  {
+        registerFileDescriptor(actor.proto.Protos.getDescriptor())
         registerFileDescriptor(ProtosReflection.descriptor)
         registerSerializer(ProtobufSerializer, true)
-        registerSerializer(JsonSerializer)
+        registerSerializer(JsonSerializer,false)
     }
-    var defaultSerializerId : Int
+
+
+
     fun registerSerializer (serializer : Serializer, makeDefault : Boolean) {
         Serializers.add(serializer)
         if (makeDefault) {
-            defaultSerializerId = Serializers.count - 1
+            defaultSerializerId = Serializers.count() - 1
         }
     }
-    fun registerFileDescriptor (fd : FileDescriptor) {
+    fun registerFileDescriptor (fd : Descriptors.FileDescriptor) {
         for(msg in fd.messageTypes) {
-            val name : String = fd.package + "." + msg.name
-            TypeLookup.add(name, msg.parser)
+            val name : String = fd.`package` + "." + msg.name
+            TypeLookup.put(name, msg.parser)
         }
     }
     fun serialize (message : Any, serializerId : Int) : ByteString = Serializers[serializerId].serialize(message)

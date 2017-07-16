@@ -1,80 +1,75 @@
-package proto.remote
+package actor.proto.remote
 
-import actor.proto.remote.RemoteDeliver
+import actor.proto.mailbox.*
+import java.util.concurrent.atomic.AtomicInteger
 
 internal object MailboxStatus {
     val Idle : Int = 0
     val Busy : Int = 1
 }
 
-
-open class EndpointWriterMailbox : Mailbox {
-    private val _batchSize : Int = 0
-    private val _systemMessages : MailboxQueue = UnboundedMailboxQueue()
-    private val _userMessages : MailboxQueue = UnboundedMailboxQueue()
-    private var _dispatcher : Dispatcher? = null
-    private var _invoker : MessageInvoker? = null
-    private val _status : Int = MailboxStatus.Idle
-    private var _suspended : Boolean = false
-    constructor(batchSize : Int)  {
-        _batchSize = batchSize
-    }
+open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
+    private val systemMessages: IMailboxQueue = UnboundedMailboxQueue()
+    private val userMessages: IMailboxQueue = UnboundedMailboxQueue()
+    private lateinit var dispatcher: Dispatcher
+    private lateinit var invoker: MessageInvoker
+    private val status : AtomicInteger = AtomicInteger(MailboxStatus.Idle)
+    private var suspended: Boolean = false
     override fun postUserMessage (msg : Any) {
-        _userMessages.push(msg)
+        userMessages.push(msg)
         schedule()
     }
     override fun postSystemMessage (msg : Any) {
-        _systemMessages.push(msg)
+        systemMessages.push(msg)
         schedule()
     }
     override fun registerHandlers (invoker : MessageInvoker, dispatcher : Dispatcher) {
-        _invoker = invoker
-        _dispatcher = dispatcher
+        this.invoker = invoker
+        this.dispatcher = dispatcher
     }
-    override fun start () {
-    }
+    override fun start () {    }
+
     private suspend fun runAsync () {
-        var m : Any = null
+        var msg : Any? = null
         try  {
-            val t : Int = _dispatcher.throughput
-            val batch : MutableList<RemoteDeliver> = mutableListOf(_batchSize)
-            val sys : Any = _systemMessages.pop()
-            if (sys != null) {
-                if (sys is SuspendMailbox) {
-                    _suspended = true
+            val batch : MutableList<RemoteDeliver> = mutableListOf()
+            msg = systemMessages.pop()
+            if (msg != null) {
+                when (msg) {
+                    is SuspendMailbox -> suspended = true
+                    is ResumeMailbox -> suspended = false
                 }
-                if (sys is ResumeMailbox) {
-                    _suspended = false
-                }
-                m = sys
-                _invoker.invokeSystemMessageAsync(sys)
+                invoker.invokeSystemMessageAsync(msg as SystemMessage)
             }
-            if (!_suspended) {
+            if (!suspended) {
                 batch.clear()
-                var msg : Any = 
-                while ((msg = _userMessages.pop()) != null) {
-                    batch.add(RemoteDelivermsg)
-                    if (batch.count >= _batchSize) {
-                        break
+                for(i in 0 until  batchSize) {
+                    msg = userMessages.pop()
+                    if (msg != null){
+                        batch.add(msg as RemoteDeliver)
+                        if (batch.count() >= batchSize) {
+                            break
+                        }
                     }
                 }
-                if (batch.count > 0) {
-                    m = batch
-                    _invoker.invokeUserMessageAsync(batch)
+                if (batch.count() > 0) {
+                    msg = batch
+                    invoker.invokeUserMessageAsync(batch)
                 }
             }
         }
         catch (x : Exception) {
-            _invoker.escalateFailure(x, m)
+            if (msg != null) invoker.escalateFailure(x, msg)
         }
-        Interlocked.exchange(_status, MailboxStatus.Idle)
-        if (_userMessages.hasMessages || _systemMessages.hasMessages) {
+        status.set(MailboxStatus.Idle)
+        if (systemMessages.hasMessages || (!suspended && userMessages.hasMessages)) {
             schedule()
         }
     }
-    protected fun schedule () {
-        if (Interlocked.exchange(_status, MailboxStatus.Busy) == MailboxStatus.Idle) {
-            _dispatcher.schedule(runAsync)
+    private fun schedule() {
+        val wasIdle = status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
+        if (wasIdle) {
+            dispatcher.schedule({ runAsync() })
         }
     }
 }

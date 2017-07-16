@@ -1,9 +1,9 @@
 package proto.remote
 
-open class RemoteConfig(var endpointWriterBatchSize: Int = 1000) {
-    var channelCredentials : ChannelCredentials = ChannelCredentials.insecure
-    var serverCredentials : ServerCredentials = ServerCredentials.insecure
-    var advertisedHostname : String
-    var advertisedPort : Int?
-}
-
+data class RemoteConfig(
+        val endpointWriterBatchSize: Int = 1000,
+        val channelCredentials : ChannelCredentials = ChannelCredentials.insecure,
+        val serverCredentials : ServerCredentials = ServerCredentials.insecure,
+        val advertisedHostname : String? = null,
+        val advertisedPort : Int? = null
+)

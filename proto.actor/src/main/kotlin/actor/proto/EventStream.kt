@@ -3,7 +3,7 @@ package actor.proto
 import actor.proto.mailbox.Dispatchers
 
 
-object EventStream : EventStreamImpl<Any>() {
+object EventStream : EventStreamImpl() {
     init {
         subscribe({
             when (it) {

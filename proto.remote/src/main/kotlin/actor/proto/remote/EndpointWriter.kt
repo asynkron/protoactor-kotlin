@@ -1,6 +1,7 @@
 package proto.remote
 
 import actor.proto.remote.EndpointTerminatedEvent
+import actor.proto.remote.Serialization
 
 open class EndpointWriter : Actor {
     private var _serializerId : Int = 0

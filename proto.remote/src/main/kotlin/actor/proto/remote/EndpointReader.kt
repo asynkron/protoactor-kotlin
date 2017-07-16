@@ -1,6 +1,7 @@
 package proto.remote
 
 import actor.proto.remote.RemoteTerminate
+import actor.proto.remote.Serialization
 
 open class EndpointReader : RemotingBase {
     suspend fun connect (request : ConnectRequest, context : ServerCallContext) : ConnectResponse {
