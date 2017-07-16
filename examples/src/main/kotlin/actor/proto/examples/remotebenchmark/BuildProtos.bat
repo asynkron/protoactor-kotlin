@@ -1,0 +1,1 @@
+protoc *.proto -I=../../../../../../../../proto.actor/src/main/kotlin/actor/proto -I=. --java_out=../../../../
