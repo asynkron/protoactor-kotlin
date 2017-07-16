@@ -3,6 +3,7 @@ package actor.proto.remote
 import com.google.protobuf.ByteString
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
+import java.io.NotSerializableException
 
 open class ProtobufSerializer : Serializer {
     override fun serialize(obj: Any): ByteString {
@@ -11,13 +12,13 @@ open class ProtobufSerializer : Serializer {
     }
 
     override fun deserialize(bytes: ByteString, typeName: String): Any {
-        val parser: Parser<Message> = Serialization.TypeLookup[typeName]!!
+        val parser: Parser<Message> = Serialization.getMessageParser(typeName)
         val o = parser.parseFrom(bytes)
         return o
     }
 
-    override fun getTypeName(obj: Any): String {
-        val message = obj as Message
-        return message.descriptorForType.file.`package` + "." + message.descriptorForType.name
+    override fun getTypeName(message: Any): String = when (message) {
+        is Message -> message.descriptorForType.file.`package` + "." + message.descriptorForType.name
+        else -> throw NotSerializableException()
     }
 }
