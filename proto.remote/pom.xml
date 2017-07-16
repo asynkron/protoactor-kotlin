@@ -3,12 +3,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>actor.proto.remote</groupId>
+    <groupId>actor.proto</groupId>
     <artifactId>proto-remote</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>actor.proto.remote proto-remote</name>
+    <name>Proto.Actor Remote</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,7 +55,7 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>actor.proto.mailbox</groupId>
+            <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

@@ -2,6 +2,35 @@ package actor.proto.examples.spawnbenchmark
 
 import actor.proto.*
 
+
+fun main(args: Array<String>) {
+    var start: Long = 0
+    val managerProps = fromFunc {
+        val msg = message
+        when (msg) {
+
+            is Begin -> {
+                val root = spawn(SpawnActor.props)
+                start = System.currentTimeMillis()
+                root.tell(Request(10, 0, 1000000, self))
+            }
+            is Long -> {
+                val millis = System.currentTimeMillis() - start
+                println("Elapsed " + millis)
+                println("Result " + msg)
+                println("done")
+            }
+        }
+    }
+    val managerPid: PID = spawn(managerProps)
+    managerPid.tell(Begin)
+    readLine()
+    managerPid.tell(Begin)
+    readLine()
+    managerPid.tell(Begin)
+    readLine()
+}
+
 object Begin
 data class Request(var div: Long, var num: Long, var size: Long, val respondTo : PID)
 
@@ -46,32 +75,5 @@ class SpawnActor : Actor {
     }
 }
 
-fun main(args: Array<String>) {
-    var start: Long = 0
-    val managerProps = fromFunc {
-        val msg = message
-        when (msg) {
-
-            is Begin -> {
-                val root = spawn(SpawnActor.props)
-                start = System.currentTimeMillis()
-                root.tell(Request(10, 0, 1000000, self))
-            }
-            is Long -> {
-                val millis = System.currentTimeMillis() - start
-                println("Elapsed " + millis)
-                println("Result " + msg)
-                println("done")
-            }
-        }
-    }
-    val managerPid: PID = spawn(managerProps)
-    managerPid.tell(Begin)
-    readLine()
-    managerPid.tell(Begin)
-    readLine()
-    managerPid.tell(Begin)
-    readLine()
-}
 
 
