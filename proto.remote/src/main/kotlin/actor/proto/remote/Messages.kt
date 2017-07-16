@@ -27,7 +27,7 @@ fun MessageEnvelope(bytes: ByteString, sender: PID?, targetId: Int, typeId: Int,
     return builder.build()
 }
 
-fun connectRequest(): RemoteProtos.ConnectRequest {
+fun ConnectRequest(): RemoteProtos.ConnectRequest {
     val builder = RemoteProtos.ConnectRequest.newBuilder()
     return builder.build()
 }
@@ -39,7 +39,7 @@ fun ActorPidResponse(pid: PID): RemoteProtos.ActorPidResponse {
     return builder.build()
 }
 
-fun ConnectResponse(defaultSerializerId : Int): RemoteProtos.ConnectResponse? {
+fun ConnectResponse(defaultSerializerId: Int): RemoteProtos.ConnectResponse? {
     val builder = RemoteProtos.ConnectResponse.newBuilder()
     builder.defaultSerializerId = defaultSerializerId
     return builder.build()

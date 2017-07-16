@@ -1,21 +1,18 @@
 package actor.proto.remote
 
 import actor.proto.*
-import kotlin.collections.HashMap
-
-data class Endpoint(val writer : PID,val watcher : PID)
 
 class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrategy {
     companion object {
-        private fun spawnWatcher (address : String, context : Context) : PID {
-            val watcherProps : Props = fromProducer{ EndpointWatcher(address) }
-            val watcher : PID = context.spawnChild(watcherProps)
+        private fun spawnWatcher(address: String, context: Context): PID {
+            val watcherProps: Props = fromProducer { EndpointWatcher(address) }
+            val watcher: PID = context.spawnChild(watcherProps)
             return watcher
         }
     }
 
-    private val _connections : HashMap<String, Endpoint> = HashMap()
-    suspend override fun receiveAsync (context : Context) {
+    private val _connections: HashMap<String, Endpoint> = HashMap()
+    suspend override fun receiveAsync(context: Context) {
         val msg = context.message
         when (msg) {
             is Started -> println("Started EndpointManager")
@@ -28,20 +25,23 @@ class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrat
             }
         }
     }
-    override fun handleFailure (supervisor : Supervisor, child : PID, rs : RestartStatistics, reason: Exception) {
+
+    override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         supervisor.restartChildren(reason, child)
     }
-    private fun ensureConnected (address : String, context : Context) : Endpoint = _connections.getOrPut(address,{
-        val writer : PID = spawnWriter(address, context)
-        val watcher : PID = spawnWatcher(address, context)
+
+    private fun ensureConnected(address: String, context: Context): Endpoint = _connections.getOrPut(address, {
+        val writer: PID = spawnWriter(address, context)
+        val watcher: PID = spawnWatcher(address, context)
         Endpoint(writer, watcher)
     })
-    private fun spawnWriter (address : String, context : Context) : PID {
 
-        val writerProps : Props =
-                fromProducer{ EndpointWriter(address) }
-                .withMailbox{ EndpointWriterMailbox(config.endpointWriterBatchSize) }
-        val writer : PID = context.spawnChild(writerProps)
+    private fun spawnWriter(address: String, context: Context): PID {
+
+        val writerProps: Props =
+                fromProducer { EndpointWriter(address) }
+                        .withMailbox { EndpointWriterMailbox(config.endpointWriterBatchSize) }
+        val writer: PID = context.spawnChild(writerProps)
         return writer
     }
 }

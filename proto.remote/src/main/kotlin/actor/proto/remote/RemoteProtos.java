@@ -5,7 +5,124 @@ package actor.proto.remote;
 
 @SuppressWarnings("ALL")
 public final class RemoteProtos {
-    private RemoteProtos() {}
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_MessageBatch_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_MessageBatch_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_MessageEnvelope_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_MessageEnvelope_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_ActorPidRequest_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_ActorPidRequest_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_ActorPidResponse_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_ActorPidResponse_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_Unit_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_Unit_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_ConnectRequest_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_ConnectRequest_fieldAccessorTable;
+    private static final com.google.protobuf.Descriptors.Descriptor
+            internal_static_remote_ConnectResponse_descriptor;
+    private static final
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+            internal_static_remote_ConnectResponse_fieldAccessorTable;
+    private static com.google.protobuf.Descriptors.FileDescriptor
+            descriptor;
+
+    static {
+        java.lang.String[] descriptorData = {
+                "\n\022remoteprotos.proto\022\006remote\032\021actorproto" +
+                        "s.proto\"d\n\014MessageBatch\022\022\n\ntype_names\030\001 " +
+                        "\003(\t\022\024\n\014target_names\030\002 \003(\t\022*\n\tenvelopes\030\003" +
+                        " \003(\0132\027.remote.MessageEnvelope\"{\n\017Message" +
+                        "Envelope\022\017\n\007type_id\030\001 \001(\005\022\024\n\014message_dat" +
+                        "a\030\002 \001(\014\022\016\n\006target\030\003 \001(\005\022\032\n\006sender\030\004 \001(\0132" +
+                        "\n.actor.PID\022\025\n\rserializer_id\030\005 \001(\005\"-\n\017Ac" +
+                        "torPidRequest\022\014\n\004name\030\001 \001(\t\022\014\n\004kind\030\002 \001(" +
+                        "\t\"+\n\020ActorPidResponse\022\027\n\003pid\030\001 \001(\0132\n.act" +
+                        "or.PID\"\006\n\004Unit\"\020\n\016ConnectRequest\"0\n\017Conn",
+                "ectResponse\022\035\n\025default_serializer_id\030\001 \001" +
+                        "(\0052}\n\010Remoting\022<\n\007Connect\022\026.remote.Conne" +
+                        "ctRequest\032\027.remote.ConnectResponse\"\000\0223\n\007" +
+                        "Receive\022\024.remote.MessageBatch\032\014.remote.U" +
+                        "nit\"\000(\0010\001B\"\n\022actor.proto.remoteB\014RemoteP" +
+                        "rotosb\006proto3"
+        };
+        com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
+                new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+                    public com.google.protobuf.ExtensionRegistry assignDescriptors(
+                            com.google.protobuf.Descriptors.FileDescriptor root) {
+                        descriptor = root;
+                        return null;
+                    }
+                };
+        com.google.protobuf.Descriptors.FileDescriptor
+                .internalBuildGeneratedFileFrom(descriptorData,
+                        new com.google.protobuf.Descriptors.FileDescriptor[]{
+                                actor.proto.Protos.getDescriptor(),
+                        }, assigner);
+        internal_static_remote_MessageBatch_descriptor =
+                getDescriptor().getMessageTypes().get(0);
+        internal_static_remote_MessageBatch_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_MessageBatch_descriptor,
+                new java.lang.String[]{"TypeNames", "TargetNames", "Envelopes",});
+        internal_static_remote_MessageEnvelope_descriptor =
+                getDescriptor().getMessageTypes().get(1);
+        internal_static_remote_MessageEnvelope_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_MessageEnvelope_descriptor,
+                new java.lang.String[]{"TypeId", "MessageData", "Target", "Sender", "SerializerId",});
+        internal_static_remote_ActorPidRequest_descriptor =
+                getDescriptor().getMessageTypes().get(2);
+        internal_static_remote_ActorPidRequest_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_ActorPidRequest_descriptor,
+                new java.lang.String[]{"Name", "Kind",});
+        internal_static_remote_ActorPidResponse_descriptor =
+                getDescriptor().getMessageTypes().get(3);
+        internal_static_remote_ActorPidResponse_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_ActorPidResponse_descriptor,
+                new java.lang.String[]{"Pid",});
+        internal_static_remote_Unit_descriptor =
+                getDescriptor().getMessageTypes().get(4);
+        internal_static_remote_Unit_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_Unit_descriptor,
+                new java.lang.String[]{});
+        internal_static_remote_ConnectRequest_descriptor =
+                getDescriptor().getMessageTypes().get(5);
+        internal_static_remote_ConnectRequest_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_ConnectRequest_descriptor,
+                new java.lang.String[]{});
+        internal_static_remote_ConnectResponse_descriptor =
+                getDescriptor().getMessageTypes().get(6);
+        internal_static_remote_ConnectResponse_fieldAccessorTable = new
+                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+                internal_static_remote_ConnectResponse_descriptor,
+                new java.lang.String[]{"DefaultSerializerId",});
+        actor.proto.Protos.getDescriptor();
+    }
+
+    private RemoteProtos() {
+    }
+
     public static void registerAllExtensions(
             com.google.protobuf.ExtensionRegistryLite registry) {
     }
@@ -14,6 +131,11 @@ public final class RemoteProtos {
             com.google.protobuf.ExtensionRegistry registry) {
         registerAllExtensions(
                 (com.google.protobuf.ExtensionRegistryLite) registry);
+    }
+
+    public static com.google.protobuf.Descriptors.FileDescriptor
+    getDescriptor() {
+        return descriptor;
     }
     public interface MessageBatchOrBuilder extends
             // @@protoc_insertion_point(interface_extends:remote.MessageBatch)
@@ -24,14 +146,17 @@ public final class RemoteProtos {
          */
         java.util.List<java.lang.String>
         getTypeNamesList();
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
         int getTypeNamesCount();
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
         java.lang.String getTypeNames(int index);
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
@@ -43,14 +168,17 @@ public final class RemoteProtos {
          */
         java.util.List<java.lang.String>
         getTargetNamesList();
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
         int getTargetNamesCount();
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
         java.lang.String getTargetNames(int index);
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
@@ -62,46 +190,172 @@ public final class RemoteProtos {
          */
         java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope>
         getEnvelopesList();
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         actor.proto.remote.RemoteProtos.MessageEnvelope getEnvelopes(int index);
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         int getEnvelopesCount();
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         java.util.List<? extends actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder>
         getEnvelopesOrBuilderList();
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder getEnvelopesOrBuilder(
                 int index);
     }
+    public interface MessageEnvelopeOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.MessageEnvelope)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>int32 type_id = 1;</code>
+         */
+        int getTypeId();
+
+        /**
+         * <code>bytes message_data = 2;</code>
+         */
+        com.google.protobuf.ByteString getMessageData();
+
+        /**
+         * <code>int32 target = 3;</code>
+         */
+        int getTarget();
+
+        /**
+         * <code>.actor.PID sender = 4;</code>
+         */
+        boolean hasSender();
+
+        /**
+         * <code>.actor.PID sender = 4;</code>
+         */
+        actor.proto.Protos.PID getSender();
+
+        /**
+         * <code>.actor.PID sender = 4;</code>
+         */
+        actor.proto.Protos.PIDOrBuilder getSenderOrBuilder();
+
+        /**
+         * <code>int32 serializer_id = 5;</code>
+         */
+        int getSerializerId();
+    }
+    public interface ActorPidRequestOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.ActorPidRequest)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>string name = 1;</code>
+         */
+        java.lang.String getName();
+
+        /**
+         * <code>string name = 1;</code>
+         */
+        com.google.protobuf.ByteString
+        getNameBytes();
+
+        /**
+         * <code>string kind = 2;</code>
+         */
+        java.lang.String getKind();
+
+        /**
+         * <code>string kind = 2;</code>
+         */
+        com.google.protobuf.ByteString
+        getKindBytes();
+    }
+    public interface ActorPidResponseOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.ActorPidResponse)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>.actor.PID pid = 1;</code>
+         */
+        boolean hasPid();
+
+        /**
+         * <code>.actor.PID pid = 1;</code>
+         */
+        actor.proto.Protos.PID getPid();
+
+        /**
+         * <code>.actor.PID pid = 1;</code>
+         */
+        actor.proto.Protos.PIDOrBuilder getPidOrBuilder();
+    }
+    public interface UnitOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.Unit)
+            com.google.protobuf.MessageOrBuilder {
+    }
+    public interface ConnectRequestOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.ConnectRequest)
+            com.google.protobuf.MessageOrBuilder {
+    }
+    public interface ConnectResponseOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:remote.ConnectResponse)
+            com.google.protobuf.MessageOrBuilder {
+
+        /**
+         * <code>int32 default_serializer_id = 1;</code>
+         */
+        int getDefaultSerializerId();
+    }
+
     /**
      * Protobuf type {@code remote.MessageBatch}
      */
-    public  static final class MessageBatch extends
+    public static final class MessageBatch extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.MessageBatch)
             MessageBatchOrBuilder {
+        public static final int TYPE_NAMES_FIELD_NUMBER = 1;
+        public static final int TARGET_NAMES_FIELD_NUMBER = 2;
+        public static final int ENVELOPES_FIELD_NUMBER = 3;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.MessageBatch)
+        private static final actor.proto.remote.RemoteProtos.MessageBatch DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<MessageBatch>
+                PARSER = new com.google.protobuf.AbstractParser<MessageBatch>() {
+            public MessageBatch parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new MessageBatch(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.MessageBatch();
+        }
+
+        private com.google.protobuf.LazyStringList typeNames_;
+        private com.google.protobuf.LazyStringList targetNames_;
+        private java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope> envelopes_;
+        private byte memoizedIsInitialized = -1;
+
         // Use MessageBatch.newBuilder() to construct.
         private MessageBatch(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private MessageBatch() {
             typeNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
             targetNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
             envelopes_ = java.util.Collections.emptyList();
-        }
-
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
         private MessageBatch(
                 com.google.protobuf.CodedInputStream input,
@@ -170,9 +424,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_MessageBatch_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.MessageBatch prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageBatch getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<MessageBatch> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -182,8 +540,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.MessageBatch.class, actor.proto.remote.RemoteProtos.MessageBatch.Builder.class);
         }
 
-        public static final int TYPE_NAMES_FIELD_NUMBER = 1;
-        private com.google.protobuf.LazyStringList typeNames_;
         /**
          * <code>repeated string type_names = 1;</code>
          */
@@ -191,18 +547,21 @@ public final class RemoteProtos {
         getTypeNamesList() {
             return typeNames_;
         }
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
         public int getTypeNamesCount() {
             return typeNames_.size();
         }
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
         public java.lang.String getTypeNames(int index) {
             return typeNames_.get(index);
         }
+
         /**
          * <code>repeated string type_names = 1;</code>
          */
@@ -211,8 +570,6 @@ public final class RemoteProtos {
             return typeNames_.getByteString(index);
         }
 
-        public static final int TARGET_NAMES_FIELD_NUMBER = 2;
-        private com.google.protobuf.LazyStringList targetNames_;
         /**
          * <code>repeated string target_names = 2;</code>
          */
@@ -220,18 +577,21 @@ public final class RemoteProtos {
         getTargetNamesList() {
             return targetNames_;
         }
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
         public int getTargetNamesCount() {
             return targetNames_.size();
         }
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
         public java.lang.String getTargetNames(int index) {
             return targetNames_.get(index);
         }
+
         /**
          * <code>repeated string target_names = 2;</code>
          */
@@ -240,14 +600,13 @@ public final class RemoteProtos {
             return targetNames_.getByteString(index);
         }
 
-        public static final int ENVELOPES_FIELD_NUMBER = 3;
-        private java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope> envelopes_;
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         public java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope> getEnvelopesList() {
             return envelopes_;
         }
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
@@ -255,18 +614,21 @@ public final class RemoteProtos {
         getEnvelopesOrBuilderList() {
             return envelopes_;
         }
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         public int getEnvelopesCount() {
             return envelopes_.size();
         }
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
         public actor.proto.remote.RemoteProtos.MessageEnvelope getEnvelopes(int index) {
             return envelopes_.get(index);
         }
+
         /**
          * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
          */
@@ -275,7 +637,6 @@ public final class RemoteProtos {
             return envelopes_.get(index);
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -327,7 +688,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -372,83 +732,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageBatch parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.MessageBatch prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -460,6 +747,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<MessageBatch> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.MessageBatch getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.MessageBatch}
          */
@@ -467,6 +764,25 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.MessageBatch)
                 actor.proto.remote.RemoteProtos.MessageBatchOrBuilder {
+            private int bitField0_;
+            private com.google.protobuf.LazyStringList typeNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            private com.google.protobuf.LazyStringList targetNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+            private java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope> envelopes_ =
+                    java.util.Collections.emptyList();
+            private com.google.protobuf.RepeatedFieldBuilderV3<
+                    actor.proto.remote.RemoteProtos.MessageEnvelope, actor.proto.remote.RemoteProtos.MessageEnvelope.Builder, actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder> envelopesBuilder_;
+
+            // Construct using actor.proto.remote.RemoteProtos.MessageBatch.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_MessageBatch_descriptor;
@@ -479,22 +795,13 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.MessageBatch.class, actor.proto.remote.RemoteProtos.MessageBatch.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.MessageBatch.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                     getEnvelopesFieldBuilder();
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 typeNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -556,32 +863,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.MessageBatch) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.MessageBatch)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.MessageBatch) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -661,15 +974,14 @@ public final class RemoteProtos {
                 }
                 return this;
             }
-            private int bitField0_;
 
-            private com.google.protobuf.LazyStringList typeNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
             private void ensureTypeNamesIsMutable() {
                 if (!((bitField0_ & 0x00000001) == 0x00000001)) {
                     typeNames_ = new com.google.protobuf.LazyStringArrayList(typeNames_);
                     bitField0_ |= 0x00000001;
                 }
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -677,18 +989,21 @@ public final class RemoteProtos {
             getTypeNamesList() {
                 return typeNames_.getUnmodifiableView();
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
             public int getTypeNamesCount() {
                 return typeNames_.size();
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
             public java.lang.String getTypeNames(int index) {
                 return typeNames_.get(index);
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -696,6 +1011,7 @@ public final class RemoteProtos {
             getTypeNamesBytes(int index) {
                 return typeNames_.getByteString(index);
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -709,6 +1025,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -722,6 +1039,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -733,6 +1051,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -742,6 +1061,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string type_names = 1;</code>
              */
@@ -757,13 +1077,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private com.google.protobuf.LazyStringList targetNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
             private void ensureTargetNamesIsMutable() {
                 if (!((bitField0_ & 0x00000002) == 0x00000002)) {
                     targetNames_ = new com.google.protobuf.LazyStringArrayList(targetNames_);
                     bitField0_ |= 0x00000002;
                 }
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -771,18 +1091,21 @@ public final class RemoteProtos {
             getTargetNamesList() {
                 return targetNames_.getUnmodifiableView();
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
             public int getTargetNamesCount() {
                 return targetNames_.size();
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
             public java.lang.String getTargetNames(int index) {
                 return targetNames_.get(index);
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -790,6 +1113,7 @@ public final class RemoteProtos {
             getTargetNamesBytes(int index) {
                 return targetNames_.getByteString(index);
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -803,6 +1127,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -816,6 +1141,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -827,6 +1153,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -836,6 +1163,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>repeated string target_names = 2;</code>
              */
@@ -851,17 +1179,12 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private java.util.List<actor.proto.remote.RemoteProtos.MessageEnvelope> envelopes_ =
-                    java.util.Collections.emptyList();
             private void ensureEnvelopesIsMutable() {
                 if (!((bitField0_ & 0x00000004) == 0x00000004)) {
                     envelopes_ = new java.util.ArrayList<actor.proto.remote.RemoteProtos.MessageEnvelope>(envelopes_);
                     bitField0_ |= 0x00000004;
                 }
             }
-
-            private com.google.protobuf.RepeatedFieldBuilderV3<
-                    actor.proto.remote.RemoteProtos.MessageEnvelope, actor.proto.remote.RemoteProtos.MessageEnvelope.Builder, actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder> envelopesBuilder_;
 
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
@@ -873,6 +1196,7 @@ public final class RemoteProtos {
                     return envelopesBuilder_.getMessageList();
                 }
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -883,6 +1207,7 @@ public final class RemoteProtos {
                     return envelopesBuilder_.getCount();
                 }
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -893,6 +1218,7 @@ public final class RemoteProtos {
                     return envelopesBuilder_.getMessage(index);
                 }
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -910,6 +1236,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -924,6 +1251,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -940,6 +1268,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -957,6 +1286,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -971,6 +1301,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -985,6 +1316,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1000,6 +1332,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1013,6 +1346,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1026,6 +1360,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1033,16 +1368,19 @@ public final class RemoteProtos {
                     int index) {
                 return getEnvelopesFieldBuilder().getBuilder(index);
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
             public actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder getEnvelopesOrBuilder(
                     int index) {
                 if (envelopesBuilder_ == null) {
-                    return envelopes_.get(index);  } else {
+                    return envelopes_.get(index);
+                } else {
                     return envelopesBuilder_.getMessageOrBuilder(index);
                 }
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1054,6 +1392,7 @@ public final class RemoteProtos {
                     return java.util.Collections.unmodifiableList(envelopes_);
                 }
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1061,6 +1400,7 @@ public final class RemoteProtos {
                 return getEnvelopesFieldBuilder().addBuilder(
                         actor.proto.remote.RemoteProtos.MessageEnvelope.getDefaultInstance());
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1069,6 +1409,7 @@ public final class RemoteProtos {
                 return getEnvelopesFieldBuilder().addBuilder(
                         index, actor.proto.remote.RemoteProtos.MessageEnvelope.getDefaultInstance());
             }
+
             /**
              * <code>repeated .remote.MessageEnvelope envelopes = 3;</code>
              */
@@ -1076,6 +1417,7 @@ public final class RemoteProtos {
             getEnvelopesBuilderList() {
                 return getEnvelopesFieldBuilder().getBuilderList();
             }
+
             private com.google.protobuf.RepeatedFieldBuilderV3<
                     actor.proto.remote.RemoteProtos.MessageEnvelope, actor.proto.remote.RemoteProtos.MessageEnvelope.Builder, actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder>
             getEnvelopesFieldBuilder() {
@@ -1090,6 +1432,7 @@ public final class RemoteProtos {
                 }
                 return envelopesBuilder_;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -1104,85 +1447,44 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.MessageBatch)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.MessageBatch)
-        private static final actor.proto.remote.RemoteProtos.MessageBatch DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.MessageBatch();
-        }
-
-        public static actor.proto.remote.RemoteProtos.MessageBatch getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<MessageBatch>
-                PARSER = new com.google.protobuf.AbstractParser<MessageBatch>() {
-            public MessageBatch parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new MessageBatch(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<MessageBatch> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<MessageBatch> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.MessageBatch getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface MessageEnvelopeOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.MessageEnvelope)
-            com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>int32 type_id = 1;</code>
-         */
-        int getTypeId();
-
-        /**
-         * <code>bytes message_data = 2;</code>
-         */
-        com.google.protobuf.ByteString getMessageData();
-
-        /**
-         * <code>int32 target = 3;</code>
-         */
-        int getTarget();
-
-        /**
-         * <code>.actor.PID sender = 4;</code>
-         */
-        boolean hasSender();
-        /**
-         * <code>.actor.PID sender = 4;</code>
-         */
-        actor.proto.Protos.PID getSender();
-        /**
-         * <code>.actor.PID sender = 4;</code>
-         */
-        actor.proto.Protos.PIDOrBuilder getSenderOrBuilder();
-
-        /**
-         * <code>int32 serializer_id = 5;</code>
-         */
-        int getSerializerId();
-    }
     /**
      * Protobuf type {@code remote.MessageEnvelope}
      */
-    public  static final class MessageEnvelope extends
+    public static final class MessageEnvelope extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.MessageEnvelope)
             MessageEnvelopeOrBuilder {
+        public static final int TYPE_ID_FIELD_NUMBER = 1;
+        public static final int MESSAGE_DATA_FIELD_NUMBER = 2;
+        public static final int TARGET_FIELD_NUMBER = 3;
+        public static final int SENDER_FIELD_NUMBER = 4;
+        public static final int SERIALIZER_ID_FIELD_NUMBER = 5;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.MessageEnvelope)
+        private static final actor.proto.remote.RemoteProtos.MessageEnvelope DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<MessageEnvelope>
+                PARSER = new com.google.protobuf.AbstractParser<MessageEnvelope>() {
+            public MessageEnvelope parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new MessageEnvelope(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.MessageEnvelope();
+        }
+
+        private int typeId_;
+        private com.google.protobuf.ByteString messageData_;
+        private int target_;
+        private actor.proto.Protos.PID sender_;
+        private int serializerId_;
+        private byte memoizedIsInitialized = -1;
+
         // Use MessageEnvelope.newBuilder() to construct.
         private MessageEnvelope(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
@@ -1194,11 +1496,6 @@ public final class RemoteProtos {
             serializerId_ = 0;
         }
 
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
         private MessageEnvelope(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -1263,9 +1560,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_MessageEnvelope_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.MessageEnvelope prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.MessageEnvelope getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<MessageEnvelope> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -1275,8 +1676,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.MessageEnvelope.class, actor.proto.remote.RemoteProtos.MessageEnvelope.Builder.class);
         }
 
-        public static final int TYPE_ID_FIELD_NUMBER = 1;
-        private int typeId_;
         /**
          * <code>int32 type_id = 1;</code>
          */
@@ -1284,8 +1683,6 @@ public final class RemoteProtos {
             return typeId_;
         }
 
-        public static final int MESSAGE_DATA_FIELD_NUMBER = 2;
-        private com.google.protobuf.ByteString messageData_;
         /**
          * <code>bytes message_data = 2;</code>
          */
@@ -1293,8 +1690,6 @@ public final class RemoteProtos {
             return messageData_;
         }
 
-        public static final int TARGET_FIELD_NUMBER = 3;
-        private int target_;
         /**
          * <code>int32 target = 3;</code>
          */
@@ -1302,20 +1697,20 @@ public final class RemoteProtos {
             return target_;
         }
 
-        public static final int SENDER_FIELD_NUMBER = 4;
-        private actor.proto.Protos.PID sender_;
         /**
          * <code>.actor.PID sender = 4;</code>
          */
         public boolean hasSender() {
             return sender_ != null;
         }
+
         /**
          * <code>.actor.PID sender = 4;</code>
          */
         public actor.proto.Protos.PID getSender() {
             return sender_ == null ? actor.proto.Protos.PID.getDefaultInstance() : sender_;
         }
+
         /**
          * <code>.actor.PID sender = 4;</code>
          */
@@ -1323,8 +1718,6 @@ public final class RemoteProtos {
             return getSender();
         }
 
-        public static final int SERIALIZER_ID_FIELD_NUMBER = 5;
-        private int serializerId_;
         /**
          * <code>int32 serializer_id = 5;</code>
          */
@@ -1332,7 +1725,6 @@ public final class RemoteProtos {
             return serializerId_;
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -1390,7 +1782,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -1442,83 +1833,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.MessageEnvelope prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -1530,6 +1848,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<MessageEnvelope> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.MessageEnvelope getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.MessageEnvelope}
          */
@@ -1537,6 +1865,25 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.MessageEnvelope)
                 actor.proto.remote.RemoteProtos.MessageEnvelopeOrBuilder {
+            private int typeId_;
+            private com.google.protobuf.ByteString messageData_ = com.google.protobuf.ByteString.EMPTY;
+            private int target_;
+            private actor.proto.Protos.PID sender_ = null;
+            private com.google.protobuf.SingleFieldBuilderV3<
+                    actor.proto.Protos.PID, actor.proto.Protos.PID.Builder, actor.proto.Protos.PIDOrBuilder> senderBuilder_;
+            private int serializerId_;
+
+            // Construct using actor.proto.remote.RemoteProtos.MessageEnvelope.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_MessageEnvelope_descriptor;
@@ -1549,21 +1896,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.MessageEnvelope.class, actor.proto.remote.RemoteProtos.MessageEnvelope.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.MessageEnvelope.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 typeId_ = 0;
@@ -1618,32 +1956,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.MessageEnvelope) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.MessageEnvelope)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.MessageEnvelope) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -1693,13 +2037,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private int typeId_ ;
             /**
              * <code>int32 type_id = 1;</code>
              */
             public int getTypeId() {
                 return typeId_;
             }
+
             /**
              * <code>int32 type_id = 1;</code>
              */
@@ -1709,6 +2053,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>int32 type_id = 1;</code>
              */
@@ -1719,13 +2064,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private com.google.protobuf.ByteString messageData_ = com.google.protobuf.ByteString.EMPTY;
             /**
              * <code>bytes message_data = 2;</code>
              */
             public com.google.protobuf.ByteString getMessageData() {
                 return messageData_;
             }
+
             /**
              * <code>bytes message_data = 2;</code>
              */
@@ -1738,6 +2083,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>bytes message_data = 2;</code>
              */
@@ -1748,13 +2094,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private int target_ ;
             /**
              * <code>int32 target = 3;</code>
              */
             public int getTarget() {
                 return target_;
             }
+
             /**
              * <code>int32 target = 3;</code>
              */
@@ -1764,6 +2110,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>int32 target = 3;</code>
              */
@@ -1774,15 +2121,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private actor.proto.Protos.PID sender_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<
-                    actor.proto.Protos.PID, actor.proto.Protos.PID.Builder, actor.proto.Protos.PIDOrBuilder> senderBuilder_;
             /**
              * <code>.actor.PID sender = 4;</code>
              */
             public boolean hasSender() {
                 return senderBuilder_ != null || sender_ != null;
             }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1793,6 +2138,22 @@ public final class RemoteProtos {
                     return senderBuilder_.getMessage();
                 }
             }
+
+            /**
+             * <code>.actor.PID sender = 4;</code>
+             */
+            public Builder setSender(
+                    actor.proto.Protos.PID.Builder builderForValue) {
+                if (senderBuilder_ == null) {
+                    sender_ = builderForValue.build();
+                    onChanged();
+                } else {
+                    senderBuilder_.setMessage(builderForValue.build());
+                }
+
+                return this;
+            }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1809,20 +2170,7 @@ public final class RemoteProtos {
 
                 return this;
             }
-            /**
-             * <code>.actor.PID sender = 4;</code>
-             */
-            public Builder setSender(
-                    actor.proto.Protos.PID.Builder builderForValue) {
-                if (senderBuilder_ == null) {
-                    sender_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    senderBuilder_.setMessage(builderForValue.build());
-                }
 
-                return this;
-            }
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1841,6 +2189,7 @@ public final class RemoteProtos {
 
                 return this;
             }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1855,6 +2204,7 @@ public final class RemoteProtos {
 
                 return this;
             }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1863,6 +2213,7 @@ public final class RemoteProtos {
                 onChanged();
                 return getSenderFieldBuilder().getBuilder();
             }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1874,6 +2225,7 @@ public final class RemoteProtos {
                             actor.proto.Protos.PID.getDefaultInstance() : sender_;
                 }
             }
+
             /**
              * <code>.actor.PID sender = 4;</code>
              */
@@ -1891,13 +2243,13 @@ public final class RemoteProtos {
                 return senderBuilder_;
             }
 
-            private int serializerId_ ;
             /**
              * <code>int32 serializer_id = 5;</code>
              */
             public int getSerializerId() {
                 return serializerId_;
             }
+
             /**
              * <code>int32 serializer_id = 5;</code>
              */
@@ -1907,6 +2259,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>int32 serializer_id = 5;</code>
              */
@@ -1916,6 +2269,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -1930,85 +2284,46 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.MessageEnvelope)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.MessageEnvelope)
-        private static final actor.proto.remote.RemoteProtos.MessageEnvelope DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.MessageEnvelope();
-        }
-
-        public static actor.proto.remote.RemoteProtos.MessageEnvelope getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<MessageEnvelope>
-                PARSER = new com.google.protobuf.AbstractParser<MessageEnvelope>() {
-            public MessageEnvelope parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new MessageEnvelope(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<MessageEnvelope> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<MessageEnvelope> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.MessageEnvelope getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface ActorPidRequestOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.ActorPidRequest)
-            com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>string name = 1;</code>
-         */
-        java.lang.String getName();
-        /**
-         * <code>string name = 1;</code>
-         */
-        com.google.protobuf.ByteString
-        getNameBytes();
-
-        /**
-         * <code>string kind = 2;</code>
-         */
-        java.lang.String getKind();
-        /**
-         * <code>string kind = 2;</code>
-         */
-        com.google.protobuf.ByteString
-        getKindBytes();
-    }
     /**
      * Protobuf type {@code remote.ActorPidRequest}
      */
-    public  static final class ActorPidRequest extends
+    public static final class ActorPidRequest extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.ActorPidRequest)
             ActorPidRequestOrBuilder {
+        public static final int NAME_FIELD_NUMBER = 1;
+        public static final int KIND_FIELD_NUMBER = 2;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.ActorPidRequest)
+        private static final actor.proto.remote.RemoteProtos.ActorPidRequest DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<ActorPidRequest>
+                PARSER = new com.google.protobuf.AbstractParser<ActorPidRequest>() {
+            public ActorPidRequest parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ActorPidRequest(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ActorPidRequest();
+        }
+
+        private volatile java.lang.Object name_;
+        private volatile java.lang.Object kind_;
+        private byte memoizedIsInitialized = -1;
+
         // Use ActorPidRequest.newBuilder() to construct.
         private ActorPidRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private ActorPidRequest() {
             name_ = "";
             kind_ = "";
-        }
-
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
         private ActorPidRequest(
                 com.google.protobuf.CodedInputStream input,
@@ -2053,9 +2368,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_ActorPidRequest_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ActorPidRequest prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidRequest getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<ActorPidRequest> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -2065,8 +2484,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.ActorPidRequest.class, actor.proto.remote.RemoteProtos.ActorPidRequest.Builder.class);
         }
 
-        public static final int NAME_FIELD_NUMBER = 1;
-        private volatile java.lang.Object name_;
         /**
          * <code>string name = 1;</code>
          */
@@ -2082,6 +2499,7 @@ public final class RemoteProtos {
                 return s;
             }
         }
+
         /**
          * <code>string name = 1;</code>
          */
@@ -2099,8 +2517,6 @@ public final class RemoteProtos {
             }
         }
 
-        public static final int KIND_FIELD_NUMBER = 2;
-        private volatile java.lang.Object kind_;
         /**
          * <code>string kind = 2;</code>
          */
@@ -2116,6 +2532,7 @@ public final class RemoteProtos {
                 return s;
             }
         }
+
         /**
          * <code>string kind = 2;</code>
          */
@@ -2133,7 +2550,6 @@ public final class RemoteProtos {
             }
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -2168,7 +2584,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -2203,83 +2618,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ActorPidRequest prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -2291,6 +2633,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ActorPidRequest> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.ActorPidRequest getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.ActorPidRequest}
          */
@@ -2299,6 +2651,20 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.ActorPidRequest)
                 actor.proto.remote.RemoteProtos.ActorPidRequestOrBuilder {
+            private java.lang.Object name_ = "";
+            private java.lang.Object kind_ = "";
+
+            // Construct using actor.proto.remote.RemoteProtos.ActorPidRequest.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_ActorPidRequest_descriptor;
@@ -2311,21 +2677,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.ActorPidRequest.class, actor.proto.remote.RemoteProtos.ActorPidRequest.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.ActorPidRequest.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 name_ = "";
@@ -2363,32 +2720,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.ActorPidRequest) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.ActorPidRequest)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.ActorPidRequest) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -2431,7 +2794,6 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private java.lang.Object name_ = "";
             /**
              * <code>string name = 1;</code>
              */
@@ -2447,6 +2809,21 @@ public final class RemoteProtos {
                     return (java.lang.String) ref;
                 }
             }
+
+            /**
+             * <code>string name = 1;</code>
+             */
+            public Builder setName(
+                    java.lang.String value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+
+                name_ = value;
+                onChanged();
+                return this;
+            }
+
             /**
              * <code>string name = 1;</code>
              */
@@ -2463,28 +2840,7 @@ public final class RemoteProtos {
                     return (com.google.protobuf.ByteString) ref;
                 }
             }
-            /**
-             * <code>string name = 1;</code>
-             */
-            public Builder setName(
-                    java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
 
-                name_ = value;
-                onChanged();
-                return this;
-            }
-            /**
-             * <code>string name = 1;</code>
-             */
-            public Builder clearName() {
-
-                name_ = getDefaultInstance().getName();
-                onChanged();
-                return this;
-            }
             /**
              * <code>string name = 1;</code>
              */
@@ -2500,7 +2856,16 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private java.lang.Object kind_ = "";
+            /**
+             * <code>string name = 1;</code>
+             */
+            public Builder clearName() {
+
+                name_ = getDefaultInstance().getName();
+                onChanged();
+                return this;
+            }
+
             /**
              * <code>string kind = 2;</code>
              */
@@ -2516,6 +2881,21 @@ public final class RemoteProtos {
                     return (java.lang.String) ref;
                 }
             }
+
+            /**
+             * <code>string kind = 2;</code>
+             */
+            public Builder setKind(
+                    java.lang.String value) {
+                if (value == null) {
+                    throw new NullPointerException();
+                }
+
+                kind_ = value;
+                onChanged();
+                return this;
+            }
+
             /**
              * <code>string kind = 2;</code>
              */
@@ -2532,28 +2912,7 @@ public final class RemoteProtos {
                     return (com.google.protobuf.ByteString) ref;
                 }
             }
-            /**
-             * <code>string kind = 2;</code>
-             */
-            public Builder setKind(
-                    java.lang.String value) {
-                if (value == null) {
-                    throw new NullPointerException();
-                }
 
-                kind_ = value;
-                onChanged();
-                return this;
-            }
-            /**
-             * <code>string kind = 2;</code>
-             */
-            public Builder clearKind() {
-
-                kind_ = getDefaultInstance().getKind();
-                onChanged();
-                return this;
-            }
             /**
              * <code>string kind = 2;</code>
              */
@@ -2568,6 +2927,17 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
+            /**
+             * <code>string kind = 2;</code>
+             */
+            public Builder clearKind() {
+
+                kind_ = getDefaultInstance().getKind();
+                onChanged();
+                return this;
+            }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -2582,77 +2952,43 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.ActorPidRequest)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.ActorPidRequest)
-        private static final actor.proto.remote.RemoteProtos.ActorPidRequest DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ActorPidRequest();
-        }
-
-        public static actor.proto.remote.RemoteProtos.ActorPidRequest getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<ActorPidRequest>
-                PARSER = new com.google.protobuf.AbstractParser<ActorPidRequest>() {
-            public ActorPidRequest parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ActorPidRequest(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<ActorPidRequest> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<ActorPidRequest> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.ActorPidRequest getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface ActorPidResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.ActorPidResponse)
-            com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>.actor.PID pid = 1;</code>
-         */
-        boolean hasPid();
-        /**
-         * <code>.actor.PID pid = 1;</code>
-         */
-        actor.proto.Protos.PID getPid();
-        /**
-         * <code>.actor.PID pid = 1;</code>
-         */
-        actor.proto.Protos.PIDOrBuilder getPidOrBuilder();
-    }
     /**
      * Protobuf type {@code remote.ActorPidResponse}
      */
-    public  static final class ActorPidResponse extends
+    public static final class ActorPidResponse extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.ActorPidResponse)
             ActorPidResponseOrBuilder {
+        public static final int PID_FIELD_NUMBER = 1;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.ActorPidResponse)
+        private static final actor.proto.remote.RemoteProtos.ActorPidResponse DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<ActorPidResponse>
+                PARSER = new com.google.protobuf.AbstractParser<ActorPidResponse>() {
+            public ActorPidResponse parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ActorPidResponse(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ActorPidResponse();
+        }
+
+        private actor.proto.Protos.PID pid_;
+        private byte memoizedIsInitialized = -1;
         // Use ActorPidResponse.newBuilder() to construct.
         private ActorPidResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private ActorPidResponse() {
         }
 
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
         private ActorPidResponse(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -2697,9 +3033,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_ActorPidResponse_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ActorPidResponse prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ActorPidResponse getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<ActorPidResponse> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -2709,20 +3149,20 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.ActorPidResponse.class, actor.proto.remote.RemoteProtos.ActorPidResponse.Builder.class);
         }
 
-        public static final int PID_FIELD_NUMBER = 1;
-        private actor.proto.Protos.PID pid_;
         /**
          * <code>.actor.PID pid = 1;</code>
          */
         public boolean hasPid() {
             return pid_ != null;
         }
+
         /**
          * <code>.actor.PID pid = 1;</code>
          */
         public actor.proto.Protos.PID getPid() {
             return pid_ == null ? actor.proto.Protos.PID.getDefaultInstance() : pid_;
         }
+
         /**
          * <code>.actor.PID pid = 1;</code>
          */
@@ -2730,7 +3170,6 @@ public final class RemoteProtos {
             return getPid();
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -2760,7 +3199,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -2796,83 +3234,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ActorPidResponse prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -2884,6 +3249,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ActorPidResponse> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.ActorPidResponse getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.ActorPidResponse}
          */
@@ -2891,6 +3266,21 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.ActorPidResponse)
                 actor.proto.remote.RemoteProtos.ActorPidResponseOrBuilder {
+            private actor.proto.Protos.PID pid_ = null;
+            private com.google.protobuf.SingleFieldBuilderV3<
+                    actor.proto.Protos.PID, actor.proto.Protos.PID.Builder, actor.proto.Protos.PIDOrBuilder> pidBuilder_;
+
+            // Construct using actor.proto.remote.RemoteProtos.ActorPidResponse.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_ActorPidResponse_descriptor;
@@ -2903,21 +3293,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.ActorPidResponse.class, actor.proto.remote.RemoteProtos.ActorPidResponse.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.ActorPidResponse.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 if (pidBuilder_ == null) {
@@ -2960,32 +3341,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.ActorPidResponse) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.ActorPidResponse)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.ActorPidResponse) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -3023,15 +3410,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private actor.proto.Protos.PID pid_ = null;
-            private com.google.protobuf.SingleFieldBuilderV3<
-                    actor.proto.Protos.PID, actor.proto.Protos.PID.Builder, actor.proto.Protos.PIDOrBuilder> pidBuilder_;
             /**
              * <code>.actor.PID pid = 1;</code>
              */
             public boolean hasPid() {
                 return pidBuilder_ != null || pid_ != null;
             }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3042,6 +3427,22 @@ public final class RemoteProtos {
                     return pidBuilder_.getMessage();
                 }
             }
+
+            /**
+             * <code>.actor.PID pid = 1;</code>
+             */
+            public Builder setPid(
+                    actor.proto.Protos.PID.Builder builderForValue) {
+                if (pidBuilder_ == null) {
+                    pid_ = builderForValue.build();
+                    onChanged();
+                } else {
+                    pidBuilder_.setMessage(builderForValue.build());
+                }
+
+                return this;
+            }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3058,20 +3459,7 @@ public final class RemoteProtos {
 
                 return this;
             }
-            /**
-             * <code>.actor.PID pid = 1;</code>
-             */
-            public Builder setPid(
-                    actor.proto.Protos.PID.Builder builderForValue) {
-                if (pidBuilder_ == null) {
-                    pid_ = builderForValue.build();
-                    onChanged();
-                } else {
-                    pidBuilder_.setMessage(builderForValue.build());
-                }
 
-                return this;
-            }
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3090,6 +3478,7 @@ public final class RemoteProtos {
 
                 return this;
             }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3104,6 +3493,7 @@ public final class RemoteProtos {
 
                 return this;
             }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3112,6 +3502,7 @@ public final class RemoteProtos {
                 onChanged();
                 return getPidFieldBuilder().getBuilder();
             }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3123,6 +3514,7 @@ public final class RemoteProtos {
                             actor.proto.Protos.PID.getDefaultInstance() : pid_;
                 }
             }
+
             /**
              * <code>.actor.PID pid = 1;</code>
              */
@@ -3139,6 +3531,7 @@ public final class RemoteProtos {
                 }
                 return pidBuilder_;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -3153,64 +3546,42 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.ActorPidResponse)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.ActorPidResponse)
-        private static final actor.proto.remote.RemoteProtos.ActorPidResponse DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ActorPidResponse();
-        }
-
-        public static actor.proto.remote.RemoteProtos.ActorPidResponse getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<ActorPidResponse>
-                PARSER = new com.google.protobuf.AbstractParser<ActorPidResponse>() {
-            public ActorPidResponse parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ActorPidResponse(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<ActorPidResponse> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<ActorPidResponse> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.ActorPidResponse getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface UnitOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.Unit)
-            com.google.protobuf.MessageOrBuilder {
-    }
     /**
      * Protobuf type {@code remote.Unit}
      */
-    public  static final class Unit extends
+    public static final class Unit extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.Unit)
             UnitOrBuilder {
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.Unit)
+        private static final actor.proto.remote.RemoteProtos.Unit DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<Unit>
+                PARSER = new com.google.protobuf.AbstractParser<Unit>() {
+            public Unit parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new Unit(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.Unit();
+        }
+
+        private byte memoizedIsInitialized = -1;
+
         // Use Unit.newBuilder() to construct.
         private Unit(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private Unit() {
         }
 
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
         private Unit(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3241,9 +3612,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_Unit_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.Unit prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.Unit getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<Unit> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3253,7 +3728,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.Unit.class, actor.proto.remote.RemoteProtos.Unit.Builder.class);
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -3276,7 +3750,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -3303,83 +3776,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.Unit parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.Unit prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -3391,6 +3791,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<Unit> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.Unit getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.Unit}
          */
@@ -3398,6 +3808,17 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.Unit)
                 actor.proto.remote.RemoteProtos.UnitOrBuilder {
+            // Construct using actor.proto.remote.RemoteProtos.Unit.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_Unit_descriptor;
@@ -3410,21 +3831,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.Unit.class, actor.proto.remote.RemoteProtos.Unit.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.Unit.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 return this;
@@ -3456,32 +3868,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.Unit) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.Unit)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.Unit) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -3515,6 +3933,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -3529,64 +3948,42 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.Unit)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.Unit)
-        private static final actor.proto.remote.RemoteProtos.Unit DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.Unit();
-        }
-
-        public static actor.proto.remote.RemoteProtos.Unit getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<Unit>
-                PARSER = new com.google.protobuf.AbstractParser<Unit>() {
-            public Unit parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new Unit(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<Unit> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<Unit> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.Unit getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface ConnectRequestOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.ConnectRequest)
-            com.google.protobuf.MessageOrBuilder {
-    }
     /**
      * Protobuf type {@code remote.ConnectRequest}
      */
-    public  static final class ConnectRequest extends
+    public static final class ConnectRequest extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.ConnectRequest)
             ConnectRequestOrBuilder {
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.ConnectRequest)
+        private static final actor.proto.remote.RemoteProtos.ConnectRequest DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<ConnectRequest>
+                PARSER = new com.google.protobuf.AbstractParser<ConnectRequest>() {
+            public ConnectRequest parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ConnectRequest(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ConnectRequest();
+        }
+
+        private byte memoizedIsInitialized = -1;
+
         // Use ConnectRequest.newBuilder() to construct.
         private ConnectRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private ConnectRequest() {
         }
 
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
         private ConnectRequest(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -3617,9 +4014,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_ConnectRequest_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ConnectRequest prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectRequest getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<ConnectRequest> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -3629,7 +4130,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.ConnectRequest.class, actor.proto.remote.RemoteProtos.ConnectRequest.Builder.class);
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -3652,7 +4152,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -3679,83 +4178,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectRequest parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ConnectRequest prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -3767,6 +4193,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ConnectRequest> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.ConnectRequest getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.ConnectRequest}
          */
@@ -3774,6 +4210,17 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.ConnectRequest)
                 actor.proto.remote.RemoteProtos.ConnectRequestOrBuilder {
+            // Construct using actor.proto.remote.RemoteProtos.ConnectRequest.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_ConnectRequest_descriptor;
@@ -3786,21 +4233,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.ConnectRequest.class, actor.proto.remote.RemoteProtos.ConnectRequest.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.ConnectRequest.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 return this;
@@ -3832,32 +4270,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.ConnectRequest) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.ConnectRequest)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.ConnectRequest) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -3891,6 +4335,7 @@ public final class RemoteProtos {
                 }
                 return this;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -3905,70 +4350,44 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.ConnectRequest)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.ConnectRequest)
-        private static final actor.proto.remote.RemoteProtos.ConnectRequest DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ConnectRequest();
-        }
-
-        public static actor.proto.remote.RemoteProtos.ConnectRequest getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<ConnectRequest>
-                PARSER = new com.google.protobuf.AbstractParser<ConnectRequest>() {
-            public ConnectRequest parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ConnectRequest(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<ConnectRequest> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<ConnectRequest> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.ConnectRequest getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
     }
 
-    public interface ConnectResponseOrBuilder extends
-            // @@protoc_insertion_point(interface_extends:remote.ConnectResponse)
-            com.google.protobuf.MessageOrBuilder {
-
-        /**
-         * <code>int32 default_serializer_id = 1;</code>
-         */
-        int getDefaultSerializerId();
-    }
     /**
      * Protobuf type {@code remote.ConnectResponse}
      */
-    public  static final class ConnectResponse extends
+    public static final class ConnectResponse extends
             com.google.protobuf.GeneratedMessageV3 implements
             // @@protoc_insertion_point(message_implements:remote.ConnectResponse)
             ConnectResponseOrBuilder {
+        public static final int DEFAULT_SERIALIZER_ID_FIELD_NUMBER = 1;
+        private static final long serialVersionUID = 0L;
+        // @@protoc_insertion_point(class_scope:remote.ConnectResponse)
+        private static final actor.proto.remote.RemoteProtos.ConnectResponse DEFAULT_INSTANCE;
+        private static final com.google.protobuf.Parser<ConnectResponse>
+                PARSER = new com.google.protobuf.AbstractParser<ConnectResponse>() {
+            public ConnectResponse parsePartialFrom(
+                    com.google.protobuf.CodedInputStream input,
+                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                    throws com.google.protobuf.InvalidProtocolBufferException {
+                return new ConnectResponse(input, extensionRegistry);
+            }
+        };
+
+        static {
+            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ConnectResponse();
+        }
+
+        private int defaultSerializerId_;
+        private byte memoizedIsInitialized = -1;
         // Use ConnectResponse.newBuilder() to construct.
         private ConnectResponse(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
             super(builder);
         }
+
         private ConnectResponse() {
             defaultSerializerId_ = 0;
         }
 
-        @java.lang.Override
-        public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
-        }
         private ConnectResponse(
                 com.google.protobuf.CodedInputStream input,
                 com.google.protobuf.ExtensionRegistryLite extensionRegistry)
@@ -4005,9 +4424,113 @@ public final class RemoteProtos {
                 makeExtensionsImmutable();
             }
         }
+
         public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
             return actor.proto.remote.RemoteProtos.internal_static_remote_ConnectResponse_descriptor;
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                java.nio.ByteBuffer data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(byte[] data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return PARSER.parseFrom(data, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseDelimitedFrom(java.io.InputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseDelimitedFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                com.google.protobuf.CodedInputStream input)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageV3
+                    .parseWithIOException(PARSER, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return DEFAULT_INSTANCE.toBuilder();
+        }
+
+        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ConnectResponse prototype) {
+            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+        }
+
+        public static actor.proto.remote.RemoteProtos.ConnectResponse getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        public static com.google.protobuf.Parser<ConnectResponse> parser() {
+            return PARSER;
+        }
+
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+            return com.google.protobuf.UnknownFieldSet.getDefaultInstance();
         }
 
         protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -4017,8 +4540,6 @@ public final class RemoteProtos {
                             actor.proto.remote.RemoteProtos.ConnectResponse.class, actor.proto.remote.RemoteProtos.ConnectResponse.Builder.class);
         }
 
-        public static final int DEFAULT_SERIALIZER_ID_FIELD_NUMBER = 1;
-        private int defaultSerializerId_;
         /**
          * <code>int32 default_serializer_id = 1;</code>
          */
@@ -4026,7 +4547,6 @@ public final class RemoteProtos {
             return defaultSerializerId_;
         }
 
-        private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
             byte isInitialized = memoizedIsInitialized;
             if (isInitialized == 1) return true;
@@ -4056,7 +4576,6 @@ public final class RemoteProtos {
             return size;
         }
 
-        private static final long serialVersionUID = 0L;
         @java.lang.Override
         public boolean equals(final java.lang.Object obj) {
             if (obj == this) {
@@ -4087,83 +4606,10 @@ public final class RemoteProtos {
             return hash;
         }
 
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                java.nio.ByteBuffer data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                java.nio.ByteBuffer data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                com.google.protobuf.ByteString data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                com.google.protobuf.ByteString data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(byte[] data)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                byte[] data,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws com.google.protobuf.InvalidProtocolBufferException {
-            return PARSER.parseFrom(data, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseDelimitedFrom(java.io.InputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseDelimitedFrom(
-                java.io.InputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                com.google.protobuf.CodedInputStream input)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input);
-        }
-        public static actor.proto.remote.RemoteProtos.ConnectResponse parseFrom(
-                com.google.protobuf.CodedInputStream input,
-                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                throws java.io.IOException {
-            return com.google.protobuf.GeneratedMessageV3
-                    .parseWithIOException(PARSER, input, extensionRegistry);
+        public Builder newBuilderForType() {
+            return newBuilder();
         }
 
-        public Builder newBuilderForType() { return newBuilder(); }
-        public static Builder newBuilder() {
-            return DEFAULT_INSTANCE.toBuilder();
-        }
-        public static Builder newBuilder(actor.proto.remote.RemoteProtos.ConnectResponse prototype) {
-            return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-        }
         public Builder toBuilder() {
             return this == DEFAULT_INSTANCE
                     ? new Builder() : new Builder().mergeFrom(this);
@@ -4175,6 +4621,16 @@ public final class RemoteProtos {
             Builder builder = new Builder(parent);
             return builder;
         }
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<ConnectResponse> getParserForType() {
+            return PARSER;
+        }
+
+        public actor.proto.remote.RemoteProtos.ConnectResponse getDefaultInstanceForType() {
+            return DEFAULT_INSTANCE;
+        }
+
         /**
          * Protobuf type {@code remote.ConnectResponse}
          */
@@ -4182,6 +4638,19 @@ public final class RemoteProtos {
                 com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
                 // @@protoc_insertion_point(builder_implements:remote.ConnectResponse)
                 actor.proto.remote.RemoteProtos.ConnectResponseOrBuilder {
+            private int defaultSerializerId_;
+
+            // Construct using actor.proto.remote.RemoteProtos.ConnectResponse.newBuilder()
+            private Builder() {
+                maybeForceBuilderInitialization();
+            }
+
+            private Builder(
+                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+                super(parent);
+                maybeForceBuilderInitialization();
+            }
+
             public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
                 return actor.proto.remote.RemoteProtos.internal_static_remote_ConnectResponse_descriptor;
@@ -4194,21 +4663,12 @@ public final class RemoteProtos {
                                 actor.proto.remote.RemoteProtos.ConnectResponse.class, actor.proto.remote.RemoteProtos.ConnectResponse.Builder.class);
             }
 
-            // Construct using actor.proto.remote.RemoteProtos.ConnectResponse.newBuilder()
-            private Builder() {
-                maybeForceBuilderInitialization();
-            }
-
-            private Builder(
-                    com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
-                super(parent);
-                maybeForceBuilderInitialization();
-            }
             private void maybeForceBuilderInitialization() {
                 if (com.google.protobuf.GeneratedMessageV3
                         .alwaysUseFieldBuilders) {
                 }
             }
+
             public Builder clear() {
                 super.clear();
                 defaultSerializerId_ = 0;
@@ -4243,32 +4703,38 @@ public final class RemoteProtos {
             public Builder clone() {
                 return (Builder) super.clone();
             }
+
             public Builder setField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.setField(field, value);
             }
+
             public Builder clearField(
                     com.google.protobuf.Descriptors.FieldDescriptor field) {
                 return (Builder) super.clearField(field);
             }
+
             public Builder clearOneof(
                     com.google.protobuf.Descriptors.OneofDescriptor oneof) {
                 return (Builder) super.clearOneof(oneof);
             }
+
             public Builder setRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     int index, Object value) {
                 return (Builder) super.setRepeatedField(field, index, value);
             }
+
             public Builder addRepeatedField(
                     com.google.protobuf.Descriptors.FieldDescriptor field,
                     Object value) {
                 return (Builder) super.addRepeatedField(field, value);
             }
+
             public Builder mergeFrom(com.google.protobuf.Message other) {
                 if (other instanceof actor.proto.remote.RemoteProtos.ConnectResponse) {
-                    return mergeFrom((actor.proto.remote.RemoteProtos.ConnectResponse)other);
+                    return mergeFrom((actor.proto.remote.RemoteProtos.ConnectResponse) other);
                 } else {
                     super.mergeFrom(other);
                     return this;
@@ -4306,13 +4772,13 @@ public final class RemoteProtos {
                 return this;
             }
 
-            private int defaultSerializerId_ ;
             /**
              * <code>int32 default_serializer_id = 1;</code>
              */
             public int getDefaultSerializerId() {
                 return defaultSerializerId_;
             }
+
             /**
              * <code>int32 default_serializer_id = 1;</code>
              */
@@ -4322,6 +4788,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             /**
              * <code>int32 default_serializer_id = 1;</code>
              */
@@ -4331,6 +4798,7 @@ public final class RemoteProtos {
                 onChanged();
                 return this;
             }
+
             public final Builder setUnknownFields(
                     final com.google.protobuf.UnknownFieldSet unknownFields) {
                 return this;
@@ -4345,158 +4813,6 @@ public final class RemoteProtos {
             // @@protoc_insertion_point(builder_scope:remote.ConnectResponse)
         }
 
-        // @@protoc_insertion_point(class_scope:remote.ConnectResponse)
-        private static final actor.proto.remote.RemoteProtos.ConnectResponse DEFAULT_INSTANCE;
-        static {
-            DEFAULT_INSTANCE = new actor.proto.remote.RemoteProtos.ConnectResponse();
-        }
-
-        public static actor.proto.remote.RemoteProtos.ConnectResponse getDefaultInstance() {
-            return DEFAULT_INSTANCE;
-        }
-
-        private static final com.google.protobuf.Parser<ConnectResponse>
-                PARSER = new com.google.protobuf.AbstractParser<ConnectResponse>() {
-            public ConnectResponse parsePartialFrom(
-                    com.google.protobuf.CodedInputStream input,
-                    com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-                    throws com.google.protobuf.InvalidProtocolBufferException {
-                return new ConnectResponse(input, extensionRegistry);
-            }
-        };
-
-        public static com.google.protobuf.Parser<ConnectResponse> parser() {
-            return PARSER;
-        }
-
-        @java.lang.Override
-        public com.google.protobuf.Parser<ConnectResponse> getParserForType() {
-            return PARSER;
-        }
-
-        public actor.proto.remote.RemoteProtos.ConnectResponse getDefaultInstanceForType() {
-            return DEFAULT_INSTANCE;
-        }
-
-    }
-
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_MessageBatch_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_MessageBatch_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_MessageEnvelope_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_MessageEnvelope_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_ActorPidRequest_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_ActorPidRequest_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_ActorPidResponse_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_ActorPidResponse_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_Unit_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_Unit_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_ConnectRequest_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_ConnectRequest_fieldAccessorTable;
-    private static final com.google.protobuf.Descriptors.Descriptor
-            internal_static_remote_ConnectResponse_descriptor;
-    private static final
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-            internal_static_remote_ConnectResponse_fieldAccessorTable;
-
-    public static com.google.protobuf.Descriptors.FileDescriptor
-    getDescriptor() {
-        return descriptor;
-    }
-    private static  com.google.protobuf.Descriptors.FileDescriptor
-            descriptor;
-    static {
-        java.lang.String[] descriptorData = {
-                "\n\022remoteprotos.proto\022\006remote\032\021actorproto" +
-                        "s.proto\"d\n\014MessageBatch\022\022\n\ntype_names\030\001 " +
-                        "\003(\t\022\024\n\014target_names\030\002 \003(\t\022*\n\tenvelopes\030\003" +
-                        " \003(\0132\027.remote.MessageEnvelope\"{\n\017Message" +
-                        "Envelope\022\017\n\007type_id\030\001 \001(\005\022\024\n\014message_dat" +
-                        "a\030\002 \001(\014\022\016\n\006target\030\003 \001(\005\022\032\n\006sender\030\004 \001(\0132" +
-                        "\n.actor.PID\022\025\n\rserializer_id\030\005 \001(\005\"-\n\017Ac" +
-                        "torPidRequest\022\014\n\004name\030\001 \001(\t\022\014\n\004kind\030\002 \001(" +
-                        "\t\"+\n\020ActorPidResponse\022\027\n\003pid\030\001 \001(\0132\n.act" +
-                        "or.PID\"\006\n\004Unit\"\020\n\016ConnectRequest\"0\n\017Conn",
-                "ectResponse\022\035\n\025default_serializer_id\030\001 \001" +
-                        "(\0052}\n\010Remoting\022<\n\007Connect\022\026.remote.Conne" +
-                        "ctRequest\032\027.remote.ConnectResponse\"\000\0223\n\007" +
-                        "Receive\022\024.remote.MessageBatch\032\014.remote.U" +
-                        "nit\"\000(\0010\001B\"\n\022actor.proto.remoteB\014RemoteP" +
-                        "rotosb\006proto3"
-        };
-        com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-                new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-                    public com.google.protobuf.ExtensionRegistry assignDescriptors(
-                            com.google.protobuf.Descriptors.FileDescriptor root) {
-                        descriptor = root;
-                        return null;
-                    }
-                };
-        com.google.protobuf.Descriptors.FileDescriptor
-                .internalBuildGeneratedFileFrom(descriptorData,
-                        new com.google.protobuf.Descriptors.FileDescriptor[] {
-                                actor.proto.Protos.getDescriptor(),
-                        }, assigner);
-        internal_static_remote_MessageBatch_descriptor =
-                getDescriptor().getMessageTypes().get(0);
-        internal_static_remote_MessageBatch_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_MessageBatch_descriptor,
-                new java.lang.String[] { "TypeNames", "TargetNames", "Envelopes", });
-        internal_static_remote_MessageEnvelope_descriptor =
-                getDescriptor().getMessageTypes().get(1);
-        internal_static_remote_MessageEnvelope_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_MessageEnvelope_descriptor,
-                new java.lang.String[] { "TypeId", "MessageData", "Target", "Sender", "SerializerId", });
-        internal_static_remote_ActorPidRequest_descriptor =
-                getDescriptor().getMessageTypes().get(2);
-        internal_static_remote_ActorPidRequest_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_ActorPidRequest_descriptor,
-                new java.lang.String[] { "Name", "Kind", });
-        internal_static_remote_ActorPidResponse_descriptor =
-                getDescriptor().getMessageTypes().get(3);
-        internal_static_remote_ActorPidResponse_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_ActorPidResponse_descriptor,
-                new java.lang.String[] { "Pid", });
-        internal_static_remote_Unit_descriptor =
-                getDescriptor().getMessageTypes().get(4);
-        internal_static_remote_Unit_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_Unit_descriptor,
-                new java.lang.String[] { });
-        internal_static_remote_ConnectRequest_descriptor =
-                getDescriptor().getMessageTypes().get(5);
-        internal_static_remote_ConnectRequest_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_ConnectRequest_descriptor,
-                new java.lang.String[] { });
-        internal_static_remote_ConnectResponse_descriptor =
-                getDescriptor().getMessageTypes().get(6);
-        internal_static_remote_ConnectResponse_fieldAccessorTable = new
-                com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-                internal_static_remote_ConnectResponse_descriptor,
-                new java.lang.String[] { "DefaultSerializerId", });
-        actor.proto.Protos.getDescriptor();
     }
 
     // @@protoc_insertion_point(outer_class_scope)

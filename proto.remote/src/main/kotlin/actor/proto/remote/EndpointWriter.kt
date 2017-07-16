@@ -11,40 +11,40 @@ class EndpointWriter(private val address: String) : Actor {
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
     private lateinit var streamWriter: StreamObserver<RemoteProtos.MessageBatch>
-    suspend override fun receiveAsync (context : Context) {
-        val tmp = context.message
-        when (tmp) {
+    suspend override fun receiveAsync(context: Context) {
+        val msg = context.message
+        when (msg) {
             is Started -> startedAsync()
             is Stopped -> stoppedAsync()
             is Restarting -> restartingAsync()
             is MutableList<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                val m = tmp as MutableList<RemoteDeliver>
-                val envelopes : MutableList<RemoteProtos.MessageEnvelope> = mutableListOf()
-                val typeNames : HashMap<String, Int> = HashMap()
-                val targetNames : HashMap<String, Int> = HashMap()
-                val typeNameList : MutableList<String> = mutableListOf()
-                val targetNameList : MutableList<String> = mutableListOf()
-                for((message, target, sender, explicitSerializerId) in m) {
-                    val targetName : String = target.id
-                    val serializerId : Int = if (explicitSerializerId == -1) serializerId else explicitSerializerId
+                val m = msg as MutableList<RemoteDeliver>
+                val envelopes: MutableList<RemoteProtos.MessageEnvelope> = mutableListOf()
+                val typeNames: HashMap<String, Int> = HashMap()
+                val targetNames: HashMap<String, Int> = HashMap()
+                val typeNameList: MutableList<String> = mutableListOf()
+                val targetNameList: MutableList<String> = mutableListOf()
+                for ((message, target, sender, explicitSerializerId) in m) {
+                    val targetName: String = target.id
+                    val serializerId: Int = if (explicitSerializerId == -1) serializerId else explicitSerializerId
 
-                    val targetId = targetNames.getOrPut(targetName){
+                    val targetId = targetNames.getOrPut(targetName) {
                         targetNameList.add(targetName)
                         targetNames.count()
                     }
-                    val typeName : String = Serialization.getTypeName(message, serializerId)
+                    val typeName: String = Serialization.getTypeName(message, serializerId)
 
-                    val typeId = typeNames.getOrPut(typeName){
+                    val typeId = typeNames.getOrPut(typeName) {
                         typeNameList.add(typeName)
                         typeNames.count()
                     }
 
-                    val bytes : ByteString = Serialization.serialize(message, serializerId)
+                    val bytes: ByteString = Serialization.serialize(message, serializerId)
                     val envelope = MessageEnvelope(bytes, sender, targetId, typeId, serializerId)
                     envelopes.add(envelope)
                 }
-                val batchBuilder  = RemoteProtos.MessageBatch.newBuilder()
+                val batchBuilder = RemoteProtos.MessageBatch.newBuilder()
                 batchBuilder.targetNamesList.addAll(targetNameList)
                 batchBuilder.typeNamesList.addAll(typeNameList)
                 batchBuilder.envelopesList.addAll(envelopes)
@@ -54,7 +54,7 @@ class EndpointWriter(private val address: String) : Actor {
         }
     }
 
-    private suspend fun sendEnvelopesAsync (batch : RemoteProtos.MessageBatch, context : Context) {
+    private suspend fun sendEnvelopesAsync(batch: RemoteProtos.MessageBatch, context: Context) {
         try {
             streamWriter.onNext(batch)
         } catch (x: Exception) {
@@ -63,17 +63,18 @@ class EndpointWriter(private val address: String) : Actor {
             throw  x
         }
     }
-    private suspend fun restartingAsync () = channel.shutdownNow()
-    private suspend fun stoppedAsync () = channel.shutdownNow()
-    private suspend fun startedAsync () {
+
+    private suspend fun restartingAsync() = channel.shutdownNow()
+    private suspend fun stoppedAsync() = channel.shutdownNow()
+    private suspend fun startedAsync() {
         println("Connecting to address $address")
         val parts = address.split(':')
         val host = parts[0]
         val port = parts[1].toInt()
-        channel =  ManagedChannelBuilder.forAddress(host,port).build()
-        client =  RemotingGrpc.newStub(channel)
+        channel = ManagedChannelBuilder.forAddress(host, port).build()
+        client = RemotingGrpc.newStub(channel)
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
-        val res =blockingClient.connect(connectRequest())
+        val res = blockingClient.connect(ConnectRequest())
         serializerId = res.defaultSerializerId
         streamWriter = client.receive(null)
 //        launch(CommonPool){

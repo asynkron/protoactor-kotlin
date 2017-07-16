@@ -18,7 +18,7 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
         }
     }
 
-    fun receiveBatch(batch:RemoteProtos.MessageBatch) {
+    fun receiveBatch(batch: RemoteProtos.MessageBatch) {
         val targetNames = batch.targetNamesList
         val typeNames = batch.typeNamesList
 

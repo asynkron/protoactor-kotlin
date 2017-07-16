@@ -16,10 +16,7 @@ import static io.grpc.stub.ServerCalls.*;
 @SuppressWarnings("ALL")
 public final class RemotingGrpc {
 
-    private RemotingGrpc() {}
-
     public static final String SERVICE_NAME = "remote.Remoting";
-
     // Static method descriptors that strictly reflect the proto.
     @io.grpc.ExperimentalApi("https://github.com/grpc/grpc-java/issues/1901")
     public static final io.grpc.MethodDescriptor<actor.proto.remote.RemoteProtos.ConnectRequest,
@@ -45,6 +42,12 @@ public final class RemotingGrpc {
                     .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                             actor.proto.remote.RemoteProtos.Unit.getDefaultInstance()))
                     .build();
+    private static final int METHODID_CONNECT = 0;
+    private static final int METHODID_RECEIVE = 1;
+    private static volatile io.grpc.ServiceDescriptor serviceDescriptor;
+
+    private RemotingGrpc() {
+    }
 
     /**
      * Creates a new async stub that supports all call types for the service
@@ -69,6 +72,23 @@ public final class RemotingGrpc {
         return new RemotingFutureStub(channel);
     }
 
+    public static io.grpc.ServiceDescriptor getServiceDescriptor() {
+        io.grpc.ServiceDescriptor result = serviceDescriptor;
+        if (result == null) {
+            synchronized (RemotingGrpc.class) {
+                result = serviceDescriptor;
+                if (result == null) {
+                    serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
+                            .setSchemaDescriptor(new RemotingDescriptorSupplier())
+                            .addMethod(METHOD_CONNECT)
+                            .addMethod(METHOD_RECEIVE)
+                            .build();
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      */
     public static abstract class RemotingImplBase implements io.grpc.BindableService {
@@ -87,7 +107,8 @@ public final class RemotingGrpc {
             return asyncUnimplementedStreamingCall(METHOD_RECEIVE, responseObserver);
         }
 
-        @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
+        @java.lang.Override
+        public final io.grpc.ServerServiceDefinition bindService() {
             return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
                     .addMethod(
                             METHOD_CONNECT,
@@ -195,9 +216,6 @@ public final class RemotingGrpc {
         }
     }
 
-    private static final int METHODID_CONNECT = 0;
-    private static final int METHODID_RECEIVE = 1;
-
     private static final class MethodHandlers<Req, Resp> implements
             io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
             io.grpc.stub.ServerCalls.ServerStreamingMethod<Req, Resp>,
@@ -243,24 +261,5 @@ public final class RemotingGrpc {
         public com.google.protobuf.Descriptors.FileDescriptor getFileDescriptor() {
             return actor.proto.remote.RemoteProtos.getDescriptor();
         }
-    }
-
-    private static volatile io.grpc.ServiceDescriptor serviceDescriptor;
-
-    public static io.grpc.ServiceDescriptor getServiceDescriptor() {
-        io.grpc.ServiceDescriptor result = serviceDescriptor;
-        if (result == null) {
-            synchronized (RemotingGrpc.class) {
-                result = serviceDescriptor;
-                if (result == null) {
-                    serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
-                            .setSchemaDescriptor(new RemotingDescriptorSupplier())
-                            .addMethod(METHOD_CONNECT)
-                            .addMethod(METHOD_RECEIVE)
-                            .build();
-                }
-            }
-        }
-        return result;
     }
 }

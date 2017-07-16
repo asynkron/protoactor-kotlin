@@ -48,13 +48,9 @@ object Remote {
         })
     }
 
-    fun activatorForAddress(address: String): PID {
-        return PID(address, "activator")
-    }
+    fun activatorForAddress(address: String): PID = PID(address, "activator")
 
-    suspend fun spawnAsync(address: String, kind: String, timeout: Duration): PID {
-        return spawnNamedAsync(address, "", kind, timeout)
-    }
+    suspend fun spawnAsync(address: String, kind: String, timeout: Duration): PID = spawnNamedAsync(address, "", kind, timeout)
 
     suspend fun spawnNamedAsync(address: String, name: String, kind: String, timeout: Duration): PID {
         val activator: PID = activatorForAddress(address)
