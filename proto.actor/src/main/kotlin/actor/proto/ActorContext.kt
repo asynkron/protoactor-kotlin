@@ -51,7 +51,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         stash.push(message)
     }
 
-    override fun respond(message: Any) = sender!!.tell(message)
+    override fun respond(message: Any) = sender!!.send(message)
 
     override fun spawnChild(props: Props): PID = spawnNamedChild(props, ProcessRegistry.nextId())
 
@@ -75,7 +75,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
             else -> {
                 receiveTimeout = duration
                 cancelReceiveTimeout()
-                _receiveTimeoutTimer = AsyncTimer({ self.tell(ReceiveTimeout) }, duration).apply { start() }
+                _receiveTimeoutTimer = AsyncTimer({ self.send(ReceiveTimeout) }, duration).apply { start() }
             }
         }
     }
@@ -93,7 +93,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     suspend override fun receive(message: Any): Unit = processMessage(message)
 
-    override fun tell(target: PID, message: Any) = sendUserMessage(target, message)
+    override fun send(target: PID, message: Any) = sendUserMessage(target, message)
 
     override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
@@ -183,7 +183,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     private fun sendUserMessage(target: PID, message: Any) {
         when (senderMiddleware) {
-            null -> target.tell(message)
+            null -> target.send(message)
             else -> when (message) {
                 is MessageEnvelope -> senderMiddleware.invoke(this, target, message)
                 else -> senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))

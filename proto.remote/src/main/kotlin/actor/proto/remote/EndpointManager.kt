@@ -16,11 +16,11 @@ class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrat
         val msg = context.message
         when (msg) {
             is Started -> println("Started EndpointManager")
-            is EndpointTerminatedEvent -> ensureConnected(msg.address, context).watcher.tell(msg)
-            is RemoteTerminate -> ensureConnected(msg.watchee.address, context).watcher.tell(msg)
-            is RemoteWatch -> ensureConnected(msg.watchee.address, context).watcher.tell(msg)
-            is RemoteUnwatch -> ensureConnected(msg.watchee.address, context).watcher.tell(msg)
-            is RemoteDeliver -> ensureConnected(msg.target.address, context).writer.tell(msg)
+            is EndpointTerminatedEvent -> ensureConnected(msg.address, context).watcher.send(msg)
+            is RemoteTerminate -> ensureConnected(msg.watchee.address, context).watcher.send(msg)
+            is RemoteWatch -> ensureConnected(msg.watchee.address, context).watcher.send(msg)
+            is RemoteUnwatch -> ensureConnected(msg.watchee.address, context).watcher.send(msg)
+            is RemoteDeliver -> ensureConnected(msg.target.address, context).writer.send(msg)
             else -> {
             }
         }

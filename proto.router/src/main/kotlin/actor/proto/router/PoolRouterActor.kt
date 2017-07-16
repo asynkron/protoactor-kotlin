@@ -27,7 +27,7 @@ class PoolRouterActor(private val routeeProps: Props, private val config: PoolRo
                 }
             }
             is RouterBroadcastMessage -> routerState.getRoutees().forEach { it.request(message, context.sender!!) }
-            is RouterGetRoutees -> context.sender!!.tell(Routees(routerState.getRoutees()))
+            is RouterGetRoutees -> context.sender!!.send(Routees(routerState.getRoutees()))
         }
     }
 }

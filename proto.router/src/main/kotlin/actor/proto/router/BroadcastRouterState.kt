@@ -1,7 +1,7 @@
 package actor.proto.router
 
 import actor.proto.PID
-import actor.proto.tell
+import actor.proto.send
 
 
 internal class BroadcastRouterState : RouterState() {
@@ -12,7 +12,7 @@ internal class BroadcastRouterState : RouterState() {
     }
 
     override fun routeMessage(message: Any) {
-        routees.forEach { it.tell(message) }
+        routees.forEach { it.send(message) }
     }
 }
 

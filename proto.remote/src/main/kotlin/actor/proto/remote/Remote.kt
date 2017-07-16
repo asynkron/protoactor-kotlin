@@ -43,7 +43,7 @@ object Remote {
         endpointManagerPid = spawn(props)
         EventStream.subscribe({
             if (it is EndpointTerminatedEvent) {
-                endpointManagerPid.tell(it)
+                endpointManagerPid.send(it)
             }
         })
     }
@@ -65,7 +65,7 @@ object Remote {
             else -> Pair(msg, null)
         }
         val env: RemoteDeliver = RemoteDeliver(message, pid, sender, serializerId)
-        endpointManagerPid.tell(env)
+        endpointManagerPid.send(env)
     }
 }
 

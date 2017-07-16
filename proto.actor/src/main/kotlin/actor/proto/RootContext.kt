@@ -8,12 +8,12 @@ class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") mi
         get() = null
     override val headers: MessageHeader = messageHeader
     private fun defaultSender(@Suppress("UNUSED_PARAMETER") context: SenderContext, target: PID, message: MessageEnvelope): Unit {
-        target.tell(message)
+        target.send(message)
     }
 
-    fun tell(target: PID, message: Any) {
+    fun send(target: PID, message: Any) {
         when (_senderMiddleware) {
-            null -> target.tell(message)
+            null -> target.send(message)
             else -> when (message) {
                 is MessageEnvelope -> _senderMiddleware.invoke(this, target, message)
                 else -> _senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
@@ -23,7 +23,7 @@ class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") mi
 
     fun request(target: PID, message: Any, sender: PID) {
         val envelope = MessageEnvelope(message, sender, null)
-        tell(target, envelope)
+        send(target, envelope)
     }
 
 //    suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T {

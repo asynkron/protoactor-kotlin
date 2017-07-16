@@ -23,7 +23,7 @@ fun run() {
         val echoProps = fromFunc {
             val msg = message
             when (msg) {
-                is Msg -> msg.sender.tell(msg)
+                is Msg -> msg.sender.send(msg)
             }
         }
                 .withDispatcher(d)
@@ -40,7 +40,7 @@ fun run() {
 
         val sw = currentTimeMillis()
         for ((client, echo) in pairs) {
-            client.tell(Start(echo))
+            client.send(Start(echo))
         }
         latch.await()
 
@@ -80,7 +80,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
             0 -> return false
             else -> {
                 val m = Msg(context.self)
-                repeat(batchSize) { sender.tell(m) }
+                repeat(batchSize) { sender.send(m) }
                 messageCount -= batchSize
                 batch = batchSize
                 return true

@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
             is Begin -> {
                 val root = spawn(SpawnActor.props)
                 start = System.currentTimeMillis()
-                root.tell(Request(10, 0, 1000000, self))
+                root.send(Request(10, 0, 1000000, self))
             }
             is Long -> {
                 val millis = System.currentTimeMillis() - start
@@ -23,11 +23,11 @@ fun main(args: Array<String>) {
         }
     }
     val managerPid: PID = spawn(managerProps)
-    managerPid.tell(Begin)
+    managerPid.send(Begin)
     readLine()
-    managerPid.tell(Begin)
+    managerPid.send(Begin)
     readLine()
-    managerPid.tell(Begin)
+    managerPid.send(Begin)
     readLine()
 }
 
@@ -49,7 +49,7 @@ class SpawnActor : Actor {
         when (msg) {
             is Request -> when {
                 msg.size == 1L -> {
-                    msg.respondTo.tell(msg.num)
+                    msg.respondTo.send(msg.num)
                     context.self.stop()
                 }
                 else -> {
@@ -58,7 +58,7 @@ class SpawnActor : Actor {
                     for (i in 0 until msg.div) {
                         val child: PID = spawn(props)
                         val s = msg.size / msg.div
-                        child.tell(Request(
+                        child.send(Request(
                                 msg.div,
                                 msg.num + i * s,
                                 s,
@@ -69,7 +69,7 @@ class SpawnActor : Actor {
             is Long -> {
                 sum += msg
                 replies--
-                if (replies == 0L) replyTo.tell(sum)
+                if (replies == 0L) replyTo.send(sum)
             }
         }
     }

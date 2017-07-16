@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
     val config = newRoundRobinPool(prop,5)
     val routerPid = spawn(config)
     repeat(10) {
-        routerPid.tell("hello")
+        routerPid.send("hello")
     }
     readLine()
 }

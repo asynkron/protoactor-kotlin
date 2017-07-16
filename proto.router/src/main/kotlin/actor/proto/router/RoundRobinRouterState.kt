@@ -1,7 +1,7 @@
 package actor.proto.router
 
 import actor.proto.PID
-import actor.proto.tell
+import actor.proto.send
 import java.util.concurrent.atomic.AtomicInteger
 
 internal class RoundRobinRouterState : RouterState() {
@@ -20,7 +20,7 @@ internal class RoundRobinRouterState : RouterState() {
     override fun routeMessage(message: Any) {
         val i = currentIndex.getAndIncrement() % values.count()
         val pid = values[i]
-        pid.tell(message)
+        pid.send(message)
     }
 }
 

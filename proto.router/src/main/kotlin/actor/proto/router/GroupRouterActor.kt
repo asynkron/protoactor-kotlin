@@ -27,7 +27,7 @@ class GroupRouterActor(private val config: GroupRouterConfig, private val router
                 }
             }
             is RouterBroadcastMessage -> routerState.getRoutees().forEach { it.request(message, context.sender!!) }
-            is RouterGetRoutees -> context.sender!!.tell(Routees(routerState.getRoutees()))
+            is RouterGetRoutees -> context.sender!!.send(Routees(routerState.getRoutees()))
         }
     }
 }

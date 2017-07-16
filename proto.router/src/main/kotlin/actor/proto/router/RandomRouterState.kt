@@ -1,7 +1,7 @@
 package actor.proto.router
 
 import actor.proto.PID
-import actor.proto.tell
+import actor.proto.send
 import java.util.*
 
 
@@ -21,7 +21,7 @@ internal class RandomRouterState(seed: Long?) : RouterState() {
     override fun routeMessage(message: Any) {
         val i = random.nextInt(values.count())
         val pid = values[i]
-        pid.tell(message)
+        pid.send(message)
     }
 
 }

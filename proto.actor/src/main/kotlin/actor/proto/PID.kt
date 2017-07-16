@@ -48,7 +48,7 @@ fun PID.stop() {
     process.stop(this)
 }
 
-fun PID.tell(message: Any) {
+fun PID.send(message: Any) {
     val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
     process.sendUserMessage(this, message)
 }

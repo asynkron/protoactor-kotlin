@@ -15,10 +15,10 @@ fun main(args: Array<String>) {
     val props = fromFunc { ParentActor() }.withChildSupervisorStrategy(OneForOneStrategy(decide, 1))
 
     val actor = spawn(props)
-    actor.tell(Hello("ProtoActor"))
+    actor.send(Hello("ProtoActor"))
     Thread.sleep(2000)
-    actor.tell(Recoverable)
-    actor.tell(Fatal)
+    actor.send(Recoverable)
+    actor.send(Fatal)
     actor.stop()
     readLine()
 }
@@ -35,9 +35,9 @@ class ParentActor : Actor {
         val msg = context.message
         when (msg) {
             is Started -> child = context.spawnChild(fromProducer { ChildActor() })
-            is Hello -> child.tell(msg)
-            is Recoverable -> child.tell(msg)
-            is Fatal -> child.tell(msg)
+            is Hello -> child.send(msg)
+            is Recoverable -> child.send(msg)
+            is Fatal -> child.send(msg)
             is Terminated -> println("Watched actor was Terminated ${msg.who.toShortString()}")
         }
     }

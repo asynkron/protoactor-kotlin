@@ -29,7 +29,7 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
             val typeName: String = typeNames[envelope.typeId]
             val message: Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
             when (message) {
-                is Terminated -> Remote.endpointManagerPid.tell(RemoteTerminate(target, message.who))
+                is Terminated -> Remote.endpointManagerPid.send(RemoteTerminate(target, message.who))
                 is SystemMessage -> target.sendSystemMessage(message)
                 else -> target.request(message, sender)
             }

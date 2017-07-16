@@ -10,7 +10,7 @@ fun main(args : Array<String>) {
             is Started -> println("Starting actor")
             is PID -> {
                 println("Got message " + m.id)
-                m.tell(PID("HELLO","WORLD"))
+                m.send(PID("HELLO","WORLD"))
             }
         }
     }

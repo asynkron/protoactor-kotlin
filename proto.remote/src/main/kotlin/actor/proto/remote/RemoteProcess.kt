@@ -8,8 +8,8 @@ class RemoteProcess(private val pid: PID) : Process() {
     override fun sendSystemMessage(pid: PID, message: SystemMessage) = send(message)
     private fun send(msg: Any) {
         when (msg) {
-            is Watch -> Remote.endpointManagerPid.tell(RemoteWatch(msg.watcher, pid))
-            is Unwatch -> Remote.endpointManagerPid.tell(RemoteUnwatch(msg.watcher, pid))
+            is Watch -> Remote.endpointManagerPid.send(RemoteWatch(msg.watcher, pid))
+            is Unwatch -> Remote.endpointManagerPid.send(RemoteUnwatch(msg.watcher, pid))
             else -> Remote.sendMessage(pid, msg, -1)
         }
     }
