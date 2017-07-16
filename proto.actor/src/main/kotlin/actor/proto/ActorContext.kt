@@ -234,6 +234,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     }
 
     private fun handleRootFailure(failure: Failure) {
+        println("Handling root failure for " + failure.who.toShortString())
         Supervision.defaultStrategy.handleFailure(this, failure.who, failure.restartStatistics, failure.reason)
     }
 
