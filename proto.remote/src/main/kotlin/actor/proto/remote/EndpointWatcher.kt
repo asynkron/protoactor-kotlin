@@ -1,7 +1,6 @@
 package actor.proto.remote
 
 import actor.proto.*
-import actor.proto.remote.*
 
 class EndpointWatcher(address: String) : Actor {
     private val _behavior : Behavior

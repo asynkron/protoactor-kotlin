@@ -7,8 +7,7 @@ import actor.proto.Watch
 import actor.proto.mailbox.SystemMessage
 import actor.proto.tell
 
-class RemoteProcess(pid: PID) : Process() {
-    private val pid: PID = pid
+class RemoteProcess(private val pid: PID) : Process() {
     override fun sendUserMessage (pid : PID, message : Any) = send(message)
     override fun sendSystemMessage (pid : PID, message : SystemMessage) = send(message)
     private fun send (msg : Any) {

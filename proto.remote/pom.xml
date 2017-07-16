@@ -19,6 +19,12 @@
     <dependencies>
         <dependency>
             <groupId>io.grpc</groupId>
+            <artifactId>protoc-gen-grpc-java</artifactId>
+            <version>1.4.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>io.grpc</groupId>
             <artifactId>grpc-netty</artifactId>
             <version>1.4.0</version>
         </dependency>

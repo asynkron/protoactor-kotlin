@@ -2,29 +2,38 @@ package actor.proto.remote
 
 import actor.proto.*
 import actor.proto.mailbox.SystemMessage
+import io.grpc.stub.StreamObserver
 
-open class EndpointReader : RemotingBase {
-    suspend fun connect (request : ConnectRequest, context : ServerCallContext) : ConnectResponse {
-        return ConnectResponse()
+class EndpointReader : RemotingGrpc.RemotingImplBase() {
+    override fun connect(request: RemoteProtos.ConnectRequest, responseObserver: StreamObserver<RemoteProtos.ConnectResponse>) {
+        responseObserver.onNext(ConnectResponse(Serialization.defaultSerializerId))
+        responseObserver.onCompleted()
     }
-    suspend fun receive (requestStream : AsyncStreamReader, responseStream : ServerStreamWriter, context : ServerCallContext) {
-        requestStream.forEachAsync{batch -> 
-            val targetNames : MutableList<String> = mutableListOf(batch.targetNames)
-            val typeNames : MutableList<String> = mutableListOf(batch.typeNames)
-            for(envelope in batch.envelopes) {
-                val targetName : String = targetNames[envelope.target]
-                val target : PID = PID(ProcessRegistry.address, targetName)
-                val sender : PID = envelope.sender
-                val typeName : String = typeNames[envelope.typeId]
-                val message : Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
-                when (message) {
-                    is Terminated -> {
-                        val rt = RemoteTerminate(target, message.who)
-                        Remote.endpointManagerPid.tell(rt)
-                    }
-                    is SystemMessage -> target.sendSystemMessage(message)
-                    else -> target.request(message, sender)
-                }
+
+    override fun receive(responseObserver: StreamObserver<RemoteProtos.Unit>): StreamObserver<RemoteProtos.MessageBatch> {
+
+        return object : StreamObserver<RemoteProtos.MessageBatch> {
+            override fun onCompleted() = responseObserver.onCompleted()
+            override fun onError(p0: Throwable): Unit = TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            override fun onNext(batch: RemoteProtos.MessageBatch) = receiveBatch(batch)
+        }
+
+    }
+
+    fun receiveBatch(batch:RemoteProtos.MessageBatch) {
+        val targetNames = batch.targetNamesList
+        val typeNames = batch.typeNamesList
+
+        for (envelope in batch.envelopesList) {
+            val targetName: String = targetNames[envelope.target]
+            val target: PID = PID(ProcessRegistry.address, targetName)
+            val sender: PID = envelope.sender
+            val typeName: String = typeNames[envelope.typeId]
+            val message: Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
+            when (message) {
+                is Terminated -> Remote.endpointManagerPid.tell(RemoteTerminate(target, message.who))
+                is SystemMessage -> target.sendSystemMessage(message)
+                else -> target.request(message, sender)
             }
         }
     }

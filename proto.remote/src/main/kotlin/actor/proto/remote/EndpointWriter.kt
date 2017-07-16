@@ -2,17 +2,16 @@ package actor.proto.remote
 
 import actor.proto.*
 import com.google.protobuf.ByteString
+import io.grpc.ManagedChannel
+import io.grpc.ManagedChannelBuilder
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 
-class EndpointWriter(private val address: String, channelOptions: Enumerable, callOptions: CallOptions, channelCredentials: ChannelCredentials) : Actor {
+class EndpointWriter(private val address: String) : Actor {
     private var serializerId: Int = 0
-    private val callOptions: CallOptions = callOptions
-    private val channelCredentials: ChannelCredentials = channelCredentials
-    private val channelOptions: Enumerable = channelOptions
-    private var channel: Channel? = null
+    private var channel: ManagedChannel? = null
     private var client: RemotingClient? = null
-    private var stream: AsyncDuplexStreamingCall<MessageBatch, Unit>? = null
+    private var stream: AsyncDuplexStreamingCall<RemoteProtos.MessageBatch, Unit>? = null
     private var streamWriter: ClientStreamWriter? = null
     suspend override fun receiveAsync (context : Context) {
         val tmp = context.message
@@ -65,26 +64,31 @@ class EndpointWriter(private val address: String, channelOptions: Enumerable, ca
             throw  x
         }
     }
-    private suspend fun restartingAsync () = channel.shutdownAsync()
-    private suspend fun stoppedAsync () = channel.shutdownAsync()
+    private suspend fun restartingAsync () = channel.shutdownNow()
+    private suspend fun stoppedAsync () = channel.shutdownNow()
     private suspend fun startedAsync () {
         println("Connecting to address $address")
-        channel = Channel(address, channelCredentials, channelOptions)
+        val parts = address.split(':')
+        val host = parts[0]
+        val port = parts[1].toInt()
+        channel =  ManagedChannelBuilder.forAddress(host,port).build()
         client = RemotingClient(channel)
-        val res : ConnectResponse = client.connectAsync(ConnectRequest())
+        val req = ConnectRequest()
+        val res : RemoteProtos.ConnectResponse = client.connectAsync(req)
         serializerId = res.defaultSerializerId
-        stream = client.receive(callOptions)
+        stream = client.receive()
         launch(CommonPool){
             try  {
-                stream.responseStream.forEachAsync{ i -> Actor.Done}
+                stream.responseStream.forEachAsync{
+
+                }
             }
             catch (x : Exception) {
-                println("Lost connection to address ${address}, reason ${x.message}")
-                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent
+                println("Lost connection to address $address, reason ${x.message}")
+                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent(address)
                 EventStream.publish(terminated)
             }
         }
-
 
         streamWriter = stream.requestStream
         println("Connected to address $address")

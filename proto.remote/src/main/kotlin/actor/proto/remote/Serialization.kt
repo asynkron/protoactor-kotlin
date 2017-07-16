@@ -2,10 +2,8 @@
 
 package actor.proto.remote
 
-import com.google.protobuf.ByteString
-import com.google.protobuf.Descriptors
-import com.google.protobuf.Message
-import com.google.protobuf.Parser
+import com.google.protobuf.*
+import com.google.protobuf.util.JsonFormat
 import kotlin.collections.HashMap
 
 interface Serializer {
@@ -21,16 +19,18 @@ open class JsonSerializer : Serializer {
             is JsonMessage -> return ByteString.copyFromUtf8(obj.json)
             else -> {
                 val message = obj as Message
-                val json: String = JsonFormatter.default.format(message)
+                val json: String = JsonFormat.printer().print(message)
                 return ByteString.copyFromUtf8(json)
             }
         }
     }
     override fun deserialize (bytes : ByteString, typeName : String) : Any {
         val json : String = bytes.toStringUtf8()
-        val parser : Parser<Message> = Serialization.TypeLookup[typeName]!!
-        val o = parser.parseJson(json)
-        return o
+//        val parser : Parser<Message> = Serialization.TypeLookup[typeName]!!
+        val parser = JsonFormat.parser()
+        val builder = Serialization.TypeLookup[typeName]!!
+      //  val o = parser.merge(json, builder)
+        return Any()
     }
     override fun getTypeName (obj : Any) : String {
         when (obj) {
@@ -63,7 +63,7 @@ open class ProtobufSerializer : Serializer {
 
 object Serialization {
     var defaultSerializerId : Int = 0
-    internal val TypeLookup : HashMap<String, Parser<Message>> = HashMap()
+    internal val TypeLookup : HashMap<String,  Parser<Message>> = HashMap()
     private val Serializers : MutableList<Serializer> = mutableListOf()
     private val ProtobufSerializer : ProtobufSerializer = ProtobufSerializer()
     private val JsonSerializer : JsonSerializer = JsonSerializer()
@@ -85,7 +85,7 @@ object Serialization {
     fun registerFileDescriptor (fd : Descriptors.FileDescriptor) {
         for(msg in fd.messageTypes) {
             val name : String = fd.`package` + "." + msg.name
-            TypeLookup.put(name, msg.parser)
+       //     TypeLookup.put(name, msg.???)
         }
     }
     fun serialize (message : Any, serializerId : Int) : ByteString = Serializers[serializerId].serialize(message)

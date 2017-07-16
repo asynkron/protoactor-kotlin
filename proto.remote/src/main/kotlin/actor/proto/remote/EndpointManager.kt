@@ -37,8 +37,9 @@ class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrat
         Endpoint(writer, watcher)
     })
     private fun spawnWriter (address : String, context : Context) : PID {
+
         val writerProps : Props =
-                fromProducer{ EndpointWriter(address, config.channelOptions, config.callOptions, config.channelCredentials) }
+                fromProducer{ EndpointWriter(address) }
                 .withMailbox{ EndpointWriterMailbox(config.endpointWriterBatchSize) }
         val writer : PID = context.spawnChild(writerProps)
         return writer

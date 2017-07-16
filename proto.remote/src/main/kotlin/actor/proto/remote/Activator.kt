@@ -7,15 +7,15 @@ class Activator : Actor {
     suspend override fun receiveAsync (context : Context) {
         val msg = context.message
         when (msg) {
-            is ActorPidRequest -> {
+            is RemoteProtos.ActorPidRequest -> {
                 val props : Props = Remote.getKnownKind(msg.kind)
-                var name : String = msg.name
-                if (name.isEmpty()) {
-                    name = ProcessRegistry.nextId()
+                val name : String = when {
+                    msg.name.isEmpty() -> msg.name
+                    else -> ProcessRegistry.nextId()
                 }
                 val pid : PID = spawnNamed(props, name)
-                val response : ActorPidResponse = TODO("fix")
-                context.respond(response)
+                val res = ActorPidResponse(pid)
+                context.respond(res)
             }
             else -> {            }
         }
