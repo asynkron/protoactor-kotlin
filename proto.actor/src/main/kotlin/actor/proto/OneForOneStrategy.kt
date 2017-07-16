@@ -34,5 +34,7 @@ class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirec
 }
 
 object Logger {
-    fun logInformation(message: String) {}
+    fun logInformation(message: String) {
+        println(message)
+    }
 }

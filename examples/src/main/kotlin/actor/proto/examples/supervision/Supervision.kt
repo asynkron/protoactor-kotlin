@@ -3,8 +3,8 @@ package actor.proto.examples.supervision
 import actor.proto.*
 
 fun main(args: Array<String>) {
-
-    val decide = { _: PID, reason: Exception ->
+    val decide = { pid: PID, reason: Exception ->
+        println("Handling failure from ${pid.toShortString()} reason:$reason")
         when (reason) {
             is RecoverableException -> SupervisorDirective.Restart
             is FatalException -> SupervisorDirective.Stop
@@ -12,13 +12,13 @@ fun main(args: Array<String>) {
         }
     }
 
-    val props = fromFunc { ParentActor() }.withChildSupervisorStrategy(OneForOneStrategy(decide, 1))
+    val props = fromProducer { ParentActor() }.withChildSupervisorStrategy(OneForOneStrategy(decide, 10))
 
     val actor = spawn(props)
     actor.send(Hello("ProtoActor"))
-    Thread.sleep(2000)
     actor.send(Recoverable)
     actor.send(Fatal)
+    Thread.sleep(2000)
     actor.stop()
     readLine()
 }
@@ -57,4 +57,3 @@ class ChildActor : Actor {
         }
     }
 }
-
