@@ -7,8 +7,8 @@ import actor.proto.router.newRoundRobinPool
 fun main(args: Array<String>) {
     val prop = fromFunc {
         when (message) {
-            is Started -> println("Started " + self.toShortString())
-            is String -> println("Got message " + self.toShortString() + " " + message)
+            is Started -> println("Started ${self.toShortString()}")
+            is String -> println("Got message ${self.toShortString()} $message")
         }
     }
     val config = newRoundRobinPool(prop,5)

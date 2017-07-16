@@ -178,7 +178,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun <T> requestAsync(target: PID, message: Any, future: FutureProcess<T>): T {
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, future.pid, null)
         sendUserMessage(target, messageEnvelope)
-        return future.deferred().await()
+        return future.future().get()
     }
 
     private fun sendUserMessage(target: PID, message: Any) {

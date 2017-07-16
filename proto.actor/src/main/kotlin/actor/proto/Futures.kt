@@ -3,30 +3,28 @@ package actor.proto
 import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.Deferred
 import java.time.Duration
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.Future
 
 @Suppress("UNUSED_PARAMETER")
-class FutureProcess<out T>(timeout: Duration? = null) : Process() {
+class FutureProcess<T>(timeout: Duration? = null) : Process() {
 
-    val pid: PID
-    private lateinit var cd: CompletableDeferred<T>
+    private val name = ProcessRegistry.nextId()
+    val pid = ProcessRegistry.add(name, this)
+    private var cd: CompletableFuture<T> = CompletableFuture()
     override fun sendUserMessage(pid: PID, message: Any) {
         val m = when (message) {
             is MessageEnvelope -> message.message
             else -> message
         }
-        cd.set(m)
+        @Suppress("UNCHECKED_CAST")
+        cd.complete(m as T)
     }
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
 
-    fun deferred(): Deferred<T> {
+    fun future(): Future<T> {
         return cd
-    }
-
-    init {
-        val name = ProcessRegistry.nextId()
-        val pid = ProcessRegistry.add(name, this)
-        this.pid = pid
     }
 }
 

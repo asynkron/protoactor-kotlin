@@ -36,7 +36,7 @@ suspend fun <T> PID.requestAsync(message: Any): T = requestAsync(message, Future
 
 suspend private fun <T> PID.requestAsync(message: Any, future: FutureProcess<T>): T {
     request(message, future.pid)
-    return future.deferred().await()
+    return future.future().get()
 }
 
 fun PID.toShortString(): String {
