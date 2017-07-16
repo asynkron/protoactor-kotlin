@@ -34,6 +34,11 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>actor.proto</groupId>
+            <artifactId>proto-actor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -61,6 +66,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <experimentalCoroutines>enable</experimentalCoroutines>
+                </configuration>
             </plugin>
         </plugins>
     </build>
