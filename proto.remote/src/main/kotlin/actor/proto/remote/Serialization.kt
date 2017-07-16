@@ -12,7 +12,6 @@ import java.lang.reflect.Field
 object Serialization {
     var defaultSerializerId: Int = 0
     private val parserLookup: HashMap<String, Parser<Message>> = HashMap()
-    private val typeLookup: HashMap<String, String> = HashMap()
     private val Serializers: MutableList<Serializer> = mutableListOf()
     private val ProtobufSerializer: ProtobufSerializer = ProtobufSerializer()
     private val JsonSerializer: JsonSerializer = JsonSerializer()
@@ -40,6 +39,7 @@ object Serialization {
             val clazz = Thread.currentThread().contextClassLoader.loadClass(className)
             val parserField : Field = clazz.getDeclaredField("PARSER")
             parserField.isAccessible = true
+            @Suppress("UNCHECKED_CAST")
             val parser = parserField.get(null) as Parser<Message>
             parserLookup.put(msg.fullName,parser)
         }

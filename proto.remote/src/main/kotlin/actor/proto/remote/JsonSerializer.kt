@@ -22,12 +22,12 @@ open class JsonSerializer : Serializer {
         val parser = JsonFormat.parser()
         val builder = Serialization.getMessageBuilder(typeName)
         parser.merge(json, builder)
-        return Any()
+        return Any() //TODO: fix
     }
 
     override fun getTypeName(message: Any): String = when (message) {
         is JsonMessage -> message.typeName
-        is Message -> message.descriptorForType.file.`package` + "." + message.descriptorForType.name
+        is Message -> message.descriptorForType.fullName
         else -> throw NotSerializableException()
     }
 }

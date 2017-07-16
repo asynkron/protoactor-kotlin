@@ -3,35 +3,31 @@ package actor.proto.remote
 import actor.proto.*
 
 class EndpointWatcher(address: String) : Actor {
-    private val _behavior: Behavior
-    private val _watched: HashMap<String, PID> = HashMap()
-    private var _address: String? = address
-    suspend override fun receiveAsync(context: Context) = _behavior.receiveAsync(context)
+    private val behavior: Behavior = Behavior({ connectedAsync(it) })
+    private val watched: HashMap<String, PID> = HashMap()
+    private var _address: String = address
+    suspend override fun receiveAsync(context: Context) = behavior.receiveAsync(context)
     private suspend fun connectedAsync(context: Context) {
         val msg = context.message
         when (msg) {
             is RemoteTerminate -> {
-                _watched.remove(msg.watcher.id)
-                val t = Terminated(msg.watchee, true)
-                msg.watcher.sendSystemMessage(t)
+                watched.remove(msg.watcher.id)
+                msg.watcher.sendSystemMessage(Terminated(msg.watchee, true))
             }
             is EndpointTerminatedEvent -> {
-                for ((id, pid) in _watched) {
-                    val t = Terminated(pid, true)
+                for ((id, pid) in watched) {
                     val watcher: PID = PID(ProcessRegistry.address, id)
-                    watcher.sendSystemMessage(t)
+                    watcher.sendSystemMessage(Terminated(pid, true))
                 }
-                _behavior.become({ terminatedAsync(it) })
+                behavior.become({ terminatedAsync(it) })
             }
             is RemoteUnwatch -> {
-                _watched.remove(msg.watcher.id)
-                val w: Unwatch = Unwatch(msg.watcher)
-                Remote.sendMessage(msg.watchee, w, -1)
+                watched.remove(msg.watcher.id)
+                Remote.sendMessage(msg.watchee, Unwatch(msg.watcher), -1)
             }
             is RemoteWatch -> {
-                _watched.put(msg.watcher.id, msg.watchee)
-                val w: Watch = Watch(msg.watcher)
-                Remote.sendMessage(msg.watchee, w, -1)
+                watched.put(msg.watcher.id, msg.watchee)
+                Remote.sendMessage(msg.watchee, Watch(msg.watcher), -1)
             }
         }
     }
@@ -40,17 +36,9 @@ class EndpointWatcher(address: String) : Actor {
         val msg = context.message
         when (msg) {
             is RemoteWatch -> msg.watcher.sendSystemMessage(Terminated(msg.watchee, true))
-            is RemoteUnwatch,
-            is EndpointTerminatedEvent,
-            is RemoteTerminate -> {
-            }
             else -> {
             }
         }
-    }
-
-    init {
-        _behavior = Behavior({ connectedAsync(it) })
     }
 }
 

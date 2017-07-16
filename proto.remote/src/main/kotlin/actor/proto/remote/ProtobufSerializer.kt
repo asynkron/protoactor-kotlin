@@ -18,7 +18,7 @@ open class ProtobufSerializer : Serializer {
     }
 
     override fun getTypeName(message: Any): String = when (message) {
-        is Message -> message.descriptorForType.file.`package` + "." + message.descriptorForType.name
+        is Message -> message.descriptorForType.fullName
         else -> throw NotSerializableException()
     }
 }

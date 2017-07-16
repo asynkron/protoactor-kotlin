@@ -26,15 +26,15 @@ class EndpointWriter(private val address: String) : Actor {
                 val typeNameList: MutableList<String> = mutableListOf()
                 val targetNameList: MutableList<String> = mutableListOf()
                 for ((message, target, sender, explicitSerializerId) in m) {
-                    val targetName: String = target.id
-                    val serializerId: Int = if (explicitSerializerId == -1) serializerId else explicitSerializerId
+                    val targetName = target.id
+                    val serializerId = if (explicitSerializerId == -1) serializerId else explicitSerializerId
 
                     val targetId = targetNames.getOrPut(targetName) {
                         targetNameList.add(targetName)
                         targetNames.count()
                     }
-                    val typeName: String = Serialization.getTypeName(message, serializerId)
 
+                    val typeName = Serialization.getTypeName(message, serializerId)
                     val typeId = typeNames.getOrPut(typeName) {
                         typeNameList.add(typeName)
                         typeNames.count()
@@ -44,11 +44,12 @@ class EndpointWriter(private val address: String) : Actor {
                     val envelope = MessageEnvelope(bytes, sender, targetId, typeId, serializerId)
                     envelopes.add(envelope)
                 }
-                val batchBuilder = RemoteProtos.MessageBatch.newBuilder()
-                batchBuilder.addAllTargetNames(targetNameList)
-                batchBuilder.addAllTypeNames(typeNameList)
-                batchBuilder.addAllEnvelopes(envelopes)
-                val batch = batchBuilder.build()
+                val batch = RemoteProtos.MessageBatch
+                        .newBuilder()
+                        .addAllTargetNames(targetNameList)
+                        .addAllTypeNames(typeNameList)
+                        .addAllEnvelopes(envelopes)
+                        .build()
                 sendEnvelopesAsync(batch, context)
             }
         }
@@ -68,10 +69,12 @@ class EndpointWriter(private val address: String) : Actor {
     private suspend fun stoppedAsync() = channel.shutdownNow()
     private suspend fun startedAsync() {
         println("Connecting to address $address")
-        val parts = address.split(':')
-        val host = parts[0]
-        val port = parts[1].toInt()
-        channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build()
+        val (host,port) = parseAddress(address)
+        channel = ManagedChannelBuilder
+                .forAddress(host, port)
+                .usePlaintext(true)
+                .build()
+
         client = RemotingGrpc.newStub(channel)
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
         val res = blockingClient.connect(ConnectRequest())
