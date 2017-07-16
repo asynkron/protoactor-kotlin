@@ -5,7 +5,7 @@ import kotlin.collections.HashMap
 
 data class Endpoint(val writer : PID,val watcher : PID)
 
-class EndpointManager(config: RemoteConfig) : Actor, SupervisorStrategy {
+class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrategy {
     companion object {
         private fun spawnWatcher (address : String, context : Context) : PID {
             val watcherProps : Props = fromProducer{ EndpointWatcher(address) }
@@ -13,7 +13,7 @@ class EndpointManager(config: RemoteConfig) : Actor, SupervisorStrategy {
             return watcher
         }
     }
-    private val _config : RemoteConfig = config
+
     private val _connections : HashMap<String, Endpoint> = HashMap()
     suspend override fun receiveAsync (context : Context) {
         val msg = context.message
@@ -38,8 +38,8 @@ class EndpointManager(config: RemoteConfig) : Actor, SupervisorStrategy {
     })
     private fun spawnWriter (address : String, context : Context) : PID {
         val writerProps : Props =
-                fromProducer{ EndpointWriter(address, _config.channelOptions, _config.callOptions, _config.channelCredentials) }
-                .withMailbox{ -> EndpointWriterMailbox(_config.endpointWriterBatchSize) }
+                fromProducer{ EndpointWriter(address, config.channelOptions, config.callOptions, config.channelCredentials) }
+                .withMailbox{ EndpointWriterMailbox(config.endpointWriterBatchSize) }
         val writer : PID = context.spawnChild(writerProps)
         return writer
     }

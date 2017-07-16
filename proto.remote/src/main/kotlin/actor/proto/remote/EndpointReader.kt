@@ -17,13 +17,13 @@ open class EndpointReader : RemotingBase {
                 val sender : PID = envelope.sender
                 val typeName : String = typeNames[envelope.typeId]
                 val message : Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
-                if (message is Terminated ) {
-                    val rt = RemoteTerminate(target, message.who)
-                    Remote.endpointManagerPid.tell(rt)
-                } else if (message is SystemMessage) {
-                    target.sendSystemMessage(message)
-                } else {
-                    target.request(message, sender)
+                when (message) {
+                    is Terminated -> {
+                        val rt = RemoteTerminate(target, message.who)
+                        Remote.endpointManagerPid.tell(rt)
+                    }
+                    is SystemMessage -> target.sendSystemMessage(message)
+                    else -> target.request(message, sender)
                 }
             }
         }
