@@ -51,9 +51,11 @@ object Remote {
     }
     suspend fun spawnNamedAsync (address : String, name : String, kind : String, timeout : Duration) : PID {
         val activator : PID = activatorForAddress(address)
-        val res = activator.requestAsync<ActorPidResponse>(ActorPidRequest(kind,name), timeout)
+        val req = ActorPidRequest(kind, name)
+        val res = activator.requestAsync<RemoteProtos.ActorPidResponse>(req, timeout)
         return res.pid
     }
+
     fun sendMessage (pid : PID, msg : Any, serializerId : Int) {
         val (message, sender) = when (msg) {
             is MessageEnvelope -> Pair(msg.message,msg.sender)

@@ -6,8 +6,6 @@ import com.google.protobuf.ByteString
 import com.google.protobuf.Descriptors
 import com.google.protobuf.Message
 import com.google.protobuf.Parser
-import proto.remote.ProtosReflection
-import java.util.*
 import kotlin.collections.HashMap
 
 interface Serializer {
@@ -71,7 +69,7 @@ object Serialization {
     private val JsonSerializer : JsonSerializer = JsonSerializer()
     init  {
         registerFileDescriptor(actor.proto.Protos.getDescriptor())
-        registerFileDescriptor(ProtosReflection.descriptor)
+        registerFileDescriptor(actor.proto.remote.RemoteProtos.getDescriptor())
         registerSerializer(ProtobufSerializer, true)
         registerSerializer(JsonSerializer,false)
     }

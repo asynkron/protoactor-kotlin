@@ -22,7 +22,7 @@ class EndpointWriter(private val address: String, channelOptions: Enumerable, ca
             is Restarting -> restartingAsync()
             is MutableList<*> -> {
                 val m = tmp as MutableList<RemoteDeliver>
-                val envelopes : MutableList<proto.remote.MessageEnvelope> = mutableListOf()
+                val envelopes : MutableList<RemoteProtos.MessageEnvelope> = mutableListOf()
                 val typeNames : HashMap<String, Int> = HashMap()
                 val targetNames : HashMap<String, Int> = HashMap()
                 val typeNameList : MutableList<String> = mutableListOf()
@@ -43,18 +43,20 @@ class EndpointWriter(private val address: String, channelOptions: Enumerable, ca
                     }
 
                     val bytes : ByteString = Serialization.serialize(message, serializerId)
-                    val envelope : proto.remote.MessageEnvelope = MessageEnvelope(bytes, sender,targetId,typeId,serializerId)
+                    val envelope = MessageEnvelope(bytes, sender, targetId, typeId, serializerId)
                     envelopes.add(envelope)
                 }
-                val batch : MessageBatch = MessageBatch()
-                batch.targetNames.addRange(targetNameList)
-                batch.typeNames.addRange(typeNameList)
-                batch.envelopes.addRange(envelopes)
+                val batchBuilder  = RemoteProtos.MessageBatch.newBuilder()
+                batchBuilder.targetNamesList.addAll(targetNameList)
+                batchBuilder.typeNamesList.addAll(typeNameList)
+                batchBuilder.envelopesList.addAll(envelopes)
+                val batch = batchBuilder.build()
                 sendEnvelopesAsync(batch, context)
             }
         }
     }
-    private suspend fun sendEnvelopesAsync (batch : MessageBatch, context : Context) {
+
+    private suspend fun sendEnvelopesAsync (batch : RemoteProtos.MessageBatch, context : Context) {
         try {
             streamWriter.writeAsync(batch)
         } catch (x: Exception) {
