@@ -26,11 +26,11 @@ class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") mi
         tell(target, envelope)
     }
 
-//    suspend fun <T> requestAsync(target: PID, message: Any, timeout: Duration): T {
+//    suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T {
 //        throw Exception()
 //    }
 //
-//    suspend fun <T> requestAsync(target: PID, message: Any): T {
+//    suspend fun <T> requestAwait(target: PID, message: Any): T {
 //        throw Exception()
 //    }
 }

@@ -17,7 +17,7 @@ class Behavior(receive: suspend (Context) -> Unit) {
         behaviors.pop()
     }
 
-    suspend fun receiveAsync(context: Context): Unit {
+    suspend fun receive(context: Context): Unit {
         val behavior = behaviors.peek()
         return behavior(context)
     }

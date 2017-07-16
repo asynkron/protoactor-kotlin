@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
         }
 
         val pid = spawn(prop)
-        val res = pid.requestAsync<String>("Proto.Actor")
+        val res = pid.requestAwait<String>("Proto.Actor")
         println("Got response " + res)
     }
     readLine()

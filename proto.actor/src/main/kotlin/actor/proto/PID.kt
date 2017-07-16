@@ -30,11 +30,11 @@ fun PID.request(message: Any, sender: PID) {
     process.sendUserMessage(this, messageEnvelope)
 }
 
-suspend fun <T> PID.requestAsync(message: Any, timeout: Duration): T = requestAsync(message, FutureProcess(timeout))
+suspend fun <T> PID.requestAwait(message: Any, timeout: Duration): T = requestAwait(message, FutureProcess(timeout))
 
-suspend fun <T> PID.requestAsync(message: Any): T = requestAsync(message, FutureProcess())
+suspend fun <T> PID.requestAwait(message: Any): T = requestAwait(message, FutureProcess())
 
-suspend private fun <T> PID.requestAsync(message: Any, future: FutureProcess<T>): T {
+suspend private fun <T> PID.requestAwait(message: Any, future: FutureProcess<T>): T {
     request(message, future.pid)
     return future.future().get()
 }

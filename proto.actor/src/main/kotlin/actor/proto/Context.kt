@@ -23,8 +23,8 @@ interface Context {
     fun tell(target: PID, message: Any)
     fun request(target: PID, message: Any)
 
-    suspend fun <T> requestAsync(target: PID, message: Any, timeout: Duration): T
-    suspend fun <T> requestAsync(target: PID, message: Any): T
+    suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T
+    suspend fun <T> requestAwait(target: PID, message: Any): T
     // fun reenterAfter (target : Task, action : (Task) -> Task)
 }
 

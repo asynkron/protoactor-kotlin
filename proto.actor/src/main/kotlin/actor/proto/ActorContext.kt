@@ -97,9 +97,9 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
-    suspend override fun <T> requestAsync(target: PID, message: Any, timeout: Duration): T = requestAsync(target, message, FutureProcess(timeout))
+    suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, FutureProcess(timeout))
 
-    suspend override fun <T> requestAsync(target: PID, message: Any): T = requestAsync(target, message, FutureProcess())
+    suspend override fun <T> requestAwait(target: PID, message: Any): T = requestAwait(target, message, FutureProcess())
 
     //    override fun reenterAfter (target : Task, action : (Task) -> Task) {
 //        val msg : Any = _message!!
@@ -175,7 +175,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         }
     }
 
-    suspend private fun <T> requestAsync(target: PID, message: Any, future: FutureProcess<T>): T {
+    suspend private fun <T> requestAwait(target: PID, message: Any, future: FutureProcess<T>): T {
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, future.pid, null)
         sendUserMessage(target, messageEnvelope)
         return future.future().get()
