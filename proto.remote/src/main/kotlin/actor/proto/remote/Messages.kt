@@ -20,7 +20,9 @@ fun ActorPidRequest(kind: String, name: String): RemoteProtos.ActorPidRequest {
 fun MessageEnvelope(bytes: ByteString, sender: PID?, targetId: Int, typeId: Int, serializerId: Int): RemoteProtos.MessageEnvelope {
     val builder = RemoteProtos.MessageEnvelope.newBuilder()
     builder.messageData = bytes
-    builder.sender = sender
+    if (sender != null) {
+        builder.sender = sender
+    }
     builder.target = targetId
     builder.typeId = typeId
     builder.serializerId = serializerId

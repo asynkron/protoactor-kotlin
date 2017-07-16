@@ -45,9 +45,9 @@ class EndpointWriter(private val address: String) : Actor {
                     envelopes.add(envelope)
                 }
                 val batchBuilder = RemoteProtos.MessageBatch.newBuilder()
-                batchBuilder.targetNamesList.addAll(targetNameList)
-                batchBuilder.typeNamesList.addAll(typeNameList)
-                batchBuilder.envelopesList.addAll(envelopes)
+                batchBuilder.addAllTargetNames(targetNameList)
+                batchBuilder.addAllTypeNames(typeNameList)
+                batchBuilder.addAllEnvelopes(envelopes)
                 val batch = batchBuilder.build()
                 sendEnvelopesAsync(batch, context)
             }
@@ -71,7 +71,7 @@ class EndpointWriter(private val address: String) : Actor {
         val parts = address.split(':')
         val host = parts[0]
         val port = parts[1].toInt()
-        channel = ManagedChannelBuilder.forAddress(host, port).build()
+        channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build()
         client = RemotingGrpc.newStub(channel)
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
         val res = blockingClient.connect(ConnectRequest())

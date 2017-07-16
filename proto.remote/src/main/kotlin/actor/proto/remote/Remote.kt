@@ -6,7 +6,7 @@ import io.grpc.ServerBuilder
 import java.time.Duration
 
 object Remote {
-    private var _server: Server? = null
+    private lateinit var _server: Server
     private val Kinds: HashMap<String, Props> = HashMap()
     lateinit var endpointManagerPid: PID
     lateinit var activatorPid: PID
@@ -24,13 +24,13 @@ object Remote {
     fun start(hostname: String, port: Int, config: RemoteConfig = RemoteConfig()) {
         ProcessRegistry.registerHostResolver { pid -> RemoteProcess(pid) }
         _server = ServerBuilder.forPort(port).addService(EndpointReader()).build().start()
-        val boundPort: Int = _server!!.port
+        val boundPort: Int = _server.port
         val boundAddress: String = "$hostname:$boundPort"
         val address: String = "${config.advertisedHostname ?: hostname}:${config.advertisedPort ?: boundPort}"
         ProcessRegistry.address = address
         spawnEndpointManager(config)
         spawnActivator()
-        println("Starting Proto.Actor server on $boundAddress ($address)")
+        println("Starting Proto.Actor server on $boundAddress")
     }
 
     private fun spawnActivator() {
