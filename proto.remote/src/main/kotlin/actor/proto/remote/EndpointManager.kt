@@ -1,9 +1,6 @@
 package actor.proto.remote
 
 import actor.proto.*
-import proto.remote.EndpointWatcher
-import proto.remote.EndpointWriter
-import proto.remote.RemoteConfig
 import kotlin.collections.HashMap
 
 data class Endpoint(val writer : PID,val watcher : PID)

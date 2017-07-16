@@ -1,8 +1,8 @@
-package proto.remote
+package actor.proto.remote
 
 import actor.proto.*
 import actor.proto.MessageEnvelope
-import actor.proto.remote.*
+import proto.remote.ActorPidResponse
 import java.time.Duration
 
 object Remote {

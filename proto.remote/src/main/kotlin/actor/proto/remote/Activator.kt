@@ -1,9 +1,7 @@
 package actor.proto.remote
 
 import actor.proto.*
-import proto.remote.ActorPidRequest
-import proto.remote.ActorPidResponse
-import proto.remote.Remote
+
 
 class Activator : Actor {
     suspend override fun receiveAsync (context : Context) {

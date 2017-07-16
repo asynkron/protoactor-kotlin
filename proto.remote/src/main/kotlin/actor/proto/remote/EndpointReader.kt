@@ -1,7 +1,7 @@
-package proto.remote
+package actor.proto.remote
 
-import actor.proto.remote.RemoteTerminate
-import actor.proto.remote.Serialization
+import actor.proto.*
+import actor.proto.mailbox.SystemMessage
 
 open class EndpointReader : RemotingBase {
     suspend fun connect (request : ConnectRequest, context : ServerCallContext) : ConnectResponse {
@@ -13,22 +13,20 @@ open class EndpointReader : RemotingBase {
             val typeNames : MutableList<String> = mutableListOf(batch.typeNames)
             for(envelope in batch.envelopes) {
                 val targetName : String = targetNames[envelope.target]
-                val target : PID = PID(ProcessRegistry.instance.address, targetName)
+                val target : PID = PID(ProcessRegistry.address, targetName)
                 val sender : PID = envelope.sender
                 val typeName : String = typeNames[envelope.typeId]
                 val message : Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
-                if (message is Terminated /* msg  */) {
-                    val rt : RemoteTerminate = RemoteTerminate(target, msg.who)
+                if (message is Terminated ) {
+                    val rt = RemoteTerminate(target, message.who)
                     Remote.endpointManagerPid.tell(rt)
-                } else if (message is SystemMessage /* sys  */) {
-                    target.sendSystemMessage(sys)
+                } else if (message is SystemMessage) {
+                    target.sendSystemMessage(message)
                 } else {
                     target.request(message, sender)
                 }
             }
-            return Actor.Done
         }
-
     }
 }
 

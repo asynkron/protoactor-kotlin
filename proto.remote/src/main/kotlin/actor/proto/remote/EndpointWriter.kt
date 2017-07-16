@@ -1,58 +1,49 @@
-package proto.remote
+package actor.proto.remote
 
-import actor.proto.remote.EndpointTerminatedEvent
-import actor.proto.remote.Serialization
+import actor.proto.*
+import com.google.protobuf.ByteString
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 
-open class EndpointWriter : Actor {
-    private var _serializerId : Int = 0
-    private val _address : String
-    private val _callOptions : CallOptions = CallOptions()
-    private val _channelCredentials : ChannelCredentials
-    private val _channelOptions : Enumerable
-    private val _logger : Logger = Log.createLogger<EndpointWriter>()
-    private var _channel : Channel? = null
-    private var _client : RemotingClient? = null
-    private var _stream : AsyncDuplexStreamingCall<MessageBatch, Unit>? = null
-    private var _streamWriter : ClientStreamWriter? = null
-    constructor(address : String, channelOptions : Enumerable, callOptions : CallOptions, channelCredentials : ChannelCredentials)  {
-        _address = address
-        _channelOptions = channelOptions
-        _callOptions = callOptions
-        _channelCredentials = channelCredentials
-    }
+class EndpointWriter(private val address: String, channelOptions: Enumerable, callOptions: CallOptions, channelCredentials: ChannelCredentials) : Actor {
+    private var serializerId: Int = 0
+    private val callOptions: CallOptions = callOptions
+    private val channelCredentials: ChannelCredentials = channelCredentials
+    private val channelOptions: Enumerable = channelOptions
+    private var channel: Channel? = null
+    private var client: RemotingClient? = null
+    private var stream: AsyncDuplexStreamingCall<MessageBatch, Unit>? = null
+    private var streamWriter: ClientStreamWriter? = null
     suspend override fun receiveAsync (context : Context) {
         val tmp = context.message
         when (tmp) {
-            is Started -> {
-                startedAsync()
-            }
-            is Stopped -> {
-                stoppedAsync()
-            }
-            is Restarting -> {
-                restartingAsync()
-            }
-            is Enumerable -> {
-                val m = tmp
-                val envelopes : MutableList<MessageEnvelope> = mutableListOf()
-                val typeNames : Dictionary<String, Int> = Dictionary<String, Int>()
-                val targetNames : Dictionary<String, Int> = Dictionary<String, Int>()
+            is Started -> startedAsync()
+            is Stopped -> stoppedAsync()
+            is Restarting -> restartingAsync()
+            is MutableList<*> -> {
+                val m = tmp as MutableList<RemoteDeliver>
+                val envelopes : MutableList<proto.remote.MessageEnvelope> = mutableListOf()
+                val typeNames : HashMap<String, Int> = HashMap()
+                val targetNames : HashMap<String, Int> = HashMap()
                 val typeNameList : MutableList<String> = mutableListOf()
                 val targetNameList : MutableList<String> = mutableListOf()
-                for(rd in m) {
-                    val targetName : String = rd.target.id
-                    val serializerId : Int = if (rd.serializerId == -1) _serializerId else rd.serializerId
-                    if (!targetNames.tryGetValue(targetName, var targetId)) {
-                        targetId = targetNames[targetName] = targetNames.count
+                for((message, target, sender, explicitSerializerId) in m) {
+                    val targetName : String = target.id
+                    val serializerId : Int = if (explicitSerializerId == -1) serializerId else explicitSerializerId
+
+                    val targetId = targetNames.getOrPut(targetName){
                         targetNameList.add(targetName)
+                        targetNames.count()
                     }
-                    val typeName : String = Serialization.getTypeName(rd.message, serializerId)
-                    if (!typeNames.tryGetValue(typeName, var typeId)) {
-                        typeId = typeNames[typeName] = typeNames.count
+                    val typeName : String = Serialization.getTypeName(message, serializerId)
+
+                    val typeId = typeNames.getOrPut(typeName){
                         typeNameList.add(typeName)
+                        typeNames.count()
                     }
-                    val bytes : ByteString = Serialization.serialize(rd.message, serializerId)
-                    val envelope : MessageEnvelope = MessageEnvelope
+
+                    val bytes : ByteString = Serialization.serialize(message, serializerId)
+                    val envelope : proto.remote.MessageEnvelope = MessageEnvelope(bytes, sender,targetId,typeId,serializerId)
                     envelopes.add(envelope)
                 }
                 val batch : MessageBatch = MessageBatch()
@@ -64,37 +55,37 @@ open class EndpointWriter : Actor {
         }
     }
     private suspend fun sendEnvelopesAsync (batch : MessageBatch, context : Context) {
-        try  {
-            _streamWriter.writeAsync(batch)
-        }
-        catch (x : Exception) {
+        try {
+            streamWriter.writeAsync(batch)
+        } catch (x: Exception) {
             context.stash()
-            _logger.logError("gRPC Failed to send to address ${_address}, reason ${x.message}")
-            throw 
+            println("gRPC Failed to send to address $address, reason ${x.message}")
+            throw  x
         }
     }
-    private suspend fun restartingAsync () = _channel.shutdownAsync()
-    private suspend fun stoppedAsync () = _channel.shutdownAsync()
+    private suspend fun restartingAsync () = channel.shutdownAsync()
+    private suspend fun stoppedAsync () = channel.shutdownAsync()
     private suspend fun startedAsync () {
-        _logger.logDebug("Connecting to address ${_address}")
-        _channel = Channel(_address, _channelCredentials, _channelOptions)
-        _client = RemotingClient(_channel)
-        val res : ConnectResponse = _client.connectAsync(ConnectRequest())
-        _serializerId = res.defaultSerializerId
-        _stream = _client.receive(_callOptions)
-        val _ : Unit = Task.factory.startNew{ -> 
+        println("Connecting to address $address")
+        channel = Channel(address, channelCredentials, channelOptions)
+        client = RemotingClient(channel)
+        val res : ConnectResponse = client.connectAsync(ConnectRequest())
+        serializerId = res.defaultSerializerId
+        stream = client.receive(callOptions)
+        launch(CommonPool){
             try  {
-                _stream.responseStream.forEachAsync{i -> Actor.Done}
+                stream.responseStream.forEachAsync{ i -> Actor.Done}
             }
             catch (x : Exception) {
-                _logger.logError("Lost connection to address ${_address}, reason ${x.message}")
+                println("Lost connection to address ${address}, reason ${x.message}")
                 val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent
-                Actor.eventStream.publish(terminated)
+                EventStream.publish(terminated)
             }
         }
 
-        _streamWriter = _stream.requestStream
-        _logger.logDebug("Connected to address ${_address}")
+
+        streamWriter = stream.requestStream
+        println("Connected to address $address")
     }
 }
 

@@ -1,14 +1,11 @@
-package proto.remote
+package actor.proto.remote
 
 import actor.proto.*
-import actor.proto.remote.EndpointTerminatedEvent
-import actor.proto.remote.RemoteTerminate
-import actor.proto.remote.RemoteUnwatch
-import actor.proto.remote.RemoteWatch
+import actor.proto.remote.*
 
 class EndpointWatcher(address: String) : Actor {
     private val _behavior : Behavior
-    private val _watched : HashMap<String, PID> = HashMap<String, PID>()
+    private val _watched : HashMap<String, PID> = HashMap()
     private var _address : String? = address
     suspend override fun receiveAsync (context : Context) {
         return _behavior.receiveAsync(context)
