@@ -21,12 +21,9 @@ fun run() {
         val clientCount = Runtime.getRuntime().availableProcessors() * 2
 
         val echoProps = fromFunc {
-            val tmp = message
-            when (tmp) {
-                is Msg -> {
-                    val msg = tmp
-                    msg.sender.tell(msg)
-                }
+            val msg = message
+            when (msg) {
+                is Msg -> msg.sender.tell(msg)
             }
         }
                 .withDispatcher(d)

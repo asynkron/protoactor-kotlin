@@ -2,11 +2,10 @@ package actor.proto.examples.spawnbenchmark
 
 import actor.proto.*
 
-
 object Begin
 data class Request(var div: Long, var num: Long, var size: Long, val respondTo : PID)
 
-open internal class SpawnActor : Actor {
+class SpawnActor : Actor {
     companion object Foo{
         private fun produce() = SpawnActor()
         val props: Props = fromProducer(SpawnActor.Foo::produce)
