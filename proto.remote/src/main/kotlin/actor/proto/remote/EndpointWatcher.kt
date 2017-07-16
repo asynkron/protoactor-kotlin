@@ -6,7 +6,7 @@ class EndpointWatcher(address: String) : Actor {
     private val behavior: Behavior = Behavior({ connectedAsync(it) })
     private val watched: HashMap<String, PID> = HashMap()
     private var _address: String = address
-    suspend override fun receiveAsync(context: Context) = behavior.receiveAsync(context)
+    suspend override fun receive(context: Context) = behavior.receiveAsync(context)
     private suspend fun connectedAsync(context: Context) {
         val msg = context.message
         when (msg) {

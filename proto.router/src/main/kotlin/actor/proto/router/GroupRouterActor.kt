@@ -5,7 +5,7 @@ import actor.proto.*
 import java.util.concurrent.CountDownLatch
 
 class GroupRouterActor(private val config: GroupRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val message = context.message
         when (message) {
             is Started -> {

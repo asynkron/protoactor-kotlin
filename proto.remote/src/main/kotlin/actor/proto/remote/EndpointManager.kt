@@ -12,7 +12,7 @@ class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrat
     }
 
     private val _connections: HashMap<String, Endpoint> = HashMap()
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is Started -> println("Started EndpointManager")

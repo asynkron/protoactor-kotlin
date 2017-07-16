@@ -4,7 +4,7 @@ import actor.proto.*
 
 
 class Activator : Actor {
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is RemoteProtos.ActorPidRequest -> {

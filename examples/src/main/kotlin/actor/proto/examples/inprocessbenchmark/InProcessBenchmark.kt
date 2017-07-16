@@ -61,7 +61,7 @@ data class Msg(val sender: PID)
 data class Start(val sender: PID)
 
 class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is Start -> sendBatch(context, msg.sender)

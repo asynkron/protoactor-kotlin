@@ -42,7 +42,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
                     is SuspendMailbox -> suspended = true
                     is ResumeMailbox -> suspended = false
                 }
-                invoker.invokeSystemMessageAsync(msg as SystemMessage)
+                invoker.invokeSystemMessage(msg as SystemMessage)
             }
             if (!suspended) {
                 batch.clear()
@@ -57,7 +57,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
                 }
                 if (batch.count() > 0) {
                     msg = batch
-                    invoker.invokeUserMessageAsync(batch)
+                    invoker.invokeUserMessage(batch)
                 }
             }
         } catch (x: Exception) {

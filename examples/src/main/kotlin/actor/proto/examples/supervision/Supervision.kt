@@ -31,7 +31,7 @@ object Recoverable
 
 class ParentActor : Actor {
     private lateinit var child: PID
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is Started -> child = context.spawnChild(fromProducer { ChildActor() })
@@ -44,7 +44,7 @@ class ParentActor : Actor {
 }
 
 class ChildActor : Actor {
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is Hello -> println("Hello ${msg.who}")

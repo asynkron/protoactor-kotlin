@@ -44,7 +44,7 @@ class SpawnActor : Actor {
     private lateinit var replyTo: PID
     private var sum: Long = 0
 
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg: Any = context.message
         when (msg) {
             is Request -> when {

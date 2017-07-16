@@ -11,7 +11,7 @@ class EndpointWriter(private val address: String) : Actor {
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
     private lateinit var streamWriter: StreamObserver<RemoteProtos.MessageBatch>
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
             is Started -> startedAsync()

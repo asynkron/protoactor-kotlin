@@ -91,7 +91,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         }
     }
 
-    suspend override fun receiveAsync(message: Any): Unit = processMessageAsync(message)
+    suspend override fun receive(message: Any): Unit = processMessage(message)
 
     override fun tell(target: PID, message: Any) = sendUserMessage(target, message)
 
@@ -124,16 +124,16 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     override fun stopChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(StopInstance) }
     override fun resumeChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(ResumeMailbox) }
 
-    suspend override fun invokeSystemMessageAsync(msg: SystemMessage): Unit {
+    suspend override fun invokeSystemMessage(msg: SystemMessage): Unit {
         try {
             when (msg) {
-                is Started -> invokeUserMessageAsync(msg)
-                is Stop -> handleStopAsync()
-                is Terminated -> handleTerminatedAsync(msg)
+                is Started -> invokeUserMessage(msg)
+                is Stop -> handleStop()
+                is Terminated -> handleTerminated(msg)
                 is Watch -> handleWatch(msg)
                 is Unwatch -> handleUnwatch(msg)
                 is Failure -> handleFailure(msg)
-                is Restart -> handleRestartAsync()
+                is Restart -> handleRestart()
                 is SuspendMailbox -> {
                 }
                 is ResumeMailbox -> {
@@ -152,7 +152,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         msg.action()
     }
 
-    suspend override fun invokeUserMessageAsync(msg: Any) {
+    suspend override fun invokeUserMessage(msg: Any) {
         if (receiveTimeout > Duration.ZERO) {
             when (msg) {
                 !is NotInfluenceReceiveTimeout -> when (_receiveTimeoutTimer) {
@@ -162,12 +162,12 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
                 }
             }
         }
-        processMessageAsync(msg)
+        processMessage(msg)
     }
 
     suspend override fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
 
-    suspend private fun processMessageAsync(msg: Any): Unit {
+    suspend private fun processMessage(msg: Any): Unit {
         _message = msg
         return when {
             receiveMiddleware != null -> receiveMiddleware.invoke(this)
@@ -196,11 +196,11 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         actor = producer()
     }
 
-    suspend private fun handleRestartAsync() {
+    suspend private fun handleRestart() {
         state = ContextState.Restarting
-        invokeUserMessageAsync(Restarting)
+        invokeUserMessage(Restarting)
         _children.forEach { it.stop() }
-        tryRestartOrTerminateAsync()
+        tryRestartOrTerminate()
     }
 
     private fun handleUnwatch(uw: Unwatch) {
@@ -227,51 +227,51 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         }
     }
 
-    suspend private fun handleTerminatedAsync(msg: Terminated) {
+    suspend private fun handleTerminated(msg: Terminated) {
         _children -= msg.who
-        invokeUserMessageAsync(msg)
-        tryRestartOrTerminateAsync()
+        invokeUserMessage(msg)
+        tryRestartOrTerminate()
     }
 
     private fun handleRootFailure(failure: Failure) {
         Supervision.defaultStrategy.handleFailure(this, failure.who, failure.restartStatistics, failure.reason)
     }
 
-    suspend private fun handleStopAsync() {
+    suspend private fun handleStop() {
         state = ContextState.Stopping
-        invokeUserMessageAsync(Stopping)
+        invokeUserMessage(Stopping)
         _children.forEach { it.stop() }
-        tryRestartOrTerminateAsync()
+        tryRestartOrTerminate()
     }
 
-    suspend private fun tryRestartOrTerminateAsync() {
+    suspend private fun tryRestartOrTerminate() {
         cancelReceiveTimeout()
         when {
             _children.any() -> return
             else -> when (state) {
-                ContextState.Restarting -> restartAsync()
-                ContextState.Stopping -> stopAsync()
+                ContextState.Restarting -> restart()
+                ContextState.Stopping -> stop()
                 else -> {
                 }
             }
         }
     }
 
-    suspend private fun stopAsync() {
+    suspend private fun stop() {
         ProcessRegistry.remove(self)
-        invokeUserMessageAsync(Stopped)
+        invokeUserMessage(Stopped)
         val terminated: Terminated = Terminated(self, false)
         watchers.forEach { it.sendSystemMessage(terminated) }
         parent?.sendSystemMessage(terminated)
     }
 
-    suspend private fun restartAsync() {
+    suspend private fun restart() {
         incarnateActor()
         self.sendSystemMessage(ResumeMailbox)
-        invokeUserMessageAsync(Started)
+        invokeUserMessage(Started)
         while (stash.isNotEmpty()) {
             val msg: Any = stash.pop()
-            invokeUserMessageAsync(msg)
+            invokeUserMessage(msg)
         }
     }
 

@@ -5,7 +5,7 @@ import java.util.concurrent.CountDownLatch
 
 
 class PoolRouterActor(private val routeeProps: Props, private val config: PoolRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
-    suspend override fun receiveAsync(context: Context) {
+    suspend override fun receive(context: Context) {
         val message = context.message
         when (message) {
             is Started -> {

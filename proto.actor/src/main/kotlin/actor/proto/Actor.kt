@@ -1,5 +1,5 @@
 package actor.proto
 
 interface Actor {
-    suspend fun receiveAsync(context: Context)
+    suspend fun receive(context: Context)
 }
