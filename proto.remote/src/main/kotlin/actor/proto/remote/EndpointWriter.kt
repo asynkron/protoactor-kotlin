@@ -4,15 +4,13 @@ import actor.proto.*
 import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import io.grpc.stub.StreamObserver
 
 class EndpointWriter(private val address: String) : Actor {
     private var serializerId: Int = 0
-    private var channel: ManagedChannel? = null
-    private var client: RemotingGrpc.RemotingStub = RemotingGrpc.newStub(channel)
-    private var stream: AsyncDuplexStreamingCall<RemoteProtos.MessageBatch, Unit>? = null
-    private var streamWriter: ClientStreamWriter? = null
+    private lateinit var channel: ManagedChannel
+    private lateinit var client: RemotingGrpc.RemotingStub
+    private lateinit var streamWriter: StreamObserver<RemoteProtos.MessageBatch>
     suspend override fun receiveAsync (context : Context) {
         val tmp = context.message
         when (tmp) {
@@ -20,6 +18,7 @@ class EndpointWriter(private val address: String) : Actor {
             is Stopped -> stoppedAsync()
             is Restarting -> restartingAsync()
             is MutableList<*> -> {
+                @Suppress("UNCHECKED_CAST")
                 val m = tmp as MutableList<RemoteDeliver>
                 val envelopes : MutableList<RemoteProtos.MessageEnvelope> = mutableListOf()
                 val typeNames : HashMap<String, Int> = HashMap()
@@ -57,7 +56,7 @@ class EndpointWriter(private val address: String) : Actor {
 
     private suspend fun sendEnvelopesAsync (batch : RemoteProtos.MessageBatch, context : Context) {
         try {
-            streamWriter.writeAsync(batch)
+            streamWriter.onNext(batch)
         } catch (x: Exception) {
             context.stash()
             println("gRPC Failed to send to address $address, reason ${x.message}")
@@ -72,24 +71,24 @@ class EndpointWriter(private val address: String) : Actor {
         val host = parts[0]
         val port = parts[1].toInt()
         channel =  ManagedChannelBuilder.forAddress(host,port).build()
-        client = RemotingClient(channel)
-        val res : RemoteProtos.ConnectResponse = client.connect(connectRequest())
+        client =  RemotingGrpc.newStub(channel)
+        val blockingClient = RemotingGrpc.newBlockingStub(channel)
+        val res =blockingClient.connect(connectRequest())
         serializerId = res.defaultSerializerId
-        stream = client.receive()
-        launch(CommonPool){
-            try  {
-                stream.responseStream.forEachAsync{
+        streamWriter = client.receive(null)
+//        launch(CommonPool){
+//            try  {
+//                stream.responseStream.forEachAsync{
+//
+//                }
+//            }
+//            catch (x : Exception) {
+//                println("Lost connection to address $address, reason ${x.message}")
+//                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent(address)
+//                EventStream.publish(terminated)
+//            }
+//        }
 
-                }
-            }
-            catch (x : Exception) {
-                println("Lost connection to address $address, reason ${x.message}")
-                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent(address)
-                EventStream.publish(terminated)
-            }
-        }
-
-        streamWriter = stream.requestStream
         println("Connected to address $address")
     }
 }
