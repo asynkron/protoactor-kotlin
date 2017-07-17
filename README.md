@@ -55,7 +55,7 @@ Define an actor:
 ```kotlin
 class HelloActor : Actor
 {
-    suspend override fun receiveAsync(context : IContext)
+    suspend override fun receive(context : Context)
     {
         val msg = context.Message;
         when (msg)
