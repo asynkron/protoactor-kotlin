@@ -47,7 +47,7 @@ The best place currently for learning how to use Proto.Actor is the [examples](h
 Define a message type:
 
 ```kotlin
-data class Hello(who : String)
+data class Hello(val who : String)
 ```
 
 Define an actor:
