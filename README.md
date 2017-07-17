@@ -57,7 +57,7 @@ class HelloActor : Actor
 {
     suspend override fun receive(context : Context)
     {
-        val msg = context.Message;
+        val msg = context.message;
         when (msg)
         {
             is Hello -> println("Hello " + msg.who);
