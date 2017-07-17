@@ -6,13 +6,12 @@
 
     <groupId>actor.proto</groupId>
     <artifactId>proto-mailbox</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>actor.proto.mailbox proto-mailbox</name>
+    <name>Proto.Actor Mailbox</name>
     <description>Mailbox core implementation for Proto.Actor</description>
     <url>http://proto.actor</url>
-
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
@@ -20,12 +19,9 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
     <scm>
         <url>https://github.com/AsynkronIT/protoactor-kotlin</url>
     </scm>
-
-
     <repositories>
         <repository>
             <id>central</id>

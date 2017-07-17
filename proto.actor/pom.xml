@@ -3,13 +3,22 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>actor.proto</groupId>
     <artifactId>proto-actor</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.8-SNAPSHOT</version>
     <packaging>jar</packaging>
-
     <name>Proto.Actor Core</name>
+    <url>http://proto.actor</url>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/AsynkronIT/protoactor-kotlin</url>
+    </scm>
     <repositories>
         <repository>
             <id>central</id>
@@ -55,7 +64,7 @@
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>0.8-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
