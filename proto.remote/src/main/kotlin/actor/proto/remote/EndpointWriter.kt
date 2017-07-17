@@ -14,9 +14,9 @@ class EndpointWriter(private val address: String) : Actor {
     suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
-            is Started -> startedAsync()
-            is Stopped -> stoppedAsync()
-            is Restarting -> restartingAsync()
+            is Started -> started()
+            is Stopped -> stopped()
+            is Restarting -> restarting()
             is MutableList<*> -> {
                 @Suppress("UNCHECKED_CAST")
                 val m = msg as MutableList<RemoteDeliver>
@@ -65,9 +65,9 @@ class EndpointWriter(private val address: String) : Actor {
         }
     }
 
-    private suspend fun restartingAsync() = channel.shutdownNow()
-    private suspend fun stoppedAsync() = channel.shutdownNow()
-    private suspend fun startedAsync() {
+    private suspend fun restarting() = channel.shutdownNow()
+    private suspend fun stopped() = channel.shutdownNow()
+    private suspend fun started() {
         println("Connecting to address $address")
         val (host,port) = parseAddress(address)
         channel = ManagedChannelBuilder

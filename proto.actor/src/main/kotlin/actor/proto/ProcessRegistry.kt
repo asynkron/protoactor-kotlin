@@ -14,6 +14,7 @@ object ProcessRegistry {
         hostResolvers.add(resolver)
     }
 
+    fun get(id:String):Process = processLookup.getOrDefault(id, DeadLetterProcess)
     fun get(pid: PID): Process {
         if (pid.address != NoHost && pid.address != address) {
             hostResolvers

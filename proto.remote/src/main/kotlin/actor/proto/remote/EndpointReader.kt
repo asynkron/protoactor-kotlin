@@ -25,13 +25,20 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
         for (envelope in batch.envelopesList) {
             val targetName: String = targetNames[envelope.target]
             val target: PID = PID(ProcessRegistry.address, targetName)
-            val sender: PID = envelope.sender
             val typeName: String = typeNames[envelope.typeId]
             val message: Any = Serialization.deserialize(typeName, envelope.messageData, envelope.serializerId)
             when (message) {
                 is Terminated -> Remote.endpointManagerPid.send(RemoteTerminate(target, message.who))
                 is SystemMessage -> target.sendSystemMessage(message)
-                else -> target.request(message, sender)
+                else -> {
+                    when {
+                        envelope.hasSender() -> {
+                            val sender: PID = envelope.sender
+                            target.request(message, sender)
+                        }
+                        else -> target.send(message)
+                    }
+                }
             }
         }
     }

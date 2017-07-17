@@ -32,10 +32,11 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
 
     override fun start() {}
 
+    private val batch: MutableList<RemoteDeliver> = mutableListOf()
     private suspend fun runAsync() {
         var msg: Any? = null
         try {
-            val batch: MutableList<RemoteDeliver> = mutableListOf()
+
             msg = systemMessages.pop()
             if (msg != null) {
                 when (msg) {
