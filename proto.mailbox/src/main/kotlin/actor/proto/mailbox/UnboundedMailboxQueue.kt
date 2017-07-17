@@ -13,6 +13,6 @@ class UnboundedMailboxQueue : IMailboxQueue {
     }
 
     override val hasMessages: Boolean
-        get() = messages.count() > 0
+        get() = messages.isNotEmpty()
 }
 
