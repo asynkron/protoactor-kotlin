@@ -55,7 +55,7 @@ Define an actor:
 ```kotlin
 class HelloActor : Actor
 {
-    suspend override fun receiveAsync(context : IContext)
+    suspend override fun receive(context : Context)
     {
         val msg = context.Message;
         when (msg)
@@ -71,7 +71,7 @@ Spawn it and send a message to it:
 ```kotlin
 val props = fromProducer({ HelloActor() });
 val pid = spawn(props);
-pid.Tell(Hello("Kotlin"))
+pid.send(Hello("Kotlin"))
 ```
 
 You should see the output `Hello Kotlin`.
