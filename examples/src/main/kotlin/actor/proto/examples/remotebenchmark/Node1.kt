@@ -10,30 +10,36 @@ import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
 fun main (args : Array<String>) {
-    runBlocking {
-        registerFileDescriptor(Messages.getDescriptor())
-        Remote.start("127.0.0.1", 0)
-        val messageCount: Int = 1000000
-        val wg = CountDownLatch(1)
-        val props = fromProducer { LocalActor(0, messageCount, wg) }
-        val pid: PID = spawn(props)
-        val remote: PID = PID("127.0.0.1:12000", "remote")
-        val startRemote = Messages.StartRemote.newBuilder().setSender(pid).build()
-        remote.requestAwait<Messages.Start>(startRemote)
 
-        val start = currentTimeMillis()
-        println("Starting to send")
-        val msg: Messages.Ping = Ping.newBuilder().build()
-        for (i in 0 until messageCount) {
-            remote.send(msg)
-        }
-        wg.await()
-        val elapsed = currentTimeMillis() - start
-        println("Elapsed " + elapsed)
-        val t: Double = messageCount * 2.0 / elapsed * 1000
-        println("Throughput {0} msg / sec" + t)
-        readLine()
+    registerFileDescriptor(Messages.getDescriptor())
+    Remote.start("127.0.0.1", 0)
+    val messageCount: Int = 1000000
+    val wg = CountDownLatch(1)
+    val props = fromProducer { LocalActor(0, messageCount, wg) }
+    val pid: PID = spawn(props)
+    val remote: PID = PID("127.0.0.1:12000", "remote")
+    val startRemote = Messages.StartRemote.newBuilder().setSender(pid).build()
+    runBlocking {
+        remote.requestAwait<Messages.Start>(startRemote)
     }
+
+    val start = currentTimeMillis()
+    println("Starting to send")
+    val msg: Messages.Ping = Ping.newBuilder().build()
+    for (i in 0 until messageCount) {
+
+        //fake backpressure to prevent flooding of the queues
+        if (i % 800 == 0){
+            Thread.sleep(1)
+        }
+        remote.send(msg)
+    }
+    wg.await()
+    val elapsed = currentTimeMillis() - start
+    println("Elapsed " + elapsed)
+    val t: Double = messageCount * 2.0 / elapsed * 1000
+    println("Throughput {0} msg / sec" + t)
+    readLine()
 }
 
 
@@ -54,6 +60,7 @@ class LocalActor(count: Int, messageCount: Int, wg: CountDownLatch) : Actor {
                     _wg.countDown()
                 }
             }
+            else -> println(msg)
         }
     }
 }

@@ -1,6 +1,7 @@
 package actor.proto.remote
 
 import actor.proto.*
+import actor.proto.mailbox.mpscMailbox
 import io.grpc.Server
 import io.grpc.ServerBuilder
 import java.time.Duration
@@ -40,7 +41,7 @@ object Remote {
 
     private fun spawnEndpointManager(config: RemoteConfig) {
         val props = fromProducer { EndpointManager(config) }
-        endpointManagerPid = spawn(props)
+        endpointManagerPid = spawnNamed(props,"endpointmanager")
         EventStream.subscribe({
             if (it is EndpointTerminatedEvent) {
                 endpointManagerPid.send(it)
