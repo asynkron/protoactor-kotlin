@@ -47,7 +47,7 @@ fun run() {
         val elapsedMillis = (currentTimeMillis() - sw).toDouble()
         val totalMessages = messageCount * 2 * clientCount
         val x = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
-        println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
+        println("$t\t\t\t\t$elapsedMillis\t\t$x")
         for ((client, echo) in pairs) {
             client.stop()
             echo.stop()

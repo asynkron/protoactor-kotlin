@@ -9,10 +9,11 @@ import java.time.Duration
 import java.util.*
 
 object NullMessage
+private val emptyPidSet = setOf<PID>()
 
 class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((Context) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
-    private var _children: Set<PID> = setOf()
-    private var watchers: Set<PID> = setOf()
+    private var _children: Set<PID> = emptyPidSet
+    private var watchers: Set<PID> = emptyPidSet
     private var _receiveTimeoutTimer: AsyncTimer? = null
     private val stash: Stack<Any> by lazy(LazyThreadSafetyMode.NONE) { Stack<Any>() }
     private val restartStatistics: RestartStatistics by lazy(LazyThreadSafetyMode.NONE) { RestartStatistics(0, 0) }

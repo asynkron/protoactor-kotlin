@@ -1,10 +1,27 @@
 package actor.proto.examples.spawnbenchmark
 
 import actor.proto.*
+import java.util.concurrent.CountDownLatch
 
 
 fun main(args: Array<String>) {
+
+    repeat(10) {
+        runOnce()
+    }
+}
+
+private fun runOnce() {
+    val (cd, managerPid: PID) = spawnManager()
+    managerPid.send(Begin)
+    cd.await()
+    System.gc ()
+    System.runFinalization ()
+}
+
+private fun spawnManager(): Pair<CountDownLatch, PID> {
     var start: Long = 0
+    val cd = CountDownLatch(1)
     val managerProps = fromFunc {
         val msg = message
         when (msg) {
@@ -18,25 +35,16 @@ fun main(args: Array<String>) {
                 val millis = System.currentTimeMillis() - start
                 println("Elapsed " + millis)
                 println("Result " + msg)
-                println("done")
+                cd.countDown()
             }
         }
     }
     val managerPid: PID = spawn(managerProps)
-    managerPid.send(Begin)
-    readLine()
-    managerPid.send(Begin)
-    readLine()
-    managerPid.send(Begin)
-    readLine()
-    managerPid.send(Begin)
-    readLine()
-    managerPid.send(Begin)
-    readLine()
+    return Pair(cd, managerPid)
 }
 
 object Begin
-data class Request(var div: Long, var num: Long, var size: Long, val respondTo : PID)
+data class Request(val div: Long, val num: Long, val size: Long, val respondTo : PID)
 
 class SpawnActor : Actor {
     companion object Foo{
