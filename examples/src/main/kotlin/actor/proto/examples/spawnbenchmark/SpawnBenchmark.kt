@@ -29,6 +29,10 @@ fun main(args: Array<String>) {
     readLine()
     managerPid.send(Begin)
     readLine()
+    managerPid.send(Begin)
+    readLine()
+    managerPid.send(Begin)
+    readLine()
 }
 
 object Begin

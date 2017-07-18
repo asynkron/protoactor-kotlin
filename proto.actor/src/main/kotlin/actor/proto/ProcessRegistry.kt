@@ -2,11 +2,11 @@ package actor.proto
 
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
-
+internal typealias ProcessMap = HashedConcurrentDictionary
 object ProcessRegistry {
     private val NoHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
-    private val processLookup: ConcurrentHashMap<String, Process> = ConcurrentHashMap()
+    private val processLookup: ProcessMap = ProcessMap()
     private val sequenceId: AtomicInteger = AtomicInteger(0)
     var address: String = NoHost
 
