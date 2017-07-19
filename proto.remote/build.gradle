@@ -1,0 +1,13 @@
+apply plugin: 'java'
+
+artifact {
+    name 'Proto.Actor Remote'
+}
+
+dependencies {
+    compile group: 'io.grpc', name: 'grpc-netty', version:'1.4.0'
+    compile group: 'io.grpc', name: 'grpc-protobuf', version:'1.4.0'
+    compile group: 'io.grpc', name: 'grpc-stub', version:'1.4.0'
+    compile project(':proto-actor')
+    compile project(':proto-mailbox')
+}

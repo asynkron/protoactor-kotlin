@@ -1,0 +1,8 @@
+artifact {
+    name 'Proto.Actor Router'
+}
+
+dependencies {
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version:'0.16'
+    compile project(':proto-actor')
+}

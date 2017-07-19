@@ -23,3 +23,6 @@ hs_err_pid*
 src/proto.mailbox/.idea/*
 */.idea/*
 **/.idea/**
+
+build
+.gradle
