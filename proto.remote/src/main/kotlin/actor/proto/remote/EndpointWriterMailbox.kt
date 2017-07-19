@@ -9,8 +9,8 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
         val Busy: Int = 1
     }
 
-    private val systemMessages: IMailboxQueue = UnboundedMailboxQueue()
-    private val userMessages: IMailboxQueue = UnboundedMailboxQueue()
+    private val systemMessages: MailboxQueue = UnboundedMailboxQueue()
+    private val userMessages: MailboxQueue = UnboundedMailboxQueue()
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
     private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)

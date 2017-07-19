@@ -2,7 +2,7 @@ package actor.proto.mailbox
 
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class UnboundedMailboxQueue : IMailboxQueue {
+class UnboundedMailboxQueue : MailboxQueue {
     private val messages: ConcurrentLinkedQueue<Any> = ConcurrentLinkedQueue()
     override fun push(message: Any) {
         messages.add(message)

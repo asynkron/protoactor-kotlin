@@ -2,7 +2,7 @@ package actor.proto.mailbox
 
 import java.util.concurrent.atomic.AtomicInteger
 private val emptyStats = arrayOf<MailboxStatistics>()
-internal class DefaultMailbox(private val systemMessages: IMailboxQueue, private val userMailbox: IMailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
+internal class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
     private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker

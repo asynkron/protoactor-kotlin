@@ -12,7 +12,6 @@ fun main(args: Array<String>) {
         run()
         readLine()
     }
-
 }
 
 fun run() {
