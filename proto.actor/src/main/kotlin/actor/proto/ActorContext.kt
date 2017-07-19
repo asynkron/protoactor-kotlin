@@ -9,11 +9,9 @@ import java.time.Duration
 import java.util.*
 
 object NullMessage
-private val emptyPidSet = setOf<PID>()
-
 class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((Context) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
-    private var _children: Set<PID> = emptyPidSet
-    private var watchers: Set<PID> = emptyPidSet
+    override var children: Set<PID> = setOf()
+    private var watchers: Set<PID> = setOf()
     private var _receiveTimeoutTimer: AsyncTimer? = null
     private val stash: Stack<Any> by lazy(LazyThreadSafetyMode.NONE) { Stack<Any>() }
     private val restartStatistics: RestartStatistics by lazy(LazyThreadSafetyMode.NONE) { RestartStatistics(0, 0) }
@@ -21,8 +19,6 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     override lateinit var actor: Actor
     override lateinit var self: PID
     private var _message: Any = NullMessage
-    override val children: Set<PID>
-        get() = _children
 
     override val message: Any
         get() = _message.let {
@@ -60,7 +56,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     override fun spawnNamedChild(props: Props, name: String): PID {
         val pid = props.spawn("${self.id}/$name", self)
-        _children += pid
+        children += pid
         return pid
     }
 
@@ -154,14 +150,8 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     }
 
     suspend override fun invokeUserMessage(msg: Any) {
-        if (receiveTimeout > Duration.ZERO) {
-            when (msg) {
-                !is NotInfluenceReceiveTimeout -> when (_receiveTimeoutTimer) {
-                    null -> {
-                    }
-                    else -> _receiveTimeoutTimer!!.reset()
-                }
-            }
+        if (receiveTimeout > Duration.ZERO && msg !is NotInfluenceReceiveTimeout) {
+            _receiveTimeoutTimer?.reset()
         }
         processMessage(msg)
     }
@@ -170,10 +160,8 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     suspend private fun processMessage(msg: Any): Unit {
         _message = msg
-        return when {
-            receiveMiddleware != null -> receiveMiddleware.invoke(this)
-            else -> ContextHelper.defaultReceive(this)
-        }
+        if (receiveMiddleware != null) receiveMiddleware.invoke(this)
+        else ContextHelper.defaultReceive(this)
     }
 
     suspend private fun <T> requestAwait(target: PID, message: Any, future: FutureProcess<T>): T {
@@ -200,7 +188,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun handleRestart() {
         state = ContextState.Restarting
         invokeUserMessage(Restarting)
-        _children.forEach { it.stop() }
+        children.forEach { it.stop() }
         tryRestartOrTerminate()
     }
 
@@ -210,26 +198,21 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     private fun handleWatch(w: Watch) {
         when (state) {
-
             ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false))
             else -> watchers += w.watcher
         }
     }
 
     private fun handleFailure(msg: Failure) {
-        actor.let {
-            when (it) {
-                is SupervisorStrategy -> {
-                    it.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
-                    return
-                }
-                else -> supervisorStrategy.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
-            }
-        }
+        val a = actor
+        when (a) {
+            is SupervisorStrategy -> a
+            else -> supervisorStrategy
+        }.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
     }
 
     suspend private fun handleTerminated(msg: Terminated) {
-        _children -= msg.who
+        children -= msg.who
         invokeUserMessage(msg)
         tryRestartOrTerminate()
     }
@@ -242,14 +225,14 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun handleStop() {
         state = ContextState.Stopping
         invokeUserMessage(Stopping)
-        _children.forEach { it.stop() }
+        children.forEach { it.stop() }
         tryRestartOrTerminate()
     }
 
     suspend private fun tryRestartOrTerminate() {
         cancelReceiveTimeout()
         when {
-            _children.any() -> return
+            children.any() -> return
             else -> when (state) {
                 ContextState.Restarting -> restart()
                 ContextState.Stopping -> stop()
@@ -271,10 +254,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         incarnateActor()
         self.sendSystemMessage(ResumeMailbox)
         invokeUserMessage(Started)
-        while (stash.isNotEmpty()) {
-            val msg: Any = stash.pop()
-            invokeUserMessage(msg)
-        }
+        while (stash.isNotEmpty()) invokeUserMessage(stash.pop())
     }
 
 

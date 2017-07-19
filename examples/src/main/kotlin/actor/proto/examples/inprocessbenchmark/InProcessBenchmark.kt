@@ -8,7 +8,11 @@ import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
 fun main(args: Array<String>) {
-    run()
+    repeat(10) {
+        run()
+        readLine()
+    }
+
 }
 
 fun run() {
@@ -46,7 +50,7 @@ fun run() {
 
         val elapsedMillis = (currentTimeMillis() - sw).toDouble()
         val totalMessages = messageCount * 2 * clientCount
-        val x = ((totalMessages.toDouble() / elapsedMillis.toDouble() * 1000.0).toInt())
+        val x = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
         println("$t\t\t\t\t$elapsedMillis\t\t$x")
         for ((client, echo) in pairs) {
             client.stop()

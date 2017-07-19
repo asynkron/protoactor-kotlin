@@ -5,7 +5,6 @@ import java.util.concurrent.CountDownLatch
 
 
 fun main(args: Array<String>) {
-
     repeat(10) {
         runOnce()
     }
@@ -29,7 +28,7 @@ private fun spawnManager(): Pair<CountDownLatch, PID> {
             is Begin -> {
                 val root = spawn(SpawnActor.props)
                 start = System.currentTimeMillis()
-                root.send(Request(10, 0, 1000000, self))
+                root.send(Request(10, 0, 1_000_000, self))
             }
             is Long -> {
                 val millis = System.currentTimeMillis() - start
