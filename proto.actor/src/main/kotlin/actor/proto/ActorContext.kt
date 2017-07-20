@@ -172,9 +172,16 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     suspend private fun processMessage(msg: Any): Unit {
         _message = msg
-        if (receiveMiddleware != null) receiveMiddleware.invoke(this)
-        else ContextHelper.defaultReceive(this)
+        return when {
+            receiveMiddleware != null -> receiveMiddleware.invoke(this)
+            else -> ContextHelper.defaultReceive(this)
+        }
     }
+//    suspend private fun processMessage(msg: Any): Unit {
+//        _message = msg
+//        if (receiveMiddleware != null) receiveMiddleware.invoke(this)
+//        else ContextHelper.defaultReceive(this)
+//    }
 
     suspend private fun <T> requestAwait(target: PID, message: Any, future: FutureProcess<T>): T {
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, future.pid, null)
