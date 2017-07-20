@@ -1,4 +1,4 @@
-package proto.tests
+package actor.proto.tests
 
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive

@@ -1,7 +1,6 @@
 package actor.proto.remote
 
 import actor.proto.*
-import actor.proto.mailbox.mpscMailbox
 import io.grpc.Server
 import io.grpc.ServerBuilder
 import java.time.Duration
@@ -51,9 +50,9 @@ object Remote {
 
     fun activatorForAddress(address: String): PID = PID(address, "activator")
 
-    suspend fun spawnAsync(address: String, kind: String, timeout: Duration): PID = spawnNamedAsync(address, "", kind, timeout)
+    suspend fun spawn(address: String, kind: String, timeout: Duration): PID = spawnNamed(address, "", kind, timeout)
 
-    suspend fun spawnNamedAsync(address: String, name: String, kind: String, timeout: Duration): PID {
+    suspend fun spawnNamed(address: String, name: String, kind: String, timeout: Duration): PID {
         val activator: PID = activatorForAddress(address)
         val req = ActorPidRequest(kind, name)
         val res = activator.requestAwait<RemoteProtos.ActorPidResponse>(req, timeout)

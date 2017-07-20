@@ -1,7 +1,7 @@
 package actor.proto
 
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
+
 internal typealias ProcessMap = HashedConcurrentDictionary
 object ProcessRegistry {
     private val NoHost: String = "nonhost"

@@ -1,8 +1,8 @@
-package proto.tests
+package actor.proto.tests
 
 import actor.proto.*
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration
 

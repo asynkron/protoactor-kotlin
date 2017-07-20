@@ -1,13 +1,12 @@
 package actor.proto
 
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.Deferred
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 @Suppress("UNUSED_PARAMETER")
-class FutureProcess<T>(val timeout: Duration? = null) : Process() {
+class FutureProcess<out T>(val timeout: Duration? = null) : Process() {
     val pid = ProcessRegistry.add( ProcessRegistry.nextId(), this)
     private val cd = CompletableFuture<T>()
     override fun sendUserMessage(pid: PID, message: Any) {

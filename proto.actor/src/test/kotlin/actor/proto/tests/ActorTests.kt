@@ -1,14 +1,15 @@
 package actor.proto.tests
-import kotlin.test.*
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.experimental.runBlocking
-import org.junit.Assert
 import org.junit.Test
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.TimeoutException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertTrue
 
 class ActorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))

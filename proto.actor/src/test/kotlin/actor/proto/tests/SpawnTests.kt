@@ -1,12 +1,11 @@
-package proto.tests
+package actor.proto.tests
 
 import actor.proto.PID
 import actor.proto.Props
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fromFunc
 import actor.proto.spawn
-import org.junit.Assert
-import org.junit.Assert.*
+import org.junit.Assert.assertSame
 import org.junit.Test
 
 class SpawnTests {
