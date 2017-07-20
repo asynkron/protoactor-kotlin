@@ -1,6 +1,5 @@
 package actor.proto
 
-
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.ResumeMailbox
 import actor.proto.mailbox.SuspendMailbox
@@ -8,7 +7,6 @@ import actor.proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-object NullMessage
 class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((Context) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
     override var children: Set<PID> = setOf()
     private var watchers: Set<PID> = setOf()
@@ -232,7 +230,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun tryRestartOrTerminate() {
         cancelReceiveTimeout()
         when {
-            children.any() -> return
+            children.isNotEmpty() -> return
             else -> when (state) {
                 ContextState.Restarting -> restart()
                 ContextState.Stopping -> stop()
@@ -245,7 +243,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     suspend private fun stop() {
         ProcessRegistry.remove(self)
         invokeUserMessage(Stopped)
-        val terminated: Terminated = Terminated(self, false)
+        val terminated = Terminated(self, false)
         watchers.forEach { it.sendSystemMessage(terminated) }
         parent?.sendSystemMessage(terminated)
     }

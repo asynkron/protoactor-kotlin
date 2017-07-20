@@ -33,6 +33,7 @@ object Stopped : AutoReceiveMessage
 object Started : SystemMessage
 object Restarting
 object Stopping : AutoReceiveMessage
+object NullMessage
 
 data class Failure(val who: PID, val reason: Exception, val restartStatistics: RestartStatistics) : SystemMessage
 data class Restart(val reason: Exception) : SystemMessage

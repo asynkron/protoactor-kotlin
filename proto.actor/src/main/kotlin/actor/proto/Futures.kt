@@ -8,10 +8,8 @@ import java.util.concurrent.Future
 
 @Suppress("UNUSED_PARAMETER")
 class FutureProcess<T>(timeout: Duration? = null) : Process() {
-
-    private val name = ProcessRegistry.nextId()
-    val pid = ProcessRegistry.add(name, this)
-    private var cd: CompletableFuture<T> = CompletableFuture()
+    val pid = ProcessRegistry.add( ProcessRegistry.nextId(), this)
+    private var cd = CompletableFuture<T>()
     override fun sendUserMessage(pid: PID, message: Any) {
         val m = when (message) {
             is MessageEnvelope -> message.message
@@ -23,9 +21,7 @@ class FutureProcess<T>(timeout: Duration? = null) : Process() {
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
 
-    fun future(): Future<T> {
-        return cd
-    }
+    fun future(): Future<T> = cd
 }
 
 abstract class CompletableDeferred<out T> : Deferred<T> {
