@@ -2,10 +2,11 @@ package proto.tests
 
 import actor.proto.*
 import org.junit.Assert
+import org.junit.Test
 import java.time.Duration
 
 open class ReceiveTimeoutTests {
-    fun receive_timeout_received_within_expected_time () {
+    @Test fun receive_timeout_received_within_expected_time () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{ 
             val tmp = message
@@ -24,7 +25,7 @@ open class ReceiveTimeoutTests {
         Thread.sleep(1500)
         Assert.assertTrue(timeoutReceived)
     }
-    fun receive_timeout_not_received_within_expected_time () {
+    @Test fun receive_timeout_not_received_within_expected_time () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message
@@ -43,7 +44,7 @@ open class ReceiveTimeoutTests {
         Thread.sleep(1500)
         Assert.assertFalse(timeoutReceived)
     }
-    fun can_cancel_receive_timeout () {
+    @Test fun can_cancel_receive_timeout () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message
@@ -63,7 +64,7 @@ open class ReceiveTimeoutTests {
         Thread.sleep(1500)
         Assert.assertFalse(timeoutReceived)
     }
-    fun can_still_set_receive_timeout_after_cancelling () {
+    @Test  fun can_still_set_receive_timeout_after_cancelling () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message

@@ -3,9 +3,10 @@ package actor.proto.tests
 import actor.proto.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
+import org.junit.Test
 
 open class FutureTests {
-    fun given_Actor_When_AwaitrequestAwait_Should_ReturnReply() {
+    @Test fun given_Actor_When_AwaitrequestAwait_Should_ReturnReply() {
         val pid: PID = spawn(fromFunc {
             if (message is String) {
                 respond("hey")
@@ -18,7 +19,7 @@ open class FutureTests {
         }
     }
 
-    fun given_Actor_When_AwaitContext_requestAwait_Should_GetReply() {
+    @Test fun given_Actor_When_AwaitContext_requestAwait_Should_GetReply() {
         val pid1: PID = spawn(fromFunc {
             if (message is String) {
                 respond("hey")

@@ -5,10 +5,11 @@ import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
+import org.junit.Test
 import java.time.Duration
 
 open class WatchTests {
-    fun canWatchLocalActors () {
+    @Test fun canWatchLocalActors () {
         runBlocking {
             val watchee: PID = spawn(fromProducer { -> DoNothingActor() }.withMailbox { -> TestMailbox() })
             val watcher: PID = spawn(fromProducer { -> LocalActor(watchee) }.withMailbox { -> TestMailbox() })

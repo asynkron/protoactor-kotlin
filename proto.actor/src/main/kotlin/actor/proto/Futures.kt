@@ -4,12 +4,12 @@ import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.Deferred
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 @Suppress("UNUSED_PARAMETER")
-class FutureProcess<T>(timeout: Duration? = null) : Process() {
+class FutureProcess<T>(val timeout: Duration? = null) : Process() {
     val pid = ProcessRegistry.add( ProcessRegistry.nextId(), this)
-    private var cd = CompletableFuture<T>()
+    private val cd = CompletableFuture<T>()
     override fun sendUserMessage(pid: PID, message: Any) {
         val m = when (message) {
             is MessageEnvelope -> message.message
@@ -20,10 +20,10 @@ class FutureProcess<T>(timeout: Duration? = null) : Process() {
     }
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
-
-    fun future(): Future<T> = cd
-}
-
-abstract class CompletableDeferred<out T> : Deferred<T> {
-    abstract fun <T> set(value: T)
+    fun get(): T {
+      return when (timeout) {
+          null -> cd.get()
+          else -> cd.get(timeout.toMillis(),TimeUnit.MILLISECONDS)
+      }
+    }
 }

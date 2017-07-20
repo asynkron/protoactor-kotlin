@@ -9,13 +9,14 @@ import actor.proto.fixture.TestDispatcher
 import actor.proto.fixture.TestMailbox
 import actor.proto.mailbox.Mailbox
 import org.junit.Assert
+import org.junit.Test
 
 object NullActor : Actor{
     suspend override fun receive(context: Context) {
     }
 }
 open class PropsTests {
-    fun given_Props_When_WithDispatcher_Then_mutate_Dispatcher () {
+    @Test fun given_Props_When_WithDispatcher_Then_mutate_Dispatcher () {
         val dispatcher : TestDispatcher = TestDispatcher()
         val props : Props = Props()
         val props2 : Props = props.withDispatcher(dispatcher)
@@ -27,7 +28,7 @@ open class PropsTests {
         Assert.assertEquals(props.producer, props2.producer)
         Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    fun given_Props_When_WithMailbox_Then_mutate_MailboxProducer () {
+    @Test fun given_Props_When_WithMailbox_Then_mutate_MailboxProducer () {
         val mailboxProducer : () -> Mailbox = { -> TestMailbox() }
         val props : Props = Props()
         val props2 : Props = props.withMailbox(mailboxProducer)
@@ -53,7 +54,7 @@ open class PropsTests {
 //        Assert.assertEquals(props.producer, props2.producer)
 //        Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
 //    }
-    fun given_Props_When_WithProducer_Then_mutate_Producer () {
+@Test fun given_Props_When_WithProducer_Then_mutate_Producer () {
         val producer : () -> Actor = { NullActor }
         val props : Props = Props()
         val props2 : Props = props.withProducer(producer)
@@ -65,7 +66,7 @@ open class PropsTests {
         Assert.assertNotEquals(props.producer, props2.producer)
         Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    fun given_Props_When_WithSpawner_Then_mutate_Spawner () {
+    @Test fun given_Props_When_WithSpawner_Then_mutate_Spawner () {
         val spawner : (String, Props, PID?) -> PID = { _, _, _ -> PID("abc","def")}
         val props : Props = Props()
         val props2 : Props = props.withSpawner(spawner)
@@ -76,7 +77,7 @@ open class PropsTests {
         Assert.assertEquals(props.producer, props2.producer)
         Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    fun given_Props_When_WithSupervisor_Then_mutate_SupervisorStrategy () {
+    @Test fun given_Props_When_WithSupervisor_Then_mutate_SupervisorStrategy () {
         val supervision : DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val props : Props = Props()
         val props2 : Props = props.withChildSupervisorStrategy(supervision)

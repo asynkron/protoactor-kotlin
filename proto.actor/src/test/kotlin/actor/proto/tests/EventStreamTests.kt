@@ -3,16 +3,17 @@ package actor.proto.tests
 import actor.proto.*
 import actor.proto.mailbox.Dispatchers
 import org.junit.Assert
+import org.junit.Test
 
 open class EventStreamTests {
-    fun eventStream_CanSubscribeToSpecificEventTypes () {
+    @Test fun eventStream_CanSubscribeToSpecificEventTypes () {
         var received : String = ""
         val eventStream = EventStreamImpl()
         eventStream.subscribe({theString -> received = theString as String})
         eventStream.publish("hello")
         Assert.assertEquals("hello", received)
     }
-    fun eventStream_CanSubscribeToAllEventTypes () {
+    @Test fun eventStream_CanSubscribeToAllEventTypes () {
         val receivedEvents = mutableListOf<Any>()
         val eventStream = EventStreamImpl()
         eventStream.subscribe({msg -> receivedEvents.add(msg)})
@@ -21,7 +22,7 @@ open class EventStreamTests {
         eventStream.publish(true)
         Assert.assertEquals(3, receivedEvents.count())
     }
-    fun eventStream_CanUnsubscribeFromEvents () {
+    @Test fun eventStream_CanUnsubscribeFromEvents () {
         val receivedEvents = mutableListOf<Any>()
         val eventStream = EventStreamImpl()
         val subscription  = eventStream.subscribe({msg -> receivedEvents.add(msg)})
@@ -30,18 +31,17 @@ open class EventStreamTests {
         eventStream.publish("second message")
         Assert.assertEquals(1, receivedEvents.count())
     }
-    fun eventStream_OnlyReceiveSubscribedToEventTypes () {
+    @Test fun eventStream_OnlyReceiveSubscribedToEventTypes () {
         val eventsReceived = mutableListOf<Any>()
         val eventStream = EventStreamImpl()
-        eventStream.subscribe({msg -> eventsReceived.add(msg)})
+        eventStream.subscribe({ eventsReceived.add(it)})
         eventStream.publish("not an int")
         Assert.assertEquals(0, eventsReceived.count())
     }
-    fun eventStream_CanSubscribeToSpecificEventTypes_Async () {
-        var received : String = ""
+    @Test fun eventStream_CanSubscribeToSpecificEventTypes_Async () {
         val eventStream = EventStreamImpl()
         eventStream.subscribe({theString ->
-            received = theString as String
+            val received = theString as String
             Assert.assertEquals("hello", received)
         }, Dispatchers.DEFAULT_DISPATCHER)
         eventStream.publish("hello")

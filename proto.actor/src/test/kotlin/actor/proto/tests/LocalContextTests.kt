@@ -6,10 +6,11 @@ import actor.proto.Context
 import actor.proto.PID
 import actor.proto.fixture.DoNothingSupervisorStrategy
 import org.junit.Assert
+import org.junit.Test
 import java.time.Duration
 
 open class LocalContextTests {
-    fun given_Context_ctor_should_set_some_fields () {
+    @Test fun given_Context_ctor_should_set_some_fields () {
         val producer : () -> Actor = {NullActor}
         val supervisorStrategyMock : DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val middleware :  (Context) -> Unit =  { }
