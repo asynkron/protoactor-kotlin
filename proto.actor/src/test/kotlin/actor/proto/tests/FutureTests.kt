@@ -4,6 +4,7 @@ import actor.proto.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import kotlin.test.assertEquals
 
 class FutureTests {
     @Test fun given_Actor_When_AwaitrequestAwait_Should_ReturnReply() {
@@ -34,7 +35,7 @@ class FutureTests {
         })
         runBlocking {
             val reply2 = pid2.requestAwait<String>("hello")
-            Assert.assertEquals("hellohey", reply2)
+            assertEquals("hellohey", reply2)
         }
     }
 }

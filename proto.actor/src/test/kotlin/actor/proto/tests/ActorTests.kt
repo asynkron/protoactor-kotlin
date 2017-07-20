@@ -21,10 +21,9 @@ class ActorTests {
 
         runBlocking {
             val reply: Any = pid.requestAwait<Any>("hello")
-            Assert.assertEquals("hey", reply)
+            assertEquals("hey", reply)
         }
     }
-
 
     @Test fun requestActorAsync_should_raise_TimeoutException_when_timeout_is_reached() : Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
@@ -48,7 +47,7 @@ class ActorTests {
 
         runBlocking {
             val reply: Any = pid.requestAwait<Any>("hello", Duration.ofMillis(100))
-            Assert.assertEquals("hey", reply)
+            assertEquals("hey", reply)
         }
     }
 
@@ -60,11 +59,11 @@ class ActorTests {
         val pid: PID = spawn(prop)
         pid.send("hello")
         pid.stop()
-        Assert.assertEquals(4, messages.count())
+        assertEquals(4, messages.count())
         val messageArr: Array<Any> = messages.toTypedArray()
-        Assert.assertTrue(messageArr[0] is Started)
-        Assert.assertTrue(messageArr[1] is String)
-        Assert.assertTrue(messageArr[2] is Stopping)
-        Assert.assertTrue(messageArr[3] is Stopped)
+        assertTrue(messageArr[0] is Started)
+        assertTrue(messageArr[1] is String)
+        assertTrue(messageArr[2] is Stopping)
+        assertTrue(messageArr[3] is Stopped)
     }
 }

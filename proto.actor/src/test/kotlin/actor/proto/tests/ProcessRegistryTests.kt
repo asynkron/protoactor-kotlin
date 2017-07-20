@@ -6,6 +6,7 @@ import actor.proto.Process
 import actor.proto.ProcessRegistry
 import actor.proto.fixture.TestProcess
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
 
@@ -15,7 +16,7 @@ class ProcessRegistryTests {
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry
         val pid = reg.add(id, p)
-        Assert.assertEquals(reg.address, pid.address)
+        assertEquals(reg.address, pid.address)
     }
 
     @Test fun given_PIDExists_addShouldNotAddLocalPID() {
@@ -34,7 +35,7 @@ class ProcessRegistryTests {
         reg.add(id, p)
         val pid = reg.add(id, p)
         val p2: Process = reg.get(pid)
-        Assert.assertSame(p, p2)
+        assertSame(p, p2)
     }
 
     @Test fun given_PIDWasRemoved_GetShouldReturnDeadLetterProcess() {
@@ -44,7 +45,7 @@ class ProcessRegistryTests {
         val pid = reg.add(id, p)
         reg.remove(pid)
         val p2: Process = reg.get(pid)
-        Assert.assertSame(DeadLetterProcess, p2)
+        assertSame(DeadLetterProcess, p2)
     }
 
     @Test fun given_PIDExistsInHostResolver_GetShouldReturnIt() {
@@ -53,7 +54,7 @@ class ProcessRegistryTests {
         val reg: ProcessRegistry = ProcessRegistry
         reg.registerHostResolver { _ -> p }
         val p2: Process = reg.get(pid)
-        Assert.assertSame(p, p2)
+        assertSame(p, p2)
     }
 }
 

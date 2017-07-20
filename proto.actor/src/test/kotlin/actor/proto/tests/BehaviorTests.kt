@@ -4,6 +4,7 @@ import actor.proto.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import kotlin.test.*
 
 class BehaviorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
@@ -20,9 +21,9 @@ class BehaviorTests {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         var response: String = actor.requestAwait<String>(PressSwitch)
-        Assert.assertEquals("Smashed!", actor.requestAwait<String>(HitWithHammer))
-        Assert.assertEquals("Broken", actor.requestAwait<String>(PressSwitch))
-        Assert.assertEquals("OW!", actor.requestAwait<String>(Touch))
+        assertEquals("Smashed!", actor.requestAwait<String>(HitWithHammer))
+        assertEquals("Broken", actor.requestAwait<String>(PressSwitch))
+        assertEquals("OW!", actor.requestAwait<String>(Touch))
     }
 
     @Test fun pop_behavior_should_restore_pushed_behavior() = runBlocking {
@@ -39,9 +40,9 @@ class BehaviorTests {
         }
 
         val pid: PID = spawnActorFromFunc({ behavior.receive(it) })
-        Assert.assertEquals("number", pid.requestAwait<String>("number"))
-        Assert.assertEquals(42, pid.requestAwait<Int>(123))
-        Assert.assertEquals("answertolifetheuniverseandeverything", pid.requestAwait<String>("answertolifetheuniverseandeverything"))
+        assertEquals("number", pid.requestAwait<String>("number"))
+        assertEquals(42, pid.requestAwait<Int>(123))
+        assertEquals("answertolifetheuniverseandeverything", pid.requestAwait<String>("answertolifetheuniverseandeverything"))
     }
 }
 

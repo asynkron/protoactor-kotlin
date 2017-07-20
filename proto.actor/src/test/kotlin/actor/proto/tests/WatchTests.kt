@@ -5,6 +5,7 @@ import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import java.time.Duration
 
@@ -15,7 +16,7 @@ class WatchTests {
             val watcher: PID = spawn(fromProducer { LocalActor(watchee) }.withMailbox { TestMailbox() })
             watchee.stop()
             val terminatedMessageReceived: Boolean = watcher.requestAwait<Boolean>("?", Duration.ofSeconds(5))
-            Assert.assertTrue(terminatedMessageReceived)
+            assertTrue(terminatedMessageReceived)
         }
     }
 

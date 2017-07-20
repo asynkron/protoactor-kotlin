@@ -8,6 +8,9 @@ import actor.proto.fixture.DoNothingSupervisorStrategy
 import org.junit.Assert
 import org.junit.Test
 import java.time.Duration
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 class LocalContextTests {
     @Test fun given_Context_ctor_should_set_some_fields () {
@@ -16,11 +19,11 @@ class LocalContextTests {
         val middleware :  (Context) -> Unit =  { }
         val parent : PID = PID("test", "test")
         val context : ActorContext = ActorContext(producer, supervisorStrategyMock, middleware, null, parent)
-        Assert.assertEquals(parent, context.parent)
-        Assert.assertNull(context.sender)
-        Assert.assertNotNull(context.children)
-        Assert.assertEquals(context.children, setOf<PID>())
-        Assert.assertEquals(Duration.ZERO, context.getReceiveTimeout())
+        assertEquals(parent, context.parent)
+        assertNull(context.sender)
+        assertNotNull(context.children)
+        assertEquals(context.children, setOf<PID>())
+        assertEquals(Duration.ZERO, context.getReceiveTimeout())
     }
 }
 

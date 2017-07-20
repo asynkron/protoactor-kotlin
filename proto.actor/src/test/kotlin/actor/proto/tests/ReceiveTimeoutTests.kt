@@ -2,6 +2,7 @@ package proto.tests
 
 import actor.proto.*
 import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Test
 import java.time.Duration
 
@@ -23,7 +24,7 @@ class ReceiveTimeoutTests {
 
         spawn(props)
         Thread.sleep(1500)
-        Assert.assertTrue(timeoutReceived)
+        assertTrue(timeoutReceived)
     }
     @Test fun receive_timeout_not_received_within_expected_time () {
         var timeoutReceived : Boolean = false
@@ -42,7 +43,7 @@ class ReceiveTimeoutTests {
 
         spawn(props)
         Thread.sleep(1500)
-        Assert.assertFalse(timeoutReceived)
+        assertFalse(timeoutReceived)
     }
     @Test fun can_cancel_receive_timeout () {
         var timeoutReceived : Boolean = false
@@ -62,7 +63,7 @@ class ReceiveTimeoutTests {
 
         spawn(props)
         Thread.sleep(1500)
-        Assert.assertFalse(timeoutReceived)
+        assertFalse(timeoutReceived)
     }
     @Test  fun can_still_set_receive_timeout_after_cancelling () {
         var timeoutReceived : Boolean = false
@@ -83,7 +84,7 @@ class ReceiveTimeoutTests {
 
         spawn(props)
         Thread.sleep(1500)
-        Assert.assertTrue(timeoutReceived)
+        assertTrue(timeoutReceived)
     }
 }
 
