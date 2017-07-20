@@ -25,7 +25,7 @@ class ActorTests {
         }
     }
 
-    @Test fun requestActorAsync_should_raise_TimeoutException_when_timeout_is_reached() : Unit {
+    @Test fun `request actor async should raise timeout exception when timeout is reached`() : Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
 
         assertFailsWith<TimeoutException> {
@@ -35,10 +35,7 @@ class ActorTests {
         }
     }
 
-
-    //Assert.assertEquals("Request didn't receive any Response within the expected time.", timeoutEx.message)
-//}
-    @Test fun requestActorAsync_should_not_raise_TimeoutException_when_result_is_first() : Unit {
+    @Test fun `request actor async should not raise timeout exception when result is first`() : Unit {
         val pid: PID = spawnActorFromFunc { ctx ->
             when (ctx.message) {
                 is String -> ctx.respond("hey")

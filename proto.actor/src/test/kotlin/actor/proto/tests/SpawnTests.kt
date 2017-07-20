@@ -10,7 +10,7 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SpawnTests {
-    @Test fun given_PropsWithSpawner_SpawnShouldReturnPidCreatedBySpawner () {
+    @Test fun `given props with spawner spawn should return pid created by spawner`() {
         val spawnedPid : PID = PID("test", "test")
         val props : Props = fromFunc(EmptyReceive).withSpawner{ _, _, _ -> spawnedPid}
         val pid : PID = spawn(props)

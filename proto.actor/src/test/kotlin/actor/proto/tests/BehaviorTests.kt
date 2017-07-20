@@ -8,7 +8,7 @@ import kotlin.test.*
 
 class BehaviorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
-    @Test fun can_change_states() = runBlocking {
+    @Test fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         Assert.assertEquals("Turning on", actor.requestAwait<String>(PressSwitch))
@@ -17,7 +17,7 @@ class BehaviorTests {
         Assert.assertEquals("Cold", actor.requestAwait<String>(Touch))
     }
 
-    @Test fun can_use_global_behaviour() = runBlocking {
+    @Test fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         var response: String = actor.requestAwait<String>(PressSwitch)
@@ -26,7 +26,7 @@ class BehaviorTests {
         assertEquals("OW!", actor.requestAwait<String>(Touch))
     }
 
-    @Test fun pop_behavior_should_restore_pushed_behavior() = runBlocking {
+    @Test fun `pop behavior should restore pushed behavior`() = runBlocking {
         val behavior: Behavior = Behavior()
         behavior.become { ctx ->
             if (ctx.message is String) {

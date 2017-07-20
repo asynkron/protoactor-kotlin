@@ -7,7 +7,7 @@ import org.junit.Test
 import java.time.Duration
 
 class ReceiveTimeoutTests {
-    @Test fun receive_timeout_received_within_expected_time () {
+    @Test fun `receive timeout received within expected time`() {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{ 
             val tmp = message
@@ -26,7 +26,7 @@ class ReceiveTimeoutTests {
         Thread.sleep(1500)
         assertTrue(timeoutReceived)
     }
-    @Test fun receive_timeout_not_received_within_expected_time () {
+    @Test fun `receive timeout not received within expected_time` () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message
@@ -45,7 +45,7 @@ class ReceiveTimeoutTests {
         Thread.sleep(1500)
         assertFalse(timeoutReceived)
     }
-    @Test fun can_cancel_receive_timeout () {
+    @Test fun `can cancel receive timeout` () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message
@@ -65,7 +65,7 @@ class ReceiveTimeoutTests {
         Thread.sleep(1500)
         assertFalse(timeoutReceived)
     }
-    @Test  fun can_still_set_receive_timeout_after_cancelling () {
+    @Test  fun `can still set receive timeout after cancelling` () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{
             val tmp = message

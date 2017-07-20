@@ -10,7 +10,7 @@ import org.junit.Test
 import java.time.Duration
 
 class WatchTests {
-    @Test fun canWatchLocalActors () {
+    @Test fun `can watch local actors` () {
         runBlocking {
             val watchee: PID = spawn(fromProducer { DoNothingActor() }.withMailbox { TestMailbox() })
             val watcher: PID = spawn(fromProducer { LocalActor(watchee) }.withMailbox { TestMailbox() })

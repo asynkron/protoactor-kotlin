@@ -7,12 +7,11 @@ import org.junit.Test
 import kotlin.test.assertEquals
 
 class FutureTests {
-    @Test fun given_Actor_When_AwaitrequestAwait_Should_ReturnReply() {
+    @Test fun `given actor when requestAwait should return reply`() {
         val pid: PID = spawn(fromFunc {
             if (message is String) {
                 respond("hey")
             }
-
         })
         runBlocking {
             val reply: Any = pid.requestAwait<Any>("hello")
@@ -20,7 +19,7 @@ class FutureTests {
         }
     }
 
-    @Test fun given_Actor_When_AwaitContext_requestAwait_Should_GetReply() {
+    @Test fun `given actor when await context_requestAwait should get reply`() {
         val pid1: PID = spawn(fromFunc {
             if (message is String) {
                 respond("hey")

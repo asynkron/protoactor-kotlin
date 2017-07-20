@@ -30,7 +30,9 @@ object ProcessRegistry {
     fun add(id: String, process: Process): PID {
         val pid = PID(address, id)
         pid.cachedProcess_ = process //we know what pid points to what process here
-        processLookup.put(pid.id, process)
+        if (processLookup.put(pid.id, process)){
+            throw ProcessNameExistException(id)
+        }
         return pid
     }
 

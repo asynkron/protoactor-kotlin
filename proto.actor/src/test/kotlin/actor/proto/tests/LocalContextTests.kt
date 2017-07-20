@@ -13,7 +13,7 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class LocalContextTests {
-    @Test fun given_Context_ctor_should_set_some_fields () {
+    @Test fun `given context ctor should set required fields`() {
         val producer : () -> Actor = {NullActor}
         val supervisorStrategyMock : DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val middleware :  (Context) -> Unit =  { }

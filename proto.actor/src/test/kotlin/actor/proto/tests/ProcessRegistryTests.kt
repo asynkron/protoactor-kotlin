@@ -1,17 +1,15 @@
 package proto.tests
 
-import actor.proto.DeadLetterProcess
-import actor.proto.PID
-import actor.proto.Process
-import actor.proto.ProcessRegistry
+import actor.proto.*
 import actor.proto.fixture.TestProcess
 import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
 import java.util.*
+import kotlin.test.*
 
 class ProcessRegistryTests {
-    @Test fun given_PIDDoesNotExist_addShouldAddLocalPID() {
+    @Test fun `given pid does not exist, add should add local pid`() {
         val id: String = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry
@@ -19,26 +17,27 @@ class ProcessRegistryTests {
         assertEquals(reg.address, pid.address)
     }
 
-    @Test fun given_PIDExists_addShouldNotAddLocalPID() {
+    @Test fun `given pid exists, add should not add local pid`() {
         val id: String = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry
         reg.add(id, p)
-        val pid = reg.add(id, p)
-        //throw
+
+        assertFailsWith<ProcessNameExistException> {
+            val pid = reg.add(id, p)
+        }
     }
 
-    @Test fun given_PIDExists_GetShouldReturnIt() {
+    @Test fun `given pid exists, get should return it`() {
         val id: String = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry
-        reg.add(id, p)
         val pid = reg.add(id, p)
         val p2: Process = reg.get(pid)
         assertSame(p, p2)
     }
 
-    @Test fun given_PIDWasRemoved_GetShouldReturnDeadLetterProcess() {
+    @Test fun `given pid was removed, get should return deadLetter process`() {
         val id: String = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry
@@ -48,7 +47,7 @@ class ProcessRegistryTests {
         assertSame(DeadLetterProcess, p2)
     }
 
-    @Test fun given_PIDExistsInHostResolver_GetShouldReturnIt() {
+    @Test fun `given pid exists in host resolver, get should return it`() {
         val pid: PID = PID("abc", "def")
         val p: TestProcess = TestProcess()
         val reg: ProcessRegistry = ProcessRegistry

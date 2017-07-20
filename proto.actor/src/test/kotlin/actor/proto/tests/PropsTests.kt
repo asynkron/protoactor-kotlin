@@ -17,7 +17,7 @@ object NullActor : Actor{
     }
 }
 class PropsTests {
-    @Test fun given_Props_When_WithDispatcher_Then_mutate_Dispatcher () {
+    @Test fun `given props when withDispatcher then mutate dispatcher`() {
         val dispatcher : TestDispatcher = TestDispatcher()
         val props : Props = Props()
         val props2 : Props = props.withDispatcher(dispatcher)
@@ -29,7 +29,7 @@ class PropsTests {
         assertEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    @Test fun given_Props_When_WithMailbox_Then_mutate_MailboxProducer () {
+    @Test fun `given props when withMailbox then mutate mailboxProducer`() {
         val mailboxProducer : () -> Mailbox = { TestMailbox() }
         val props : Props = Props()
         val props2 : Props = props.withMailbox(mailboxProducer)
@@ -55,7 +55,7 @@ class PropsTests {
 //        Assert.assertEquals(props.producer, props2.producer)
 //        Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
 //    }
-@Test fun given_Props_When_WithProducer_Then_mutate_Producer () {
+@Test fun `given props when withProducer then mutate producer`() {
         val producer : () -> Actor = { NullActor }
         val props : Props = Props()
         val props2 : Props = props.withProducer(producer)
@@ -67,7 +67,7 @@ class PropsTests {
         assertNotEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    @Test fun given_Props_When_WithSpawner_Then_mutate_Spawner () {
+    @Test fun `given props when withSpawner then mutate spawner`() {
         val spawner : (String, Props, PID?) -> PID = { _, _, _ -> PID("abc","def")}
         val props : Props = Props()
         val props2 : Props = props.withSpawner(spawner)
@@ -78,7 +78,7 @@ class PropsTests {
         assertEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
-    @Test fun given_Props_When_WithSupervisor_Then_mutate_SupervisorStrategy () {
+    @Test fun `given props when withSupervisor then mutate supervisorStrategy`() {
         val supervision : DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val props : Props = Props()
         val props2 : Props = props.withChildSupervisorStrategy(supervision)
