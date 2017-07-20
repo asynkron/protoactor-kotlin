@@ -7,7 +7,7 @@ import actor.proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, private val receiveMiddleware: ((Context) -> Unit)?, private val senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)?, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
+class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, receiveMiddleware: List<ReceiveMiddleware>, senderMiddleware: List<SenderMiddleware>, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
     override var children: Set<PID> = setOf()
     private var watchers: Set<PID> = setOf()
     private var _receiveTimeoutTimer: AsyncTimer? = null
@@ -17,6 +17,20 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     override lateinit var actor: Actor
     override lateinit var self: PID
     private var _message: Any = NullMessage
+    private val receiveMiddleware : Receive? = when {
+        receiveMiddleware.isEmpty() -> null
+        else -> receiveMiddleware
+                .reversed()
+                .fold({ctx -> ContextHelper.defaultReceive(ctx)},
+                        { inner, outer -> outer(inner!!) })
+    }
+    private val senderMiddleware : Send? = when {
+        senderMiddleware.isEmpty() -> null
+        else -> senderMiddleware
+                .reversed()
+                .fold({ ctx, targetPid, envelope -> ContextHelper.defaultSender(ctx,targetPid,envelope)},
+                        { inner, outer -> outer(inner!!) })
+    }
 
     override val message: Any
         get() = _message.let {
@@ -88,9 +102,9 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     suspend override fun receive(message: Any): Unit = processMessage(message)
 
-    override fun send(target: PID, message: Any) = sendUserMessage(target, message)
+    suspend override fun send(target: PID, message: Any) = sendUserMessage(target, message)
 
-    override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
+    suspend override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
     suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, FutureProcess(timeout))
 
@@ -168,7 +182,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         return future.get()
     }
 
-    private fun sendUserMessage(target: PID, message: Any) {
+    suspend private fun sendUserMessage(target: PID, message: Any) {
         when (senderMiddleware) {
             null -> target.send(message)
             else -> when (message) {
@@ -255,9 +269,9 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         while (stash.isNotEmpty()) invokeUserMessage(stash.pop())
     }
 
-
     init {
         incarnateActor()
     }
+
 }
 

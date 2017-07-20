@@ -20,8 +20,8 @@ interface Context {
     fun getReceiveTimeout(): Duration
     fun cancelReceiveTimeout()
     suspend fun receive(message: Any): Unit
-    fun send(target: PID, message: Any)
-    fun request(target: PID, message: Any)
+    suspend fun send(target: PID, message: Any)
+    suspend fun request(target: PID, message: Any)
 
     suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T
     suspend fun <T> requestAwait(target: PID, message: Any): T

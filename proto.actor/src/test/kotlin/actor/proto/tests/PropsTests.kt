@@ -26,7 +26,7 @@ class PropsTests {
         assertEquals(dispatcher, props2.dispatcher)
         assertNotEquals(props.dispatcher, props2.dispatcher)
         assertEquals(props.mailboxProducer, props2.mailboxProducer)
-        assertEquals(props.receiveMiddlewareChain, props2.receiveMiddlewareChain)
+        assertEquals(props.receiveMiddleware, props2.receiveMiddleware)
         assertEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
@@ -39,7 +39,7 @@ class PropsTests {
         assertEquals(mailboxProducer, props2.mailboxProducer)
         assertEquals(props.dispatcher, props2.dispatcher)
         assertNotEquals(props.mailboxProducer, props2.mailboxProducer)
-        assertEquals(props.receiveMiddlewareChain, props2.receiveMiddlewareChain)
+        assertEquals(props.receiveMiddleware, props2.receiveMiddleware)
         assertEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
@@ -66,7 +66,7 @@ class PropsTests {
         assertEquals(producer, props2.producer)
         assertEquals(props.dispatcher, props2.dispatcher)
         assertEquals(props.mailboxProducer, props2.mailboxProducer)
-        assertEquals(props.receiveMiddlewareChain, props2.receiveMiddlewareChain)
+        assertEquals(props.receiveMiddleware, props2.receiveMiddleware)
         assertNotEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
@@ -78,7 +78,7 @@ class PropsTests {
         assertNotEquals(props, props2)
         assertEquals(props.dispatcher, props2.dispatcher)
         assertEquals(props.mailboxProducer, props2.mailboxProducer)
-        assertEquals(props.receiveMiddlewareChain, props2.receiveMiddlewareChain)
+        assertEquals(props.receiveMiddleware, props2.receiveMiddleware)
         assertEquals(props.producer, props2.producer)
         assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
@@ -91,7 +91,7 @@ class PropsTests {
         assertEquals(supervision, props2.supervisorStrategy)
         assertEquals(props.dispatcher, props2.dispatcher)
         assertEquals(props.mailboxProducer, props2.mailboxProducer)
-        assertEquals(props.receiveMiddlewareChain, props2.receiveMiddlewareChain)
+        assertEquals(props.receiveMiddleware, props2.receiveMiddleware)
         assertEquals(props.producer, props2.producer)
         assertNotEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }

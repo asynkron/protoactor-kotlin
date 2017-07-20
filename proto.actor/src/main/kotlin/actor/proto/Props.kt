@@ -4,37 +4,32 @@ import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.Mailbox
 import actor.proto.mailbox.unboundedMailbox
 
+typealias Receive = suspend (Context) -> Unit
+typealias Send = suspend (SenderContext, PID, MessageEnvelope) -> Unit
+
+typealias ReceiveMiddleware = (Receive) -> Receive
+typealias SenderMiddleware = (Send) -> Send
 data class Props(
         private val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
         val producer: (() -> Actor)? = null,
         val mailboxProducer: () -> Mailbox = { unboundedMailbox() },
         val supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy,
         val dispatcher: Dispatcher = actor.proto.mailbox.Dispatchers.DEFAULT_DISPATCHER,
-        private val receiveMiddleware: List<((Context) -> Unit) -> (Context) -> Unit> = listOf(),
-        private val senderMiddleware: List<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit> = listOf(),
-        val receiveMiddlewareChain: ((Context) -> Unit)? = null,
-        val senderMiddlewareChain: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
+        val receiveMiddleware: List<ReceiveMiddleware> = listOf(),
+        val senderMiddleware: List<SenderMiddleware> = listOf()
 ) {
     fun withProducer(producer: () -> Actor): Props = copy(producer = producer)
     fun withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
     fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
     fun withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
-    fun withReceiveMiddleware(middleware: Array<((Context) -> Unit) -> (Context) -> Unit>): Props = copy(
-            receiveMiddleware = (middleware).toList())
-    // props.receiveMiddlewareChain = (ReceiveLocalContext.defaultReceive, { inner, outer -> outer(inner) })
-
-
-    fun withSenderMiddleware(middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>): Props = copy(
-            senderMiddleware = (middleware).toList())
-    //props.senderMiddlewareChain = (SenderLocalContext.defaultSender, { inner, outer -> outer(inner) })
-
-
+    fun withReceiveMiddleware (vararg middleware : ReceiveMiddleware) : Props = copy(receiveMiddleware = middleware.toList())
+    fun withSenderMiddleware (vararg middleware : SenderMiddleware) : Props = copy (senderMiddleware = middleware.toList())
     fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy(spawner = spawner)
     internal fun spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
 }
 
 fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
-    val ctx = ActorContext(props.producer!!, props.supervisorStrategy, props.receiveMiddlewareChain, props.senderMiddlewareChain, parent)
+    val ctx = ActorContext(props.producer!!, props.supervisorStrategy, props.receiveMiddleware, props.senderMiddleware, parent)
     val mailbox = props.mailboxProducer()
     val dispatcher = props.dispatcher
     val process = LocalProcess(mailbox)
