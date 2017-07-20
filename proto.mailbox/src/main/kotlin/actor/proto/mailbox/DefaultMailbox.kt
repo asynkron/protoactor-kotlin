@@ -32,17 +32,6 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
     }
 
     private suspend fun run() {
-        processMessages()
-
-        status.set(MailboxStatus.Idle)
-        if (systemMessages.hasMessages || (!suspended && userMailbox.hasMessages)) {
-            schedule()
-        } else {
-            for (stat in stats) stat.mailboxEmpty()
-        }
-    }
-
-    private suspend fun processMessages() {
         var msg: Any? = null
         try {
             for (i in 0 until dispatcher.throughput) {
@@ -57,17 +46,22 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
                 }
                 if (!suspended) {
                     msg = userMailbox.pop()
-                    when (msg) {
-                        null -> return
-                        else -> {
-                            invoker.invokeUserMessage(msg)
-                            for (stat in stats) stat.messageReceived(msg)
-                        }
+                    if (msg == null) break
+                    else {
+                        invoker.invokeUserMessage(msg)
+                        for (stat in stats) stat.messageReceived(msg)
                     }
                 }
             }
         } catch (e: Exception) {
             if (msg != null) invoker.escalateFailure(e, msg)
+        }
+
+        status.set(MailboxStatus.Idle)
+        if (systemMessages.hasMessages || (!suspended && userMailbox.hasMessages)) {
+            schedule()
+        } else {
+            for (stat in stats) stat.mailboxEmpty()
         }
     }
 

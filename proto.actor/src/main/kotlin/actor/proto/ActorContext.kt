@@ -165,23 +165,24 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
         if (receiveTimeout > Duration.ZERO && msg !is NotInfluenceReceiveTimeout) {
             _receiveTimeoutTimer?.reset()
         }
-        processMessage(msg)
+        return processMessage(msg)
     }
 
     suspend override fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
 
-    suspend private fun processMessage(msg: Any): Unit {
-        _message = msg
-        return when {
-            receiveMiddleware != null -> receiveMiddleware.invoke(this)
-            else -> ContextHelper.defaultReceive(this)
-        }
-    }
 //    suspend private fun processMessage(msg: Any): Unit {
 //        _message = msg
-//        if (receiveMiddleware != null) receiveMiddleware.invoke(this)
-//        else ContextHelper.defaultReceive(this)
+//        return when {
+//            receiveMiddleware != null -> receiveMiddleware.invoke(this)
+//            else -> ContextHelper.defaultReceive(this)
+//        }
 //    }
+    //For some reason this is a lot slower than the above.... be careful :-)
+    suspend private fun processMessage(msg: Any): Unit {
+        _message = msg
+        return if (receiveMiddleware != null) receiveMiddleware.invoke(this)
+        else ContextHelper.defaultReceive(this)
+    }
 
     suspend private fun <T> requestAwait(target: PID, message: Any, future: FutureProcess<T>): T {
         val messageEnvelope: MessageEnvelope = MessageEnvelope(message, future.pid, null)
