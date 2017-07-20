@@ -14,7 +14,7 @@ object ProcessRegistry {
         hostResolvers.add(resolver)
     }
 
-    fun get(id:String):Process = processLookup.getOrDefault(id, DeadLetterProcess)
+    fun get(id: String): Process = processLookup.getOrDefault(id, DeadLetterProcess)
     fun get(pid: PID): Process {
         if (pid.address != NoHost && pid.address != address) {
             hostResolvers
@@ -30,7 +30,7 @@ object ProcessRegistry {
     fun add(id: String, process: Process): PID {
         val pid = PID(address, id)
         pid.cachedProcess_ = process //we know what pid points to what process here
-        if (processLookup.put(pid.id, process)){
+        if (processLookup.put(pid.id, process)) {
             throw ProcessNameExistException(id)
         }
         return pid

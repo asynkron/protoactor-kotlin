@@ -4,7 +4,7 @@ import actor.proto.*
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import kotlin.test.*
+import kotlin.test.assertEquals
 
 class BehaviorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
@@ -48,31 +48,33 @@ class BehaviorTests {
 
 
 class LightBulb : Actor {
-    private val _behavior : Behavior = Behavior()
-    private var _smashed : Boolean = false
-    private suspend fun off (context : Context) {
+    private val _behavior: Behavior = Behavior()
+    private var _smashed: Boolean = false
+    private suspend fun off(context: Context) {
         when (context.message) {
             is PressSwitch -> {
                 context.respond("Turning on")
-                _behavior.become{on(it)}
+                _behavior.become { on(it) }
             }
             is Touch -> {
                 context.respond("Cold")
             }
         }
     }
-    private suspend fun on (context : Context) {
+
+    private suspend fun on(context: Context) {
         when (context.message) {
             is PressSwitch -> {
                 context.respond("Turning off")
-                _behavior.become{off(it)}
+                _behavior.become { off(it) }
             }
             is Touch -> {
                 context.respond("Hot!")
             }
         }
     }
-    suspend override fun receive (context : Context) {
+
+    suspend override fun receive(context: Context) {
         when (context.message) {
             is HitWithHammer -> {
                 context.respond("Smashed!")
@@ -83,7 +85,7 @@ class LightBulb : Actor {
                 context.respond("Broken")
                 return
             }
-            is Touch ->  if (_smashed) {
+            is Touch -> if (_smashed) {
                 context.respond("OW!")
                 return
             }
@@ -92,7 +94,7 @@ class LightBulb : Actor {
     }
 
     init {
-        _behavior.become{off(it)}
+        _behavior.become { off(it) }
     }
 }
 

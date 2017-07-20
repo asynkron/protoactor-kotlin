@@ -2,19 +2,19 @@ package actor.proto.remote
 
 import actor.proto.*
 
-fun main(args : Array<String>) {
-    Remote.start("localhost",8080)
+fun main(args: Array<String>) {
+    Remote.start("localhost", 8080)
     val props = fromFunc {
         val m = message
-        when(m) {
+        when (m) {
             is Started -> println("Starting actor")
             is PID -> {
                 println("Got message " + m.id)
-                m.send(PID("HELLO","WORLD"))
+                m.send(PID("HELLO", "WORLD"))
             }
         }
     }
-    spawnNamed(props,"kotlin")
+    spawnNamed(props, "kotlin")
     readLine()
 //    val p = PID("abc","def")
 //    val bytes = Serialization.serialize(p,0)

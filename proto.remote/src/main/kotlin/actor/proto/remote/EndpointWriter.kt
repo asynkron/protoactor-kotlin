@@ -69,7 +69,7 @@ class EndpointWriter(private val address: String) : Actor {
     private suspend fun stopped() = channel.shutdownNow()
     private suspend fun started() {
         println("Connecting to address $address")
-        val (host,port) = parseAddress(address)
+        val (host, port) = parseAddress(address)
         channel = ManagedChannelBuilder
                 .forAddress(host, port)
                 .usePlaintext(true)

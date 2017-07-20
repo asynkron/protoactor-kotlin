@@ -26,7 +26,7 @@ internal class HashedConcurrentDictionary {
 
     fun put(key: String, reff: Process): Boolean {
         val p = getPartition(key)
-        return p.putIfAbsent(key,reff)!=null
+        return p.putIfAbsent(key, reff) != null
     }
 
     fun tryGetValue(key: String): Process? {

@@ -1,4 +1,5 @@
 package actor.proto.tests
+
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
@@ -13,7 +14,7 @@ import kotlin.test.assertTrue
 
 class ActorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
-    @Test fun requestActorAsync() : Unit {
+    @Test fun requestActorAsync(): Unit {
         val pid: PID = spawnActorFromFunc { ctx ->
             when (ctx.message) {
                 is String -> ctx.respond("hey")
@@ -26,7 +27,7 @@ class ActorTests {
         }
     }
 
-    @Test fun `request actor async should raise timeout exception when timeout is reached`() : Unit {
+    @Test fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
 
         assertFailsWith<TimeoutException> {
@@ -36,7 +37,7 @@ class ActorTests {
         }
     }
 
-    @Test fun `request actor async should not raise timeout exception when result is first`() : Unit {
+    @Test fun `request actor async should not raise timeout exception when result is first`(): Unit {
         val pid: PID = spawnActorFromFunc { ctx ->
             when (ctx.message) {
                 is String -> ctx.respond("hey")
@@ -49,7 +50,7 @@ class ActorTests {
         }
     }
 
-    @Test fun actorLifeCycle() : Unit {
+    @Test fun actorLifeCycle(): Unit {
         val messages: Queue<Any> = ArrayDeque<Any>()
         val prop = fromFunc {
             messages.offer(message)

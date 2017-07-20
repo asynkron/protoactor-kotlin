@@ -14,8 +14,8 @@ private fun runOnce() {
     val (cd, managerPid: PID) = spawnManager()
     managerPid.send(Begin)
     cd.await()
-    System.gc ()
-    System.runFinalization ()
+    System.gc()
+    System.runFinalization()
 }
 
 private fun spawnManager(): Pair<CountDownLatch, PID> {
@@ -43,10 +43,10 @@ private fun spawnManager(): Pair<CountDownLatch, PID> {
 }
 
 object Begin
-data class Request(val div: Long, val num: Long, val size: Long, val respondTo : PID)
+data class Request(val div: Long, val num: Long, val size: Long, val respondTo: PID)
 
 class SpawnActor : Actor {
-    companion object Foo{
+    companion object Foo {
         private fun produce() = SpawnActor()
         val props: Props = fromProducer(SpawnActor.Foo::produce)
     }

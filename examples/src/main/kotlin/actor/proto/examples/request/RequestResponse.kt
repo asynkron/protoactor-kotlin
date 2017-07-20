@@ -1,6 +1,8 @@
 package actor.proto.examples.request
 
-import actor.proto.*
+import actor.proto.fromFunc
+import actor.proto.requestAwait
+import actor.proto.spawn
 import kotlinx.coroutines.experimental.runBlocking
 
 fun main(args: Array<String>) = runBlocking {

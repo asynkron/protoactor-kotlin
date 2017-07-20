@@ -9,7 +9,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.lang.System.currentTimeMillis
 import java.util.concurrent.CountDownLatch
 
-fun main (args : Array<String>) {
+fun main(args: Array<String>) {
 
     registerFileDescriptor(Messages.getDescriptor())
     Remote.start("127.0.0.1", 0)

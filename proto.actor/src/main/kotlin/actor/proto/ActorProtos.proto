@@ -9,7 +9,8 @@ message PID {
 }
 
 //user messages
-message PoisonPill {}
+message PoisonPill {
+}
 
 //system messages
 message Watch {
@@ -25,4 +26,5 @@ message Terminated {
     bool AddressTerminated = 2;
 }
 
-message Stop {}
+message Stop {
+}

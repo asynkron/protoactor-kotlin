@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
             is String -> println("Got message ${self.toShortString()} $message")
         }
     }
-    val config = newRoundRobinPool(prop,5)
+    val config = newRoundRobinPool(prop, 5)
     val routerPid = spawn(config)
     repeat(10) {
         routerPid.send("hello")

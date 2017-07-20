@@ -1,6 +1,9 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.PID
+import actor.proto.fromFunc
+import actor.proto.requestAwait
+import actor.proto.spawn
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -26,7 +29,7 @@ class FutureTests {
             }
         })
         val pid2: PID = spawn(fromFunc {
-            val m=message
+            val m = message
             if (m is String) {
                 val reply1 = requestAwait<String>(pid1, "")
                 respond(m + reply1)

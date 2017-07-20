@@ -4,12 +4,12 @@ import actor.proto.*
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.experimental.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration
 
 class WatchTests {
-    @Test fun `can watch local actors` () {
+    @Test fun canWatchLocalActors() {
         runBlocking {
             val watchee: PID = spawn(fromProducer { DoNothingActor() }.withMailbox { TestMailbox() })
             val watcher: PID = spawn(fromProducer { LocalActor(watchee) }.withMailbox { TestMailbox() })
@@ -20,9 +20,9 @@ class WatchTests {
     }
 
     class LocalActor(watchee: PID) : Actor {
-        private val _watchee : PID = watchee
-        private var _terminateReceived : Boolean = false
-        suspend override fun receive (context : Context) {
+        private val _watchee: PID = watchee
+        private var _terminateReceived: Boolean = false
+        suspend override fun receive(context: Context) {
             when (context.message) {
                 is Started -> context.watch(_watchee)
                 is String -> context.respond(_terminateReceived)

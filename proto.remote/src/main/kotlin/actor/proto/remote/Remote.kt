@@ -40,7 +40,7 @@ object Remote {
 
     private fun spawnEndpointManager(config: RemoteConfig) {
         val props = fromProducer { EndpointManager(config) }
-        endpointManagerPid = spawnNamed(props,"endpointmanager")
+        endpointManagerPid = spawnNamed(props, "endpointmanager")
         EventStream.subscribe({
             if (it is EndpointTerminatedEvent) {
                 endpointManagerPid.send(it)

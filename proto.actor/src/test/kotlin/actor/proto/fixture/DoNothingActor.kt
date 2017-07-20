@@ -4,6 +4,6 @@ import actor.proto.Actor
 import actor.proto.Context
 
 class DoNothingActor : Actor {
-    suspend override fun receive (context : Context) {}
+    suspend override fun receive(context: Context) {}
 }
 

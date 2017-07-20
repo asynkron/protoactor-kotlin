@@ -1,13 +1,16 @@
 syntax = "proto3";
 package messages;
-option java_package="actor.proto.examples.remotebenchmark";
-option java_outer_classname="Messages";
+option java_package = "actor.proto.examples.remotebenchmark";
+option java_outer_classname = "Messages";
 
 import "ActorProtos.proto";
 
-message Start {}
+message Start {
+}
 message StartRemote {
     actor.PID Sender = 1;
 }
-message Ping {}
-message Pong {}
+message Ping {
+}
+message Pong {
+}

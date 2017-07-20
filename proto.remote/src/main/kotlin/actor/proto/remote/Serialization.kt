@@ -37,18 +37,18 @@ object Serialization {
             val outer = if (fd.options.javaOuterClassname == "") fd.name.split('.')[0] else fd.options.javaOuterClassname
             val className = "${fd.options.javaPackage}.$outer$${msg.name}"
             val clazz = Thread.currentThread().contextClassLoader.loadClass(className)
-            val parserField : Field = clazz.getDeclaredField("PARSER")
+            val parserField: Field = clazz.getDeclaredField("PARSER")
             parserField.isAccessible = true
             @Suppress("UNCHECKED_CAST")
             val parser = parserField.get(null) as Parser<Message>
-            parserLookup.put(msg.fullName,parser)
+            parserLookup.put(msg.fullName, parser)
         }
     }
 
     fun serialize(message: Any, serializerId: Int): ByteString = Serializers[serializerId].serialize(message)
     fun getTypeName(message: Any, serializerId: Int): String = Serializers[serializerId].getTypeName(message)
     fun deserialize(typeName: String, bytes: ByteString, serializerId: Int): Any = Serializers[serializerId].deserialize(bytes, typeName)
-    fun  getMessageBuilder(typeName: Any): Message.Builder? {
+    fun getMessageBuilder(typeName: Any): Message.Builder? {
         return null
     }
 

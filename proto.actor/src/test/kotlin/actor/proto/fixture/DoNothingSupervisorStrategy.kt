@@ -6,7 +6,7 @@ import actor.proto.Supervisor
 import actor.proto.SupervisorStrategy
 
 class DoNothingSupervisorStrategy : SupervisorStrategy {
-    override fun handleFailure (supervisor : Supervisor, child : PID, rs : RestartStatistics, reason: Exception) {
+    override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
     }
 }
 

@@ -5,7 +5,7 @@ import java.time.Duration
 
 
 typealias PID = Protos.PID
-fun PID(address: String, id: String) : PID {
+fun PID(address: String, id: String): PID {
     val p = PID.newBuilder()
     p.address = address
     p.id = id

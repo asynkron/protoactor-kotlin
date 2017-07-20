@@ -1,8 +1,8 @@
 package actor.proto
 
 import actor.proto.mailbox.Dispatcher
-import actor.proto.mailbox.unboundedMailbox
 import actor.proto.mailbox.Mailbox
+import actor.proto.mailbox.unboundedMailbox
 
 data class Props(
         private val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
