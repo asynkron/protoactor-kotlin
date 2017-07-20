@@ -15,10 +15,10 @@ open class EventStreamImpl {
 
 
     fun publish(msg: Any) {
-        for (sub in subscriptions) {
-            sub.value.dispatcher.schedule { ->
+        for (value in subscriptions.values) {
+            value.dispatcher.schedule {
                 try {
-                    sub.value.action(msg)
+                    value.action(msg)
                 } catch (ex: Exception) {
                     // _logger.logWarning(0, ex, "Exception has occurred when publishing a message.")
                 }

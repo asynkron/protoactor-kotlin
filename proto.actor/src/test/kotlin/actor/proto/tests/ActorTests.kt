@@ -29,7 +29,6 @@ class ActorTests {
 
     @Test fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
-
         assertFailsWith<TimeoutException> {
             runBlocking {
                 pid.requestAwait<Any>("", Duration.ofMillis(10))

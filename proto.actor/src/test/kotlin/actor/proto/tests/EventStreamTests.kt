@@ -2,10 +2,11 @@ package actor.proto.tests
 
 import actor.proto.EventStreamImpl
 import actor.proto.mailbox.Dispatchers
+import org.junit.Assert
 import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
+import kotlin.test.*
 
 class EventStreamTests {
     @Test fun `event stream can subscribe to specific event types`() {
@@ -14,6 +15,7 @@ class EventStreamTests {
         eventStream.subscribe({ theString -> received = theString as String })
         eventStream.publish("hello")
         assertEquals("hello", received)
+        
     }
 
     @Test fun `eventStream can subscribe to all event types`() {
