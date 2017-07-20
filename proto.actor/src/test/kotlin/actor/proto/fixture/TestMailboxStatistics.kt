@@ -3,7 +3,7 @@ package actor.proto.fixture
 import actor.proto.mailbox.MailboxStatistics
 import java.util.concurrent.CountDownLatch
 
-open class TestMailboxStatistics(private val waitForReceived: (Any) -> Boolean) : MailboxStatistics {
+class TestMailboxStatistics(private val waitForReceived: (Any) -> Boolean) : MailboxStatistics {
     val reset : CountDownLatch = CountDownLatch(1)
     val stats : MutableList<Any> = mutableListOf()
     val posted : MutableList<Any> = mutableListOf()

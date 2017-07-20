@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
 
-open class FutureTests {
+class FutureTests {
     @Test fun given_Actor_When_AwaitrequestAwait_Should_ReturnReply() {
         val pid: PID = spawn(fromFunc {
             if (message is String) {

@@ -9,7 +9,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.time.Duration
 
-open class LocalContextTests {
+class LocalContextTests {
     @Test fun given_Context_ctor_should_set_some_fields () {
         val producer : () -> Actor = {NullActor}
         val supervisorStrategyMock : DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()

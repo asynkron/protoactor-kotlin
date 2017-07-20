@@ -9,7 +9,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-open class ProcessRegistryTests {
+class ProcessRegistryTests {
     @Test fun given_PIDDoesNotExist_addShouldAddLocalPID() {
         val id: String = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()

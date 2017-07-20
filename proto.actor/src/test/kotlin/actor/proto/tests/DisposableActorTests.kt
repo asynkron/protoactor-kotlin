@@ -5,10 +5,10 @@
 //import actor.proto.fixture.TestMailboxStatistics
 //import org.junit.Assert
 //
-//open class DisposableActorTests {
+//class DisposableActorTests {
 //    fun whenActorStopped_DisposeIsCalled () {
 //        var disposeCalled : Boolean = false
-//        val props : Props = fromProducer{ -> DisposableActor{ -> disposeCalled = true} }.withMailbox{ -> TestMailbox() }
+//        val props : Props = fromProducer{ DisposableActor{ disposeCalled = true} }.withMailbox{ TestMailbox() }
 //        val pid : PID = spawn(props)
 //        pid.stop()
 //        Assert.assertTrue(disposeCalled)
@@ -17,8 +17,8 @@
 //        val childMailboxStats : TestMailboxStatistics = TestMailboxStatistics{it is Stopped}
 //        var disposeCalled : Boolean = false
 //        val strategy : OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart}, 0, null)
-//        val childProps : Props = fromProducer{ -> DisposableActor{ -> disposeCalled = true} }.withMailbox{ -> UnboundedMailbox.create(childMailboxStats)}.withChildSupervisorStrategy(strategy)
-//        val props : Props = fromProducer{ -> SupervisingActor(childProps) }.withMailbox{ -> TestMailbox()}.withChildSupervisorStrategy(strategy)
+//        val childProps : Props = fromProducer{ DisposableActor{ disposeCalled = true} }.withMailbox{ UnboundedMailbox.create(childMailboxStats)}.withChildSupervisorStrategy(strategy)
+//        val props : Props = fromProducer{ SupervisingActor(childProps) }.withMailbox{ TestMailbox()}.withChildSupervisorStrategy(strategy)
 //        val parentPID : PID = spawn(props)
 //        parentPID.send("crash")
 //        childMailboxStats.reset.wait(1000)
@@ -28,8 +28,8 @@
 //        val childMailboxStats : TestMailboxStatistics = TestMailboxStatistics{it is Stopped}
 //        var disposeCalled : Boolean = false
 //        val strategy : OneForOneStrategy = OneForOneStrategy({pid, reason -> SupervisorDirective.Resume}, 0, null)
-//        val childProps : Props = fromProducer{ -> DisposableActor{ -> disposeCalled = true} }.withMailbox{ -> UnboundedMailbox.create(childMailboxStats)}.withChildSupervisorStrategy(strategy)
-//        val props : Props = fromProducer{ -> SupervisingActor(childProps) }.withMailbox{ -> TestMailbox()}.withChildSupervisorStrategy(strategy)
+//        val childProps : Props = fromProducer{ DisposableActor{ disposeCalled = true} }.withMailbox{ UnboundedMailbox.create(childMailboxStats)}.withChildSupervisorStrategy(strategy)
+//        val props : Props = fromProducer{ SupervisingActor(childProps) }.withMailbox{ TestMailbox()}.withChildSupervisorStrategy(strategy)
 //        val parentPID : PID = spawn(props)
 //        parentPID.send("crash")
 //        childMailboxStats.reset.wait(1000)
@@ -41,9 +41,9 @@
 //        val child1MailboxStats : TestMailboxStatistics = TestMailboxStatistics{it is Stopped}
 //        val child2MailboxStats : TestMailboxStatistics = TestMailboxStatistics{it is Stopped}
 //        val strategy : AllForOneStrategy = AllForOneStrategy({pid, reason -> SupervisorDirective.Stop}, 1, null)
-//        val child1Props : Props = fromProducer{ -> DisposableActor{ -> child1Disposed = true} }.withMailbox{ -> UnboundedMailbox.create(child1MailboxStats)}
-//        val child2Props : Props = fromProducer{ -> DisposableActor{ -> child2Disposed = true} }.withMailbox{ -> UnboundedMailbox.create(child2MailboxStats)}
-//        val parentProps : Props = fromProducer{ -> ParentWithMultipleChildrenActor(child1Props, child2Props) }.withChildSupervisorStrategy(strategy)
+//        val child1Props : Props = fromProducer{ DisposableActor{ child1Disposed = true} }.withMailbox{ UnboundedMailbox.create(child1MailboxStats)}
+//        val child2Props : Props = fromProducer{ DisposableActor{ child2Disposed = true} }.withMailbox{ UnboundedMailbox.create(child2MailboxStats)}
+//        val parentProps : Props = fromProducer{ ParentWithMultipleChildrenActor(child1Props, child2Props) }.withChildSupervisorStrategy(strategy)
 //        val parent : PID = spawn(parentProps)
 //        parent.send("crash")
 //        child1MailboxStats.reset.wait(1000)

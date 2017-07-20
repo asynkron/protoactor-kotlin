@@ -15,7 +15,7 @@ object NullActor : Actor{
     suspend override fun receive(context: Context) {
     }
 }
-open class PropsTests {
+class PropsTests {
     @Test fun given_Props_When_WithDispatcher_Then_mutate_Dispatcher () {
         val dispatcher : TestDispatcher = TestDispatcher()
         val props : Props = Props()
@@ -29,7 +29,7 @@ open class PropsTests {
         Assert.assertEquals(props.supervisorStrategy, props2.supervisorStrategy)
     }
     @Test fun given_Props_When_WithMailbox_Then_mutate_MailboxProducer () {
-        val mailboxProducer : () -> Mailbox = { -> TestMailbox() }
+        val mailboxProducer : () -> Mailbox = { TestMailbox() }
         val props : Props = Props()
         val props2 : Props = props.withMailbox(mailboxProducer)
         Assert.assertNotEquals(props, props2)

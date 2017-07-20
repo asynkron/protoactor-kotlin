@@ -8,7 +8,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.util.*
 
-open class PIDTests {
+class PIDTests {
     @Test fun given_ActorNotDead_Ref_ShouldReturnIt() {
         val pid: PID = spawn(fromFunc(EmptyReceive))
         val p = pid.cachedProcess()
@@ -16,7 +16,7 @@ open class PIDTests {
     }
 
     @Test fun given_ActorDied_Ref_ShouldNotReturnIt() {
-        val pid: PID = spawn(fromFunc(EmptyReceive).withMailbox { -> TestMailbox() })
+        val pid: PID = spawn(fromFunc(EmptyReceive).withMailbox { TestMailbox() })
         pid.stop()
         val p = pid.cachedProcess()
         Assert.assertNotNull(p)

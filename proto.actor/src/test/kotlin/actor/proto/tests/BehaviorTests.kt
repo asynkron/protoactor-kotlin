@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
 
-open class BehaviorTests {
+class BehaviorTests {
     fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
     @Test fun can_change_states() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
@@ -17,7 +17,7 @@ open class BehaviorTests {
     }
 
     @Test fun can_use_global_behaviour() = runBlocking {
-        val testActorProps: Props = fromProducer { -> LightBulb() }
+        val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         var response: String = actor.requestAwait<String>(PressSwitch)
         Assert.assertEquals("Smashed!", actor.requestAwait<String>(HitWithHammer))
@@ -46,7 +46,7 @@ open class BehaviorTests {
 }
 
 
-open class LightBulb : Actor {
+class LightBulb : Actor {
     private val _behavior : Behavior = Behavior()
     private var _smashed : Boolean = false
     private suspend fun off (context : Context) {

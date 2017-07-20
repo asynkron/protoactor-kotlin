@@ -5,7 +5,7 @@
 //import org.junit.Assert
 //import java.time.Duration
 //
-//open class SupervisionTests_ExponentialBackoff {
+//class SupervisionTests_ExponentialBackoff {
 //    fun failureOutsideWindow_ZeroCount () {
 //        val rs : RestartStatistics = RestartStatistics(10, DateTime.now.subtract(TimeSpan.fromSeconds(11)))
 //        val strategy : ExponentialBackoffStrategy = ExponentialBackoffStrategy(Duration.ofSeconds(10), Duration.ofSeconds(1))

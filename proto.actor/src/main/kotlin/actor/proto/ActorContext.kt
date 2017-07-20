@@ -98,7 +98,7 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
 
     //    override fun reenterAfter (target : Task, action : (Task) -> Task) {
 //        val msg : Any = _message!!
-//        val cont : Continuation = Continuation({ -> action(target) }, msg)
+//        val cont : Continuation = Continuation({ action(target) }, msg)
 //        target.continueWith{t ->
 //            self.sendSystemMessage(cont)
 //        }

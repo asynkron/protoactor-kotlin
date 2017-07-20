@@ -5,7 +5,7 @@
 //import actor.proto.fixture.TestMailbox
 //import org.junit.Assert
 //
-//open class MiddlewareTests {
+//class MiddlewareTests {
 //    fun given_ReceiveMiddleware_Should_Call_Middleware_In_Order_Then_Actor_Receive () {
 //        val logs : MutableList<String> = mutableListOf()
 //        val testMailbox : TestMailbox = TestMailbox()
@@ -27,7 +27,7 @@
 //
 //            next(c)
 //        }
-//}).withMailbox{ -> testMailbox}
+//}).withMailbox{ testMailbox}
 //        val pid : PID = spawn(props)
 //        pid.send("")
 //        Assert.assertEquals(3, logs.count())
@@ -37,7 +37,7 @@
 //    }
 //    fun given_SenderMiddleware_Should_Call_Middleware_In_Order () {
 //        val logs : MutableList<String> = mutableListOf()
-//        val pid1 : PID = spawn(fromProducer{ -> DoNothingActor() })
+//        val pid1 : PID = spawn(fromProducer{ DoNothingActor() })
 //        val props : Props = fromFunc{c ->
 //            if (c.message is )
 //                c.send(pid1, "hey")
@@ -56,7 +56,7 @@
 //
 //            return next(c, t, e)
 //        }
-//}).withMailbox{ -> TestMailbox()}
+//}).withMailbox{ TestMailbox()}
 //        val pid2 : PID = spawn(props)
 //        pid2.send("")
 //        Assert.assertEquals(2, logs.count)

@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import java.time.Duration
 
-open class ReceiveTimeoutTests {
+class ReceiveTimeoutTests {
     @Test fun receive_timeout_received_within_expected_time () {
         var timeoutReceived : Boolean = false
         val props : Props = fromFunc{ 

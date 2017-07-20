@@ -6,7 +6,7 @@ import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.runBlocking
 
-open class TestMailbox : Mailbox {
+class TestMailbox : Mailbox {
     private lateinit var _invoker: MessageInvoker
     val userMessages: MutableList<Any> = mutableListOf()
     val systemMessages: MutableList<Any> = mutableListOf()
