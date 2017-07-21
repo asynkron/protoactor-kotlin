@@ -1,7 +1,0 @@
-apply plugin: 'java'
-
-dependencies {
-    compile project(':proto-actor')
-    compile project(':proto-router')
-    compile project(':proto-remote')
-}
