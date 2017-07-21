@@ -1,0 +1,11 @@
+apply plugin: 'java'
+
+artifact {
+    name 'Proto.Actor Core'
+}
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
+    compile group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version:'0.16'
+    compile project(':proto-mailbox')
+}

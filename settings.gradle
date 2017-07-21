@@ -1,0 +1,13 @@
+rootProject.name = 'protoactor-kotlin'
+
+include 'proto.mailbox'
+include 'proto.actor'
+include 'proto.router'
+include 'proto.remote'
+include 'examples'
+
+project(':proto.mailbox').name = 'proto-mailbox'
+project(':proto.actor').name = 'proto-actor'
+project(':proto.router').name = 'proto-router'
+project(':proto.remote').name = 'proto-remote'
+project(':examples').name = 'proto-examples'

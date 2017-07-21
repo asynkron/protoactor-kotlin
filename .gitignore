@@ -24,6 +24,8 @@ src/proto.mailbox/.idea/*
 */.idea/*
 **/.idea/**
 
+build
+.gradle
 # https://github.com/github/gitignore/blob/master/Maven.gitignore
 target/
 pom.xml.tag
