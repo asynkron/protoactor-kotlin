@@ -1,5 +1,8 @@
 package actor.proto.mailbox
 
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CoroutineStart
+import kotlinx.coroutines.experimental.launch
 import java.util.concurrent.atomic.AtomicInteger
 
 private val emptyStats = arrayOf<MailboxStatistics>()
@@ -68,7 +71,7 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
     private fun schedule() {
         val wasIdle = status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
         if (wasIdle) {
-            dispatcher.schedule({ run() })
+            dispatcher.schedule { run() }
         }
     }
 }

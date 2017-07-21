@@ -5,6 +5,7 @@ import actor.proto.*
 import actor.proto.mailbox.ThreadPoolDispatcher
 import actor.proto.mailbox.mpscMailbox
 import java.lang.System.currentTimeMillis
+import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
 
 fun main(args: Array<String>) {
@@ -41,16 +42,17 @@ fun run() {
                 .map { Pair(spawn(clientProps), spawn(echoProps)) }
                 .toTypedArray()
 
-        val sw = currentTimeMillis()
+        val sw = nanoTime()
         for ((client, echo) in pairs) {
             client.send(Start(echo))
         }
         latch.await()
 
-        val elapsedMillis = (currentTimeMillis() - sw).toDouble()
+        val elapsedNanos = (nanoTime() - sw).toDouble()
+        val elapsedMillis = (elapsedNanos / 1_000_000).toInt()
         val totalMessages = messageCount * 2 * clientCount
-        val x = ((totalMessages.toDouble() / elapsedMillis * 1000.0).toInt())
-        println("$t\t\t\t\t$elapsedMillis\t\t$x")
+        val x = ((totalMessages.toDouble() / elapsedNanos * 1_000_000_000.0 ).toInt())
+        println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
         for ((client, echo) in pairs) {
             client.stop()
             echo.stop()

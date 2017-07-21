@@ -3,6 +3,7 @@ package actor.proto.fixture
 import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
+import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.runBlocking
 
 class TestMailboxHandler : MessageInvoker, Dispatcher {
@@ -20,7 +21,7 @@ class TestMailboxHandler : MessageInvoker, Dispatcher {
     }
 
     override var throughput: Int = 10
-    override fun schedule(runner: suspend () -> Unit) {
+    override fun schedule(runner: suspend CoroutineScope.() -> Unit) {
         runBlocking { runner() }
     }
 }
