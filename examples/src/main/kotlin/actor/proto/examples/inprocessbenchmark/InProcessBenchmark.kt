@@ -8,6 +8,8 @@ import java.lang.System.currentTimeMillis
 import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
 
+//-Xmx3550m -Xms3550m -Xmn2g -Xss128k -XX:ParallelGCThreads=20 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15
+
 fun main(args: Array<String>) {
     repeat(10) {
         run()
@@ -19,7 +21,7 @@ fun run() {
     val messageCount = 1_000_000
     val batchSize = 500
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
-    val tps = arrayOf(1,2,5,10,50,100,200,300, 400, 500, 600, 700, 800, 900)
+    val tps = arrayOf(300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
         val d = ThreadPoolDispatcher(throughput = t)
         val clientCount = Runtime.getRuntime().availableProcessors() * 2

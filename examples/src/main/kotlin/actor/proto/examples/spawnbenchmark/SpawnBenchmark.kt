@@ -3,6 +3,7 @@ package actor.proto.examples.spawnbenchmark
 import actor.proto.*
 import java.util.concurrent.CountDownLatch
 
+//-Xmx3550m -Xms3550m -Xmn2g -Xss128k -XX:ParallelGCThreads=20 -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:SurvivorRatio=8 -XX:TargetSurvivorRatio=90 -XX:MaxTenuringThreshold=15
 
 fun main(args: Array<String>) {
     repeat(10) {
