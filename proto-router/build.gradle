@@ -1,0 +1,9 @@
+artifact {
+    name 'Proto.Actor Router'
+}
+
+dependencies {
+    compile project(':proto-actor')
+    compile project(':proto-mailbox')
+    compile 'com.google.protobuf:protobuf-java:+'
+}

@@ -1,0 +1,18 @@
+apply plugin: 'java'
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/kotlin']
+        }
+    }
+}
+
+artifact {
+    name 'Proto.Actor Core'
+}
+
+dependencies {
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
+    compile project(':proto-mailbox')
+}
