@@ -4,9 +4,9 @@ package actor.proto.examples.inprocessbenchmark
 import actor.proto.*
 import actor.proto.mailbox.ThreadPoolDispatcher
 import actor.proto.mailbox.mpscMailbox
-import java.lang.System.currentTimeMillis
 import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.ForkJoinPool
 
 fun main(args: Array<String>) {
     repeat(10) {
@@ -19,7 +19,7 @@ fun run() {
     val messageCount = 1_000_000
     val batchSize = 500
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
-    val tps = arrayOf(300, 400, 500, 600, 700, 800, 900)
+    val tps = arrayOf(/*1,2,5,10,20,50,100,150,200,*/300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
         val d = ThreadPoolDispatcher(throughput = t)
         val clientCount = Runtime.getRuntime().availableProcessors() * 2

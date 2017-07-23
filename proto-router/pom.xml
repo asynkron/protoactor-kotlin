@@ -8,16 +8,12 @@
         <version>1</version>
     </parent>
 
-    <artifactId>examples</artifactId>
-    <name>Proto.Actor Examples</name>
+    <artifactId>proto-router</artifactId>
+    <name>Proto.Actor Router</name>
 
-
+    <version>${package.version}</version>
+  
     <dependencies>
-        <dependency>
-            <groupId>org.jctools</groupId>
-            <artifactId>jctools-core</artifactId>
-            <version>2.0.2</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -34,17 +30,9 @@
             <artifactId>proto-mailbox</artifactId>
             <version>${package.version}</version>
         </dependency>
-        <dependency>
-            <groupId>actor.proto</groupId>
-            <artifactId>proto-router</artifactId>
-            <version>${package.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>actor.proto</groupId>
-            <artifactId>proto-remote</artifactId>
-            <version>${package.version}</version>
-        </dependency>
 
     </dependencies>
+
+
 
 </project>

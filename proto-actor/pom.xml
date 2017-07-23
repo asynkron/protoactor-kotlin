@@ -8,43 +8,34 @@
         <version>1</version>
     </parent>
 
-    <artifactId>examples</artifactId>
-    <name>Proto.Actor Examples</name>
+    <artifactId>proto-actor</artifactId>
+    <name>Proto.Actor Core</name>
 
+    <version>${package.version}</version>
+  
+    <repositories>
+        <repository>
+            <id>central</id>
+            <url>http://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>org.jctools</groupId>
-            <artifactId>jctools-core</artifactId>
-            <version>2.0.2</version>
-        </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>LATEST</version>
         </dependency>
-        <dependency>
-            <groupId>actor.proto</groupId>
-            <artifactId>proto-actor</artifactId>
-            <version>${package.version}</version>
-        </dependency>
+     
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
             <version>${package.version}</version>
         </dependency>
-        <dependency>
-            <groupId>actor.proto</groupId>
-            <artifactId>proto-router</artifactId>
-            <version>${package.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>actor.proto</groupId>
-            <artifactId>proto-remote</artifactId>
-            <version>${package.version}</version>
-        </dependency>
-
     </dependencies>
+
+    
 
 </project>
