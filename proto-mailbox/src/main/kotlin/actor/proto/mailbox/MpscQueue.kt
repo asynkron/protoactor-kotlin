@@ -1,7 +1,6 @@
 package actor.proto.mailbox
 
 import org.jctools.queues.atomic.MpscAtomicArrayQueue
-
 class MpscQueue(capacity: Int = 1000) : MailboxQueue {
 
     private val messages: MpscAtomicArrayQueue<Any> = MpscAtomicArrayQueue(capacity)
