@@ -7,15 +7,15 @@ import java.util.concurrent.atomic.AtomicInteger
 
 open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
     internal object MailboxStatus {
-        val Idle: Int = 0
-        val Busy: Int = 1
+        const val IDLE: Int = 0
+        const val BUSY: Int = 1
     }
 
     private val systemMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
     private val userMessages: MailboxQueue = MpscUnboundedArrayQueue<Any>(200)
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
-    private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
+    private val status: AtomicInteger = AtomicInteger(MailboxStatus.IDLE)
     private var suspended: Boolean = false
     override fun postUserMessage(msg: Any) {
         userMessages.add(msg)
@@ -35,20 +35,22 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
     override fun start() {}
 
     private val batch: MutableList<RemoteDeliver> = mutableListOf()
-    private suspend fun runAsync() {
+    private suspend fun run() {
         var msg: Any? = null
         try {
 
-            msg = systemMessages.poll()
-            if (msg != null) {
-                when (msg) {
-                    is SuspendMailbox -> suspended = true
-                    is ResumeMailbox -> suspended = false
+            if (systemMessages.isNotEmpty()) {
+                msg = systemMessages.poll()
+                if (msg != null) {
+                    when (msg) {
+                        is SuspendMailbox -> suspended = true
+                        is ResumeMailbox -> suspended = false
+                    }
+                    invoker.invokeSystemMessage(msg as SystemMessage)
                 }
-                invoker.invokeSystemMessage(msg as SystemMessage)
             }
             if (!suspended) {
-                batch.clear()
+                batch.clear() //move to end?
                 for (i in 0 until batchSize) {
                     msg = userMessages.poll()
                     if (msg != null) {
@@ -66,16 +68,16 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
         } catch (x: Exception) {
             if (msg != null) invoker.escalateFailure(x, msg)
         }
-        status.set(MailboxStatus.Idle)
+        status.set(MailboxStatus.IDLE)
         if (systemMessages.isNotEmpty() || (!suspended && userMessages.isNotEmpty())) {
             schedule()
         }
     }
 
     private fun schedule() {
-        val wasIdle = status.compareAndSet(MailboxStatus.Idle, MailboxStatus.Busy)
+        val wasIdle = status.compareAndSet(MailboxStatus.IDLE, MailboxStatus.BUSY)
         if (wasIdle) {
-            dispatcher.schedule({ runAsync() })
+            dispatcher.schedule({ run() })
         }
     }
 }
