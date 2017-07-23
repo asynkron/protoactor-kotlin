@@ -1,6 +1,7 @@
 package actor.proto.remote
 
 import actor.proto.mailbox.*
+import org.jctools.queues.MpscUnboundedArrayQueue
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -11,7 +12,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
     }
 
     private val systemMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
-    private val userMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
+    private val userMessages: MailboxQueue = MpscUnboundedArrayQueue<Any>(200)
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
     private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
