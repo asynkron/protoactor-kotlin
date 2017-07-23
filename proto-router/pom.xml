@@ -7,32 +7,26 @@
         <artifactId>proto-parent</artifactId>
         <version>1</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>proto-router</artifactId>
     <name>Proto.Actor Router</name>
-
-    <version>${package.version}</version>
-  
+    <version>0.9-SNAPSHOT</version>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>LATEST</version>
+            <version>3.3.1</version>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-actor</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
-
-
-
 </project>

@@ -9,7 +9,6 @@
         <module name="examples" />
         <module name="proto-actor" />
         <module name="proto-mailbox" />
-        <module name="proto-parent" />
         <module name="proto-remote" />
         <module name="proto-router" />
       </profile>

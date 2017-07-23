@@ -7,14 +7,11 @@
         <artifactId>proto-parent</artifactId>
         <version>1</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>proto-mailbox</artifactId>
-
     <name>Proto.Actor Mailbox</name>
     <description>Mailbox core implementation for Proto.Actor</description>
-
-
-    <version>${package.version}</version>
+    <version>0.9-SNAPSHOT</version>
     <repositories>
         <repository>
             <id>central</id>
@@ -23,12 +20,10 @@
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>org.jctools</groupId>
             <artifactId>jctools-core</artifactId>
             <version>2.0.2</version>
         </dependency>
     </dependencies>
-
 </project>

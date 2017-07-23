@@ -7,11 +7,11 @@
         <artifactId>proto-parent</artifactId>
         <version>1</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>proto-remote</artifactId>
     <name>Proto.Actor Remote</name>
 
-    <version>${package.version}</version>
+    <version>0.9-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
@@ -32,15 +32,14 @@
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-actor</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
-
     </dependencies>
-
-
 </project>

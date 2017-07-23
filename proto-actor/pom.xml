@@ -7,12 +7,10 @@
         <artifactId>proto-parent</artifactId>
         <version>1</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>proto-actor</artifactId>
     <name>Proto.Actor Core</name>
-
-    <version>${package.version}</version>
-  
+    <version>0.9-SNAPSHOT</version>
     <repositories>
         <repository>
             <id>central</id>
@@ -21,21 +19,17 @@
     </repositories>
 
     <dependencies>
-
         <!-- https://mvnrepository.com/artifact/com.google.protobuf/protobuf-java -->
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>LATEST</version>
+            <version>3.3.1</version>
         </dependency>
-     
+
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    
-
 </project>

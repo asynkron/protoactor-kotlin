@@ -7,11 +7,9 @@
         <artifactId>proto-parent</artifactId>
         <version>1</version>
     </parent>
-
+    <packaging>jar</packaging>
     <artifactId>examples</artifactId>
     <name>Proto.Actor Examples</name>
-
-
     <dependencies>
         <dependency>
             <groupId>org.jctools</groupId>
@@ -27,24 +25,22 @@
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-actor</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-mailbox</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-router</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>actor.proto</groupId>
             <artifactId>proto-remote</artifactId>
-            <version>${package.version}</version>
+            <version>0.9-SNAPSHOT</version>
         </dependency>
-
     </dependencies>
-
 </project>
