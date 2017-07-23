@@ -2,7 +2,7 @@ package actor.proto
 
 import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.Mailbox
-import actor.proto.mailbox.unboundedMailbox
+import actor.proto.mailbox.newUnboundedMailbox
 
 typealias Receive = suspend (Context) -> Unit
 typealias Send = suspend (SenderContext, PID, MessageEnvelope) -> Unit
@@ -12,7 +12,7 @@ typealias SenderMiddleware = (Send) -> Send
 data class Props(
         private val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
         val producer: (() -> Actor)? = null,
-        val mailboxProducer: () -> Mailbox = { unboundedMailbox() },
+        val mailboxProducer: () -> Mailbox = { newUnboundedMailbox() },
         val supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy,
         val dispatcher: Dispatcher = actor.proto.mailbox.Dispatchers.DEFAULT_DISPATCHER,
         val receiveMiddleware: List<ReceiveMiddleware> = listOf(),

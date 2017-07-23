@@ -7,27 +7,27 @@
 //    fun whenMailboxOverflows_OverflowActionCalledWithMessage () {
 //        var overflowMessage = null
 //        val mailbox = NonBlockingBoundedMailbox(1, {msg -> overflowMessage = msg }, Duration.ofSeconds(1))
-//        mailbox.push("first message")
+//        mailbox.add("first message")
 //        assertNull(overflowMessage)
 //        val secondMessage = "second message"
-//        mailbox.push(secondMessage)
+//        mailbox.add(secondMessage)
 //        assertEquals(overflowMessage, secondMessage)
 //    }
 //    fun whenMailboxOverflows_OverflowActionCalledOnAllSubsequentMessages () {
 //        val overflowActionCallCount = 0
 //        val mailbox = NonBlockingBoundedMailbox(1, {msg -> overflowActionCallCount++ }, Duration.ofSeconds(1))
-//        mailbox.push("first message")
+//        mailbox.add("first message")
 //        for (i in 0 until 10) {
-//            mailbox.push(i)
+//            mailbox.add(i)
 //        }
 //        assertEquals(overflowActionCallCount, 10)
 //    }
 //    fun whenMailboxOverflows_CurrentMessagesRemainInMailbox () {
 //        var overflowMessage = null
 //        val mailbox = NonBlockingBoundedMailbox(1, {msg -> overflowMessage = msg }, Duration.ofSeconds(1))
-//        mailbox.push("first message")
-//        mailbox.push("second message")
-//        assertEquals("first message", mailbox.pop())
+//        mailbox.add("first message")
+//        mailbox.add("second message")
+//        assertEquals("first message", mailbox.poll())
 //    }
 //}
 //

@@ -1,23 +1,26 @@
 package actor.proto.mailbox
 
+import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 private val emptyStats = arrayOf<MailboxStatistics>()
-
+typealias MailboxQueue = Queue<Any>
 class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
-    private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
+    private val status = AtomicInteger(MailboxStatus.Idle)
+    private val sysCount = AtomicInteger(0)
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
     private var suspended: Boolean = false
 
     override fun postUserMessage(msg: Any) {
-        userMailbox.push(msg)
+        userMailbox.add(msg)
         for (stats in stats) stats.messagePosted(msg)
         schedule()
     }
 
     override fun postSystemMessage(msg: Any) {
-        systemMessages.push(msg)
+        sysCount.incrementAndGet()
+        systemMessages.add(msg)
         for (stats in stats) stats.messagePosted(msg)
         schedule()
     }
@@ -35,17 +38,21 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         var msg: Any? = null
         try {
             for (i in 0 until dispatcher.throughput) {
-                msg = systemMessages.pop()
-                if (msg != null) {
-                    when (msg) {
-                        is SuspendMailbox -> suspended = true
-                        is ResumeMailbox -> suspended = false
+                if (sysCount.get() > 0) {
+                    msg = systemMessages.poll()
+                    sysCount.decrementAndGet()
+
+                    if (msg != null) {
+                        when (msg) {
+                            is SuspendMailbox -> suspended = true
+                            is ResumeMailbox -> suspended = false
+                        }
+                        invoker.invokeSystemMessage(msg as SystemMessage)
+                        for (stat in stats) stat.messageReceived(msg)
                     }
-                    invoker.invokeSystemMessage(msg as SystemMessage)
-                    for (stat in stats) stat.messageReceived(msg)
                 }
                 if (!suspended) {
-                    msg = userMailbox.pop()
+                    msg = userMailbox.poll()
                     if (msg == null) break
                     else {
                         invoker.invokeUserMessage(msg)
@@ -60,7 +67,7 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         }
 
         status.set(MailboxStatus.Idle)
-        if (systemMessages.hasMessages || (!suspended && userMailbox.hasMessages)) {
+        if (systemMessages.isNotEmpty() || (!suspended && userMailbox.isNotEmpty())) {
             schedule()
         } else {
             for (stat in stats) stat.mailboxEmpty()

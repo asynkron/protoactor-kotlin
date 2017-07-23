@@ -1,4 +1,9 @@
 package actor.proto.mailbox
 
-fun unboundedMailbox(stats: Array<MailboxStatistics> = arrayOf()): Mailbox = DefaultMailbox(UnboundedMailboxQueue(), UnboundedMailboxQueue(), stats)
-fun mpscMailbox(capacity: Int = 1000, stats: Array<MailboxStatistics> = arrayOf()): Mailbox = DefaultMailbox(UnboundedMailboxQueue(), MpscQueue(capacity), stats)
+import org.jctools.queues.MpscUnboundedArrayQueue
+import org.jctools.queues.atomic.MpscAtomicArrayQueue
+import java.util.concurrent.ConcurrentLinkedQueue
+
+fun newUnboundedMailbox(stats: Array<MailboxStatistics> = arrayOf()): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), ConcurrentLinkedQueue<Any>(), stats)
+fun newMpscAtomicArrayMailbox(capacity: Int = 1000, stats: Array<MailboxStatistics> = arrayOf()): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), MpscAtomicArrayQueue(capacity), stats)
+fun newMpscUnboundedArrayMailbox(capacity: Int = 1000, stats: Array<MailboxStatistics> = arrayOf()): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), MpscUnboundedArrayQueue(capacity), stats)

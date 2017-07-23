@@ -27,13 +27,13 @@
 //    fun given_MailboxQueue_When_push_pop_Then_HasMessages_relate_the_queue_status (kind : MailboxQueueKind) {
 //        val sut = getMailboxQueue(kind)
 //        assertFalse(sut.hasMessages)
-//        sut.push(1)
+//        sut.add(1)
 //        assertTrue(sut.hasMessages)
-//        sut.push(2)
+//        sut.add(2)
 //        assertTrue(sut.hasMessages)
-//        assertEquals(1, sut.pop())
+//        assertEquals(1, sut.poll())
 //        assertTrue(sut.hasMessages)
-//        assertEquals(2, sut.pop())
+//        assertEquals(2, sut.poll())
 //        assertFalse(sut.hasMessages)
 //    }
 //    fun given_MailboxQueue_when_enqueue_and_dequeue_in_different_threads_Then_we_get_the_elements_in_the_FIFO_order (kind : MailboxQueueKind) {
@@ -45,7 +45,7 @@
 //                if (cancelSource.isCancellationRequested)
 //                    return
 //
-//                sut.push(i)
+//                sut.add(i)
 //            }
 //        }
 //
@@ -53,13 +53,13 @@
 //        val consumer = Thread{l ->
 //            val list = l
 //            for (i in 0 until msgCount) {
-//                var popped = sut.pop()
+//                var popped = sut.poll()
 //                while (popped == null) {
 //                    if (cancelSource.isCancellationRequested)
 //                        return
 //
 //                    Thread.sleep(1)
-//                    popped = sut.pop()
+//                    popped = sut.poll()
 //                }
 //                list.add(popped)
 //            }

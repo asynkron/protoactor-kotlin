@@ -1,6 +1,7 @@
 package actor.proto.remote
 
 import actor.proto.mailbox.*
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 
 open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
@@ -9,19 +10,19 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
         val Busy: Int = 1
     }
 
-    private val systemMessages: MailboxQueue = UnboundedMailboxQueue()
-    private val userMessages: MailboxQueue = UnboundedMailboxQueue()
+    private val systemMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
+    private val userMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
     private val status: AtomicInteger = AtomicInteger(MailboxStatus.Idle)
     private var suspended: Boolean = false
     override fun postUserMessage(msg: Any) {
-        userMessages.push(msg)
+        userMessages.add(msg)
         schedule()
     }
 
     override fun postSystemMessage(msg: Any) {
-        systemMessages.push(msg)
+        systemMessages.add(msg)
         schedule()
     }
 
@@ -37,7 +38,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
         var msg: Any? = null
         try {
 
-            msg = systemMessages.pop()
+            msg = systemMessages.poll()
             if (msg != null) {
                 when (msg) {
                     is SuspendMailbox -> suspended = true
@@ -48,7 +49,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
             if (!suspended) {
                 batch.clear()
                 for (i in 0 until batchSize) {
-                    msg = userMessages.pop()
+                    msg = userMessages.poll()
                     if (msg != null) {
                         batch.add(msg as RemoteDeliver)
                         if (batch.count() >= batchSize) {
@@ -65,7 +66,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
             if (msg != null) invoker.escalateFailure(x, msg)
         }
         status.set(MailboxStatus.Idle)
-        if (systemMessages.hasMessages || (!suspended && userMessages.hasMessages)) {
+        if (systemMessages.isNotEmpty() || (!suspended && userMessages.isNotEmpty())) {
             schedule()
         }
     }

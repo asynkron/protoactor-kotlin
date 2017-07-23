@@ -3,8 +3,7 @@ package actor.proto.examples.inprocessbenchmark
 
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
-import actor.proto.mailbox.mpscMailbox
-import kotlinx.coroutines.experimental.CommonPool
+import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import java.lang.Runtime.*
 import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
@@ -30,13 +29,13 @@ fun run() {
         val echoProps =
                 fromProducer { EchoActor() }
                 .withDispatcher(d)
-                .withMailbox { mpscMailbox(capacity = 20000) }
+                .withMailbox { newMpscUnboundedArrayMailbox(capacity = 20000) }
 
         val latch = CountDownLatch(clientCount)
         val clientProps =
                 fromProducer { PingActor(latch, messageCount, batchSize) }
                 .withDispatcher(d)
-                .withMailbox { mpscMailbox(capacity = 20000) }
+                .withMailbox { newMpscUnboundedArrayMailbox(capacity = 20000) }
 
         val pairs = (0 until clientCount)
                 .map { Pair(spawn(clientProps), spawn(echoProps)) }
