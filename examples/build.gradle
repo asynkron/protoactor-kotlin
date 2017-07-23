@@ -1,4 +1,7 @@
 apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 
 sourceSets {
     main {
