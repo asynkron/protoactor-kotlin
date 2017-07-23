@@ -31,12 +31,12 @@ Other implementations:
 Inprocess Ping-Pong results:
 ```
 Dispatcher		Elapsed		Msg/sec
-300				215			148691649
-400				227			140607101
-500				99			323057167
-600				84			380760563
-700				83			384428701 <-- 380 mil msg/sec
-800				83			381784357 
+300			215		148691649
+400			227		140607101
+500			99		323057167
+600			84		380760563
+700			83		384428701 <-- 380 mil msg/sec
+800			83		381784357 
 ```
 
 ## Getting started
