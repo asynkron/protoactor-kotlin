@@ -13,6 +13,7 @@
     <name>Proto.Actor Mailbox</name>
     <description>Mailbox core implementation for Proto.Actor</description>
 
+
     <version>${package.version}</version>
     <repositories>
         <repository>
