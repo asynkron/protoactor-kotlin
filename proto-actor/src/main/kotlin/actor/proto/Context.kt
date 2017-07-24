@@ -9,7 +9,7 @@ interface Context {
     val actor: Actor
     val children: Set<PID>
     val message: Any
-    fun respond(message: Any)
+
     fun stash()
     fun spawnChild(props: Props): PID
     fun spawnPrefixChild(props: Props, prefix: String): PID
@@ -22,6 +22,7 @@ interface Context {
     suspend fun receive(message: Any): Unit
     suspend fun send(target: PID, message: Any)
     suspend fun request(target: PID, message: Any)
+    suspend fun respond(message: Any)
 
     suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T
     suspend fun <T> requestAwait(target: PID, message: Any): T
