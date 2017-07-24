@@ -10,10 +10,10 @@ abstract class PoolRouterConfig(private val poolSize: Int,val routeeProps:Props)
     }
 
     fun spawner(): (String, Props, PID?) -> PID {
-        fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
+        fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
             val routerState = createRouterState()
             val wg = CountDownLatch(1)
-            val routerProps = fromProducer { -> PoolRouterActor(this, routerState, wg) }
+            val routerProps = props.withProducer { PoolRouterActor(this, routerState, wg) }
             val ctx = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddleware, routerProps.senderMiddleware, parent)
             val mailbox = routerProps.mailboxProducer()
             val dispatcher = routerProps.dispatcher
@@ -28,6 +28,5 @@ abstract class PoolRouterConfig(private val poolSize: Int,val routeeProps:Props)
         }
         return { name, props, parent -> spawnRouterProcess(name, props, parent) }
     }
-
 }
 

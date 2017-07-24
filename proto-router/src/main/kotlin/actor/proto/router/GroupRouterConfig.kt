@@ -10,10 +10,10 @@ abstract class GroupRouterConfig(private var routees: Set<PID>) : RouterConfig {
     }
 
     fun spawner(): (String, Props, PID?) -> PID {
-        fun spawnRouterProcess(name: String, @Suppress("UNUSED_PARAMETER") props: Props, parent: PID?): PID {
+        fun spawnRouterProcess(name: String, props: Props, parent: PID?): PID {
             val routerState = createRouterState()
             val wg = CountDownLatch(1)
-            val routerProps = fromProducer { -> GroupRouterActor(this, routerState, wg) }
+            val routerProps = props.withProducer { GroupRouterActor(this, routerState, wg) }
             val ctx = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddleware, routerProps.senderMiddleware, parent)
             val mailbox = routerProps.mailboxProducer()
             val dispatcher = routerProps.dispatcher
