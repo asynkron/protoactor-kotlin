@@ -7,7 +7,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
 import java.util.*
-import java.util.concurrent.TimeoutException
+import kotlinx.coroutines.experimental.CancellationException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -29,7 +29,7 @@ class ActorTests {
 
     @Test fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
-        assertFailsWith<TimeoutException> {
+        assertFailsWith<CancellationException> {
             runBlocking {
                 pid.requestAwait<Any>("", Duration.ofMillis(10))
             }
