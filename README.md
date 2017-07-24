@@ -80,3 +80,6 @@ You should see the output `Hello Kotlin`.
 ### Support
 
 Many thanks to [JetBrains](https://www.jetbrains.com) for support!
+
+Also thanks to [ej-technologies.com for their Java profiler - JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html)
+
