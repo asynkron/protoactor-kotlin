@@ -58,10 +58,10 @@ class HelloActor : Actor
 {
     suspend override fun receive(context : Context)
     {
-        val msg = context.message;
+        val msg = context.message
         when (msg)
         {
-            is Hello -> println("Hello " + msg.who);
+            is Hello -> println("Hello " + msg.who)
         }
     }
 }
@@ -70,8 +70,8 @@ class HelloActor : Actor
 Spawn it and send a message to it:
 
 ```kotlin
-val props = fromProducer({ HelloActor() });
-val pid = spawn(props);
+val props = fromProducer({ HelloActor() })
+val pid = spawn(props)
 pid.send(Hello("Kotlin"))
 ```
 
