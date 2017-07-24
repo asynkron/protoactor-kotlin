@@ -4,12 +4,12 @@ import actor.proto.*
 import java.util.concurrent.CountDownLatch
 
 
-class PoolRouterActor(private val routeeProps: Props, private val config: PoolRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
+class PoolRouterActor(private val config: PoolRouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
     suspend override fun receive(context: Context) {
         val message = context.message
         when (message) {
             is Started -> {
-                config.onStarted(context, routeeProps, routerState)
+                config.onStarted(context, routerState)
                 wg.countDown()
             }
             is RouterAddRoutee -> {

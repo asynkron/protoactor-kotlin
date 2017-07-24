@@ -1,6 +1,8 @@
 package actor.proto.router
 
-internal class ConsistentHashPoolRouterConfig(poolSize: Int, private val hash: (String) -> Int, private val replicaCount: Int) : PoolRouterConfig(poolSize) {
+import actor.proto.Props
+
+internal class ConsistentHashPoolRouterConfig(poolSize: Int, routeeProps: Props, private val hash: (String) -> Int, private val replicaCount: Int) : PoolRouterConfig(poolSize,routeeProps) {
     override fun createRouterState(): RouterState = ConsistentHashRouterState(hash, replicaCount)
 
     init {
