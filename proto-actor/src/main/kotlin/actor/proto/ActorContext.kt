@@ -105,9 +105,9 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     suspend override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
-    suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, FutureProcess(timeout))
+    suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, DeferredProcess(timeout))
 
-    suspend override fun <T> requestAwait(target: PID, message: Any): T = requestAwait(target, message, FutureProcess())
+    suspend override fun <T> requestAwait(target: PID, message: Any): T = requestAwait(target, message, DeferredProcess())
 
     //    override fun reenterAfter (target : Task, action : (Task) -> Task) {
 //        val msg : Any = _message!!
@@ -175,10 +175,10 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     suspend override fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
 
 
-    suspend private fun <T> requestAwait(target: PID, message: Any, future: FutureProcess<T>): T {
-        val messageEnvelope = MessageEnvelope(message, future.pid, null)
+    suspend private fun <T> requestAwait(target: PID, message: Any, deferredProcess: DeferredProcess<T>): T {
+        val messageEnvelope = MessageEnvelope(message, deferredProcess.pid, null)
         sendUserMessage(target, messageEnvelope)
-        return future.get()
+        return deferredProcess.await()
     }
 
     suspend private fun sendUserMessage(target: PID, message: Any) {

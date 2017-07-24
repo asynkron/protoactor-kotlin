@@ -77,7 +77,7 @@
 //        mailbox.postUserMessage(msg1)
 //        msg1.taskCompletionSource.setResult(0)
 //        Thread.sleep(500)
-//        assertTrue(mailbox.status.get() == MailboxStatus.IDLE, "Mailbox should be set back to IDLE after completion of message.")
+//        assertTrue(mailbox.status.await() == MailboxStatus.IDLE, "Mailbox should be set back to IDLE after completion of message.")
 //    }
 //}
 //

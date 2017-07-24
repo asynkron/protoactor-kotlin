@@ -8,6 +8,7 @@ fun main(args: Array<String>) {
     repeat(10) {
         runOnce()
     }
+    readLine()
 }
 
 private fun runOnce() {

@@ -6,8 +6,7 @@ import kotlinx.coroutines.experimental.withTimeout
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-@Suppress("UNUSED_PARAMETER")
-class FutureProcess<out T>(val timeout: Duration? = null) : Process() {
+class DeferredProcess<out T>(val timeout: Duration = Duration.ofMillis(5000)) : Process() {
     val pid = ProcessRegistry.add(ProcessRegistry.nextId(), this)
     private val cd = CompletableDeferred<T>()
     override fun sendUserMessage(pid: PID, message: Any) {
@@ -20,10 +19,5 @@ class FutureProcess<out T>(val timeout: Duration? = null) : Process() {
     }
 
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
-    suspend fun get(): T {
-        return when (timeout) {
-            null -> cd.await()
-            else -> withTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS) { cd.await() }
-        }
-    }
+    suspend fun await(): T = withTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS) { cd.await() }
 }
