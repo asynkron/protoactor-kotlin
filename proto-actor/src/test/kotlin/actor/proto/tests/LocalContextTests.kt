@@ -2,7 +2,6 @@ package actor.proto.tests
 
 import actor.proto.Actor
 import actor.proto.ActorContext
-import actor.proto.Context
 import actor.proto.PID
 import actor.proto.fixture.DoNothingSupervisorStrategy
 import org.junit.Test
