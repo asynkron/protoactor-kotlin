@@ -30,12 +30,13 @@ Other implementations:
 
 Inprocess Ping-Pong results:
 ```
-Dispatcher      Elapsed     Msg/sec
-300             900.0       35555555
-400             332.0       96385542
-500             215.0       148837209
-600             250.0       128000000
-700             157.0       203821656 <-- 200 mil msg/sec
+Dispatcher		Elapsed		Msg/sec
+300			273		116885925
+400			217		147426522
+500			150		213037390
+600			85		375979638
+700			87		364621820
+800			83		381552772 <-- 380+ mil msg/sec
 ```
 
 ## Getting started
