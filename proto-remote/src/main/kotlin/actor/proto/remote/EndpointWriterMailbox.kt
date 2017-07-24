@@ -6,10 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger
 
 open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
-    internal object MailboxStatus {
-        const val IDLE: Int = 0
-        const val BUSY: Int = 1
-    }
+
 
     private val systemMessages: MailboxQueue = ConcurrentLinkedQueue<Any>()
     private val userMessages: MailboxQueue = MpscUnboundedArrayQueue<Any>(200)
@@ -60,7 +57,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
                         }
                     }
                 }
-                if (batch.count() > 0) {
+                if (batch.isNotEmpty()) {
                     msg = batch
                     invoker.invokeUserMessage(batch)
                 }

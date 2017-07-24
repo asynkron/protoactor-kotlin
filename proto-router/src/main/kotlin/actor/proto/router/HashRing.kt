@@ -1,8 +1,9 @@
 package actor.proto.router
 
-data class HashEntry(val hashKey: Int, val node: String)
+
 
 class HashRing(nodes: Set<String>, private val hash: (String) -> Int, private val replicaCount: Int) {
+    data class HashEntry(val hashKey: Int, val node: String)
     private val ring: Array<HashEntry>
 
     init {
