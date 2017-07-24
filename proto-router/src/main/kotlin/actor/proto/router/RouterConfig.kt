@@ -9,19 +9,15 @@ abstract class RouterConfig {
 
     val props: Props = Props().withSpawner { name, props, parent ->
         val routerState = createRouterState()
+        val mailbox = props.mailboxProducer()
         val wg = CountDownLatch(1)
-        val routerProps = props.withProducer { RouterActor(this, routerState, wg) }
-        val ctx = ActorContext(routerProps.producer!!, routerProps.supervisorStrategy, routerProps.receiveMiddleware, routerProps.senderMiddleware, parent)
-        val mailbox = routerProps.mailboxProducer()
-        val dispatcher = routerProps.dispatcher
-        val reff = RouterProcess(routerState, mailbox)
-        val pid = ProcessRegistry.add(name, reff)
-        ctx.self = pid
-        mailbox.registerHandlers(ctx, dispatcher)
+        val self = ProcessRegistry.add(name, RouterProcess(routerState, mailbox))
+        val ctx = ActorContext({ RouterActor(this, routerState, wg) }, self, props.supervisorStrategy, props.receiveMiddleware, props.senderMiddleware, parent)
+        mailbox.registerHandlers(ctx, props.dispatcher)
         mailbox.postSystemMessage(Started)
         mailbox.start()
         wg.await()
-        pid
+        self
     }
 }
 

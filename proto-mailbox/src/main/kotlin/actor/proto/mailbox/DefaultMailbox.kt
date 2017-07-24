@@ -3,8 +3,9 @@ package actor.proto.mailbox
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
+private val emptyStats = arrayOf<MailboxStatistics>()
 typealias MailboxQueue = Queue<Any>
-class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics>) : Mailbox {
+class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
     private val status = AtomicInteger(MailboxStatus.IDLE)
     private val sysCount = AtomicInteger(0)
     private lateinit var dispatcher: Dispatcher

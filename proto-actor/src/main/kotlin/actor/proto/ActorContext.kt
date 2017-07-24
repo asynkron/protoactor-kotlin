@@ -7,7 +7,7 @@ import actor.proto.mailbox.SystemMessage
 import java.time.Duration
 import java.util.*
 
-class ActorContext(private val producer: () -> Actor, private val supervisorStrategy: SupervisorStrategy, receiveMiddleware: List<ReceiveMiddleware>, senderMiddleware: List<SenderMiddleware>, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
+class ActorContext(private val producer: () -> Actor, override val self: PID, private val supervisorStrategy: SupervisorStrategy, receiveMiddleware: List<ReceiveMiddleware>, senderMiddleware: List<SenderMiddleware>, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
     override var children: Set<PID> = setOf()
     private var watchers: Set<PID> = setOf()
     private var _receiveTimeoutTimer: AsyncTimer? = null
@@ -15,7 +15,6 @@ class ActorContext(private val producer: () -> Actor, private val supervisorStra
     private val restartStatistics: RestartStatistics by lazy(LazyThreadSafetyMode.NONE) { RestartStatistics(0, 0) }
     private var state: ContextState = ContextState.None
     override lateinit var actor: Actor
-    override lateinit var self: PID
     private var _message: Any = NullMessage
     private val receiveMiddleware : Receive? = when {
         receiveMiddleware.isEmpty() -> null
