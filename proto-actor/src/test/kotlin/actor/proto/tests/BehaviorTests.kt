@@ -20,7 +20,7 @@ class BehaviorTests {
     @Test fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        var response: String = actor.requestAwait<String>(PressSwitch)
+        assertEquals("Turning on", actor.requestAwait<String>(PressSwitch))
         assertEquals("Smashed!", actor.requestAwait<String>(HitWithHammer))
         assertEquals("Broken", actor.requestAwait<String>(PressSwitch))
         assertEquals("OW!", actor.requestAwait<String>(Touch))

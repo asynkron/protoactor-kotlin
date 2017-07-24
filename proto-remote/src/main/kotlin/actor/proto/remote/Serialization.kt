@@ -48,6 +48,7 @@ object Serialization {
     fun serialize(message: Any, serializerId: Int): ByteString = Serializers[serializerId].serialize(message)
     fun getTypeName(message: Any, serializerId: Int): String = Serializers[serializerId].getTypeName(message)
     fun deserialize(typeName: String, bytes: ByteString, serializerId: Int): Any = Serializers[serializerId].deserialize(bytes, typeName)
+    @Suppress("UNUSED_PARAMETER")
     fun getMessageBuilder(typeName: Any): Message.Builder? {
         return null
     }
