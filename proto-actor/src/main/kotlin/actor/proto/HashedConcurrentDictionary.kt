@@ -6,20 +6,12 @@ typealias Partition = ConcurrentHashMap<String, Process>
 
 internal class HashedConcurrentDictionary {
     companion object {
-        private val HashSize: Int = 1024
-        /*fun calculateHash (read : String) : Long {
-            var hashedValue : Long = 3074457345618258791
-            for (i in 0..read.length) {
-                hashedValue += read[i].toInt()
-                hashedValue *= 3074457345618258799
-            }
-            return hashedValue
-        }*/
+        private const val HashSize: Int = 1024
     }
 
     private val _partitions: Array<Partition> = Array(HashSize, { ConcurrentHashMap<String, Process>(10000) })
     private fun getPartition(key: String): Partition {
-        val hash: Int = Math.abs(key.hashCode()) % HashSize
+        val hash: Int = Math.abs(key.hashCode()) and (HashSize-1)
         val p = _partitions[hash]
         return p
     }

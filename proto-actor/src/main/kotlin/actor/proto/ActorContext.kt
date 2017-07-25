@@ -59,7 +59,9 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         stash.push(message)
     }
 
-    suspend override fun respond(message: Any) = sendUserMessage(sender!!,message)
+    suspend override fun respond(message: Any) {
+        sendUserMessage(sender!!,message)
+    }
 
     override fun spawnChild(props: Props): PID = spawnNamedChild(props, ProcessRegistry.nextId())
 
