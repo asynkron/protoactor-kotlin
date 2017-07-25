@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProtobufSettings">
+    <option name="includePaths">
+      <list>
+        <option value="$PROJECT_DIR$/proto-actor/src/main/kotlin/actor/proto" />
+        <option value="$PROJECT_DIR$/proto-remote/src/main/kotlin/actor/proto/remote" />
+      </list>
+    </option>
+  </component>
+</project>

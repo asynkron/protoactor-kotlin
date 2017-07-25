@@ -16,7 +16,7 @@ class ProcessRegistryTests {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
-        val pid = reg.add(id, p)
+        val pid = reg.put(id, p)
         assertEquals(reg.address, pid.address)
     }
 
@@ -24,10 +24,10 @@ class ProcessRegistryTests {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
-        reg.add(id, p)
+        reg.put(id, p)
 
         assertFailsWith<ProcessNameExistException> {
-            reg.add(id, p)
+            reg.put(id, p)
         }
     }
 
@@ -35,7 +35,7 @@ class ProcessRegistryTests {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
-        val pid = reg.add(id, p)
+        val pid = reg.put(id, p)
         val p2 = reg.get(pid)
         assertSame(p, p2)
     }
@@ -44,7 +44,7 @@ class ProcessRegistryTests {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
-        val pid = reg.add(id, p)
+        val pid = reg.put(id, p)
         reg.remove(pid)
         val p2 = reg.get(pid)
         assertSame(DeadLetterProcess, p2)

@@ -1,36 +1,38 @@
 package actor.proto
 
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-internal typealias ProcessMap = HashedConcurrentDictionary
+internal typealias ProcessMap = ConcurrentHashMap<String,Process>
 object ProcessRegistry {
-    private val NoHost: String = "nonhost"
+    val noHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
     private val processLookup: ProcessMap = ProcessMap()
     private val sequenceId: AtomicInteger = AtomicInteger(0)
-    var address: String = NoHost
+    var address: String = noHost
 
     fun registerHostResolver(resolver: (PID) -> Process) {
         hostResolvers.add(resolver)
     }
 
-    fun get(id: String): Process = processLookup.getOrDefault(id, DeadLetterProcess)
-    fun get(pid: PID): Process {
-        if (pid.address != NoHost && pid.address != address) {
-            hostResolvers
-                    .mapNotNull { it(pid) }
-                    .forEach { return it }
-
-            throw Exception("Unknown host")
-        }
-        return processLookup.getOrDefault(pid.id, DeadLetterProcess)
-        //return processLookup.tryGetValue(pid.id) ?: DeadLetterProcess
+    fun get(localId: String): Process = processLookup.getOrDefault(localId, DeadLetterProcess)
+    fun get(pid: PID): Process = when {
+        pid.isLocal() -> processLookup.getOrDefault(pid.id, DeadLetterProcess)
+        else -> resolveRemoteProcess(pid)
     }
 
-    fun add(id: String, process: Process): PID {
+    private fun resolveRemoteProcess(pid: PID) : Process {
+        hostResolvers
+                .mapNotNull { it(pid) }
+                .forEach { return it }
+
+        throw Exception("Unknown host")
+    }
+
+    fun put(id: String, process: Process): PID {
         val pid = PID(address, id)
         pid.cachedProcess_ = process //we know what pid points to what process here
-        if (processLookup.put(pid.id, process)) {
+        if (processLookup.put(pid.id, process) != null) {
             throw ProcessNameExistException(id)
         }
         return pid

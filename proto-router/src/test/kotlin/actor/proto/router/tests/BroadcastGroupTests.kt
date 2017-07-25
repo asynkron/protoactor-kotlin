@@ -16,7 +16,7 @@ class BroadcastGroupTests {
     private val MyActorProps: Props = fromProducer { MyTestActor() }
     private val _timeout: Duration = Duration.ofMillis(1000)
 
-    @Test fun broadcastGroupRouter_AllRouteesReceiveMessages() {
+    @Test fun `broadcast group router, all routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send("hello")
@@ -26,7 +26,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_WhenOneRouteeIsStopped_AllOtherRouteesReceiveMessages() {
+    @Test fun `broadcast group router, when one routee is stopped, all other routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             routee2.stop()
@@ -36,7 +36,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_WhenOneRouteeIsSlow_AllOtherRouteesReceiveMessages() {
+    @Test fun `broadcast group router, when one routee is slow, all other routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             routee2.send("go slow")
@@ -46,7 +46,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_RouteesCanBeRemoved() {
+    @Test fun `broadcast group router, routees can be removed`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send(RouterRemoveRoutee(routee1))
@@ -57,7 +57,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_RouteesCanBeAdded() {
+    @Test fun `broadcast group router, routees can be added`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
@@ -70,7 +70,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_RemovedRouteesNoLongerReceiveMessages() {
+    @Test fun `broadcast group router, removed routees no longer receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send("first message")
@@ -82,7 +82,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_AddedRouteesReceiveMessages() {
+    @Test fun `broadcast group router, added routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
@@ -95,7 +95,7 @@ class BroadcastGroupTests {
         }
     }
 
-    @Test fun broadcastGroupRouter_AllRouteesReceiveRouterBroadcastMessages() {
+    @Test fun `broadcast group router, all routees receive router broadcast messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send(RouterBroadcastMessage("hello"))

@@ -7,7 +7,7 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 class DeferredProcess<out T>(val timeout: Duration = Duration.ofMillis(5000)) : Process() {
-    val pid = ProcessRegistry.add(ProcessRegistry.nextId(), this)
+    val pid = ProcessRegistry.put(ProcessRegistry.nextId(), this)
     private val cd = CompletableDeferred<T>()
     override fun sendUserMessage(pid: PID, message: Any) {
         val m = when (message) {

@@ -10,23 +10,23 @@ import java.util.*
 import kotlin.test.assertNotNull
 
 class PIDTests {
-    @Test fun given_ActorNotDead_Ref_ShouldReturnIt() {
+    @Test fun `given actor not dead, cachedProcess should return it`() {
         val pid: PID = spawn(fromFunc(EmptyReceive))
         val p = pid.cachedProcess()
         assertNotNull(p)
     }
 
-    @Test fun given_ActorDied_Ref_ShouldNotReturnIt() {
+    @Test fun `given actor died, cachedProcess should not return it`() {
         val pid: PID = spawn(fromFunc(EmptyReceive).withMailbox { TestMailbox() })
         pid.stop()
         val p = pid.cachedProcess()
         assertNotNull(p)
     }
 
-    @Test fun given_OtherProcess_Ref_ShouldReturnIt() {
+    @Test fun `given other process, cachedProcess should return it`() {
         val id = UUID.randomUUID().toString()
         val p: TestProcess = TestProcess()
-        val pid = ProcessRegistry.add(id, p)
+        val pid = ProcessRegistry.put(id, p)
         val p2 = pid.cachedProcess()
         assertSame(p, p2)
     }
