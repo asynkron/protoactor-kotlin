@@ -7,6 +7,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
@@ -85,7 +86,7 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
-            router.send(RouterAddRoutee(routee1))
+            router.send(RouterAddRoutee(routee4))
             router.send("a message")
             assertEquals("a message", routee1.requestAwait("received?", _timeout))
             assertEquals("a message", routee2.requestAwait("received?", _timeout))
@@ -97,21 +98,21 @@ class BroadcastGroupTests {
     @Test fun broadcastGroupRouter_AllRouteesReceiveRouterBroadcastMessages() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            router.send(RouterBroadcastMessage("Hello"))
-
+            router.send(RouterBroadcastMessage("hello"))
+            delay(100, TimeUnit.MILLISECONDS)
             assertEquals("hello", routee1.requestAwait("received?", _timeout))
             assertEquals("hello", routee2.requestAwait("received?", _timeout))
             assertEquals("hello", routee3.requestAwait("received?", _timeout))
         }
     }
 
-    private fun createBroadcastGroupRouterWith3Routees(): Tuple4 {
+    private fun createBroadcastGroupRouterWith3Routees(): Array<PID> {
         val routee1 = spawn(MyActorProps)
         val routee2 = spawn(MyActorProps)
         val routee3 = spawn(MyActorProps)
         val props = newBroadcastGroup(setOf(routee1, routee2, routee3)).withMailbox { TestMailbox() }
         val router = spawn(props)
-        return Tuple4(router, routee1, routee2, routee3)
+        return arrayOf(router, routee1, routee2, routee3)
     }
 
     open internal class MyTestActor : Actor {
@@ -119,17 +120,10 @@ class BroadcastGroupTests {
         suspend override fun receive(context: Context) {
             val tmp = context.message
             when (tmp) {
-                is String -> {
-                    when (tmp) {
-                        "received?" -> context.respond(_received)
-                        "go slow" -> delay(5000)
-                        else -> _received = tmp
-                    }
-                }
+                "received?" -> context.respond(_received)
+                "go slow" -> delay(5000)
+                is String -> _received = tmp
             }
         }
     }
 }
-
-data class Tuple4(val a: PID, val b: PID, val c: PID, val d: PID)
-
