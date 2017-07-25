@@ -21,7 +21,7 @@ class TestMailboxHandler : MessageInvoker, Dispatcher {
     }
 
     override var throughput: Int = 10
-    override fun schedule(runner: suspend CoroutineScope.() -> Unit) {
+    override fun schedule(runner: suspend () -> Unit) {
         runBlocking { runner() }
     }
 }
