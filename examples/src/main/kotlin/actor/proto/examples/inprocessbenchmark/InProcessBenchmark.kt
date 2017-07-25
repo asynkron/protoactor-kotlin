@@ -24,7 +24,7 @@ fun run() {
     val tps = arrayOf(/*1,2,5,10,20,50,100,150,200,*/300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
         val d = DefaultDispatcher(throughput = t)
-        val clientCount = getRuntime().availableProcessors() * 10
+        val clientCount = getRuntime().availableProcessors() * 15
 
         val echoProps =
                 fromProducer { EchoActor() }

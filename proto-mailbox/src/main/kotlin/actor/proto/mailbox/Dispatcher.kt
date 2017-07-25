@@ -4,5 +4,5 @@ import kotlinx.coroutines.experimental.CoroutineScope
 
 interface Dispatcher {
     var throughput: Int
-    fun schedule(runner: suspend CoroutineScope.() -> Unit)
+    fun schedule(runner: suspend () -> Unit)
 }

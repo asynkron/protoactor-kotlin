@@ -1,14 +1,21 @@
 package actor.proto.mailbox
 
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.CoroutineStart
-import kotlinx.coroutines.experimental.launch
+import kotlin.coroutines.experimental.Continuation
 import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.experimental.startCoroutine
 
 
-class DefaultDispatcher(val coroutineContext: CoroutineContext = CommonPool,override var throughput: Int = 300) : Dispatcher {
-    override fun schedule(runner: suspend CoroutineScope.() -> Unit) {
-        launch(coroutineContext, CoroutineStart.DEFAULT, runner)
+class DefaultDispatcher(coroutineContext: CoroutineContext = CommonPool, override var throughput: Int = 300) : Dispatcher {
+    private val f = EmptyContinuation(coroutineContext)
+    override fun schedule(runner: suspend () -> Unit) {
+        runner.startCoroutine(f)
+    }
+}
+
+class EmptyContinuation(override val context: CoroutineContext) : Continuation<Unit> {
+    override fun resume(value: Unit) {
+    }
+    override fun resumeWithException(exception: Throwable) {
     }
 }
