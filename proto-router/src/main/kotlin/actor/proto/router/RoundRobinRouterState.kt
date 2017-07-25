@@ -18,8 +18,9 @@ internal class RoundRobinRouterState : RouterState() {
     }
 
     override fun routeMessage(message: Any) {
-        val i = currentIndex.getAndIncrement() % values.count()
-        val pid = values[i]
+        val v = values
+        val i = currentIndex.getAndIncrement() % v.count()
+        val pid = v[i]
         pid.send(message)
     }
 }
