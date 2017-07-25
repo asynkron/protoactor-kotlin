@@ -1,0 +1,22 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/kotlin']
+        }
+    }
+}
+
+dependencies {
+    compile 'org.jctools:jctools-core:2.0.2'
+    compile 'com.google.protobuf:protobuf-java:+'
+
+    compile project(':proto-actor')
+    compile project(':proto-router')
+    compile project(':proto-remote')
+    compile project(':proto-mailbox')
+}
