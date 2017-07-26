@@ -17,7 +17,7 @@ class FutureTests {
             }
         })
         runBlocking {
-            val reply: Any = pid.requestAwait<Any>("hello")
+            val reply: Any = pid.requestAwait("hello")
             Assert.assertEquals("hey", reply)
         }
     }

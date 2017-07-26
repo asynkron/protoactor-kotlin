@@ -3,7 +3,6 @@ package actor.proto.router.fixture
 import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.CoroutineScope
 import kotlinx.coroutines.experimental.runBlocking
 
 class TestMailboxHandler : MessageInvoker, Dispatcher {

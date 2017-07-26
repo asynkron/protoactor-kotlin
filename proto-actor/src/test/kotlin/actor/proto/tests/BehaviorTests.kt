@@ -20,10 +20,10 @@ class BehaviorTests {
     @Test fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        assertEquals("Turning on", actor.requestAwait<String>(PressSwitch))
-        assertEquals("Smashed!", actor.requestAwait<String>(HitWithHammer))
-        assertEquals("Broken", actor.requestAwait<String>(PressSwitch))
-        assertEquals("OW!", actor.requestAwait<String>(Touch))
+        assertEquals("Turning on", actor.requestAwait(PressSwitch))
+        assertEquals("Smashed!", actor.requestAwait(HitWithHammer))
+        assertEquals("Broken", actor.requestAwait(PressSwitch))
+        assertEquals("OW!", actor.requestAwait(Touch))
     }
 
     @Test fun `pop behavior should restore pushed behavior`() = runBlocking {
@@ -40,9 +40,9 @@ class BehaviorTests {
         }
 
         val pid: PID = spawnActorFromFunc({ behavior.receive(it) })
-        assertEquals("number", pid.requestAwait<String>("number"))
-        assertEquals(42, pid.requestAwait<Int>(123))
-        assertEquals("answertolifetheuniverseandeverything", pid.requestAwait<String>("answertolifetheuniverseandeverything"))
+        assertEquals("number", pid.requestAwait("number"))
+        assertEquals(42, pid.requestAwait(123))
+        assertEquals("answertolifetheuniverseandeverything", pid.requestAwait("answertolifetheuniverseandeverything"))
     }
 }
 

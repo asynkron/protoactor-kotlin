@@ -13,7 +13,7 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class ActorTests {
-    fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
+    private fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
     @Test fun requestActorAsync(): Unit {
         val pid: PID = spawnActorFromFunc { ctx ->
             when (ctx.message) {
@@ -22,7 +22,7 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = pid.requestAwait<Any>("hello")
+            val reply: Any = pid.requestAwait("hello")
             assertEquals("hey", reply)
         }
     }
@@ -44,7 +44,7 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = pid.requestAwait<Any>("hello", Duration.ofMillis(100))
+            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(100))
             assertEquals("hey", reply)
         }
     }

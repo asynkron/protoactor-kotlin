@@ -20,7 +20,7 @@ class LocalContextTests {
         assertEquals(parent, context.parent)
         assertNull(context.sender)
         assertNotNull(context.children)
-        assertEquals(context.children, setOf<PID>())
+        assertEquals(context.children, setOf())
         assertEquals(Duration.ZERO, context.getReceiveTimeout())
     }
 }
