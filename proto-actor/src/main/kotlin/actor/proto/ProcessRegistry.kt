@@ -18,10 +18,10 @@ object ProcessRegistry {
     fun get(localId: String): Process = processLookup.getOrDefault(localId, DeadLetterProcess)
     fun get(pid: PID): Process = when {
         pid.isLocal() -> processLookup.getOrDefault(pid.id, DeadLetterProcess)
-        else -> resolveRemoteProcess(pid)
+        else -> resolveProcess(pid)
     }
 
-    private fun resolveRemoteProcess(pid: PID) : Process {
+    private fun resolveProcess(pid: PID) : Process {
         hostResolvers
                 .mapNotNull { it(pid) }
                 .forEach { return it }
@@ -42,9 +42,6 @@ object ProcessRegistry {
         processLookup.remove(pid.id)
     }
 
-    fun nextId(): String {
-        val counter: Int = sequenceId.incrementAndGet()
-        return "$" + counter
-    }
+    fun nextId(): String = "$${sequenceId.incrementAndGet()}"
 }
 

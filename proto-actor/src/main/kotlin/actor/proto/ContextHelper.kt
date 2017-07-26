@@ -8,7 +8,6 @@ internal object ContextHelper {
         }
     }
 
-    @Suppress("unused")
     internal fun defaultSender(@Suppress("UNUSED_PARAMETER") ctx: SenderContext, target: PID, envelope: MessageEnvelope) {
         target.cachedProcess()?.sendUserMessage(target, envelope)
     }
