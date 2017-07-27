@@ -5,7 +5,7 @@ import actor.proto.*
 fun main(args: Array<String>) {
     val prop = fromFunc {
         when (message) {
-            is Started -> println("started")
+            is Started -> println("Started")
             is String -> {
                 println("Hello " + message)
                 self.stop()

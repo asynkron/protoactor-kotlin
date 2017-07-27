@@ -2,20 +2,20 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/examples/examples.iml" filepath="$PROJECT_DIR$/examples/examples.iml" group="examples" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/examples.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/examples.iml" group="examples" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/examples_main.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/examples_main.iml" group="examples" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/examples/examples_test.iml" filepath="$PROJECT_DIR$/.idea/modules/examples/examples_test.iml" group="examples" />
-      <module fileurl="file://$PROJECT_DIR$/proto-actor/proto-actor.iml" filepath="$PROJECT_DIR$/proto-actor/proto-actor.iml" group="proto-actor" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor.iml" group="proto-actor" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor_main.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor_main.iml" group="proto-actor" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor_test.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-actor/proto-actor_test.iml" group="proto-actor" />
-      <module fileurl="file://$PROJECT_DIR$/proto-mailbox/proto-mailbox.iml" filepath="$PROJECT_DIR$/proto-mailbox/proto-mailbox.iml" group="proto-mailbox" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox.iml" group="proto-mailbox" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox_main.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox_main.iml" group="proto-mailbox" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox_test.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-mailbox/proto-mailbox_test.iml" group="proto-mailbox" />
       <module fileurl="file://$PROJECT_DIR$/proto-parent.iml" filepath="$PROJECT_DIR$/proto-parent.iml" />
-      <module fileurl="file://$PROJECT_DIR$/proto-remote/proto-remote.iml" filepath="$PROJECT_DIR$/proto-remote/proto-remote.iml" group="proto-remote" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote.iml" group="proto-remote" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote_main.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote_main.iml" group="proto-remote" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote_test.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-remote/proto-remote_test.iml" group="proto-remote" />
-      <module fileurl="file://$PROJECT_DIR$/proto-router/proto-router.iml" filepath="$PROJECT_DIR$/proto-router/proto-router.iml" group="proto-router" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-router/proto-router.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-router/proto-router.iml" group="proto-router" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-router/proto-router_main.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-router/proto-router_main.iml" group="proto-router" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/proto-router/proto-router_test.iml" filepath="$PROJECT_DIR$/.idea/modules/proto-router/proto-router_test.iml" group="proto-router" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/protoactor-kotlin.iml" filepath="$PROJECT_DIR$/.idea/modules/protoactor-kotlin.iml" />
