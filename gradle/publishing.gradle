@@ -1,4 +1,5 @@
 apply plugin: 'maven-publish'
+apply plugin: 'com.jfrog.bintray'
 
 task sourcesJar(type: Jar, dependsOn: project.classes) {
     classifier = 'sources'
@@ -44,7 +45,30 @@ publishing {
     }
 }
 
+bintray {
+    dryRun = true
+    publish = false
 
+    user = findProperty("protoBintrayUser")
+    key = findProperty("protoBintrayKey")
+
+    publications = ['maven']
+    pkg {
+        repo = 'protoactor'
+        userOrg = 'protoactor'
+        name = project.name
+        websiteUrl = "http://proto.actor/"
+        vcsUrl = "https://github.com/AsynkronIT/protoactor-kotlin.git"
+        licenses = ['Apache-2.0']
+        labels = ['actor']
+        version {
+            gpg {
+                sign = false //Determines whether to GPG sign the files. The default is false
+                // passphrase = 'passphrase' //Optional. The passphrase for GPG signing'
+            }
+        }
+    }
+}
 
 class ArtifactExtension {
     String name = 'Proto.Actor'
