@@ -4,6 +4,7 @@ package actor.proto.examples.inprocessbenchmark
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
+import kotlinx.coroutines.experimental.newFixedThreadPoolContext
 import java.lang.Runtime.*
 import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
@@ -19,7 +20,7 @@ fun main(args: Array<String>) {
 
 fun run() {
     val messageCount = 1_000_000
-    val batchSize = 500
+    val batchSize = 5
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
     val tps = arrayOf(/*1,2,5,10,20,50,100,150,200,*/300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
