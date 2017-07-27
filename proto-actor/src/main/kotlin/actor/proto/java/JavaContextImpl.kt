@@ -34,8 +34,7 @@ class JavaContextImpl : JavaContext {
     override val children: Set<PID>
         get() = ctx.children
 
-    override val message: Any
-        get() = ctx.message
+    override fun message() : Any = ctx.message
 
     override fun stash() {
         ctx.stash()

@@ -11,8 +11,8 @@ interface JavaContext {
     val sender: PID?
     val actor: JavaActor
     val children: Set<PID>
-    val message: Any
 
+    fun message() : Any
     fun stash()
     fun spawnChild(props: Props): PID
     fun spawnPrefixChild(props: Props, prefix: String): PID
