@@ -30,13 +30,13 @@ fun run() {
         val echoProps =
                 fromProducer { EchoActor() }
                 .withDispatcher(d)
-                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 2000) }
+                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
         val latch = CountDownLatch(clientCount)
         val clientProps =
                 fromProducer { PingActor(latch, messageCount, batchSize) }
                 .withDispatcher(d)
-                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 2000) }
+                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
         val pairs = (0 until clientCount)
                 .map { Pair(spawn(clientProps), spawn(echoProps)) }
