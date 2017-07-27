@@ -9,7 +9,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
-class JavaContextImpl : JavaContext {
+class JavaContextImpl : FutureContext {
 
     fun wrap(ctx: actor.proto.Context, a: FutureActor) {
         this.ctx = ctx
@@ -19,20 +19,15 @@ class JavaContextImpl : JavaContext {
     private lateinit var ctx: actor.proto.Context
     private lateinit var a: FutureActor
 
-    override val parent: PID?
-        get() = ctx.parent
+    override fun parent(): PID? = ctx.parent
 
-    override val self: PID
-        get() = ctx.self
+    override fun self(): PID = ctx.self
 
-    override val sender: PID?
-        get() = ctx.sender
+    override fun sender(): PID? = ctx.sender
 
-    override val actor: FutureActor
-        get() = a //TODO: this is wrong?
+    override fun actor(): FutureActor = a //TODO: this is wrong?
 
-    override val children: Set<PID>
-        get() = ctx.children
+    override fun children(): Set<PID> = ctx.children
 
     override fun message() : Any = ctx.message
 

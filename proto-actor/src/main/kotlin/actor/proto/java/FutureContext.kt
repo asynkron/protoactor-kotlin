@@ -5,12 +5,12 @@ import actor.proto.Props
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
-interface JavaContext {
-    val parent: PID?
-    val self: PID
-    val sender: PID?
-    val actor: FutureActor
-    val children: Set<PID>
+interface FutureContext {
+    fun parent(): PID?
+    fun self(): PID
+    fun sender(): PID?
+    fun actor(): FutureActor
+    fun children(): Set<PID>
 
     fun message() : Any
     fun stash()

@@ -2,7 +2,7 @@ package actor.proto.examples.helloworld_java;
 
 import actor.proto.java.Actor;
 import actor.proto.java.FutureActor;
-import actor.proto.java.JavaContext;
+import actor.proto.java.FutureContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
@@ -13,7 +13,7 @@ public class HelloActor implements FutureActor {
 
     @NotNull
     @Override
-    public CompletableFuture receive(@NotNull JavaContext context) {
+    public CompletableFuture receive(@NotNull FutureContext context) {
         Object m = context.message();
 
         if (m instanceof String) {
