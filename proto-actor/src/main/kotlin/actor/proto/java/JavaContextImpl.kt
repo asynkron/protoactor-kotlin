@@ -7,17 +7,17 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.future.asCompletableFuture
 import kotlinx.coroutines.experimental.runBlocking
 import java.time.Duration
-import java.util.concurrent.Future
+import java.util.concurrent.CompletableFuture
 
 class JavaContextImpl : JavaContext {
 
-    fun wrap(ctx: actor.proto.Context, a: JavaActor) {
+    fun wrap(ctx: actor.proto.Context, a: FutureActor) {
         this.ctx = ctx
         this.a = a
     }
 
     private lateinit var ctx: actor.proto.Context
-    private lateinit var a: JavaActor
+    private lateinit var a: FutureActor
 
     override val parent: PID?
         get() = ctx.parent
@@ -28,7 +28,7 @@ class JavaContextImpl : JavaContext {
     override val sender: PID?
         get() = ctx.sender
 
-    override val actor: JavaActor
+    override val actor: FutureActor
         get() = a //TODO: this is wrong?
 
     override val children: Set<PID>
@@ -64,14 +64,14 @@ class JavaContextImpl : JavaContext {
 
     override fun respond(message: Any) = runBlocking { ctx.respond(message) }
 
-    override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): Future<T> {
+    override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): CompletableFuture<T> {
         val d = async(CommonPool) {
             ctx.requestAwait<T>(target, message, timeout)
         }
         return d.asCompletableFuture()
     }
 
-    override fun <T> requestAwait(target: PID, message: Any): Future<T> {
+    override fun <T> requestAwait(target: PID, message: Any): CompletableFuture<T> {
         val d = async(CommonPool) {
             ctx.requestAwait<T>(target, message)
         }

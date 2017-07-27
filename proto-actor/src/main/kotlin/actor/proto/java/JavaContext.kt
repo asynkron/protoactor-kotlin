@@ -3,13 +3,13 @@ package actor.proto.java
 import actor.proto.PID
 import actor.proto.Props
 import java.time.Duration
-import java.util.concurrent.Future
+import java.util.concurrent.CompletableFuture
 
 interface JavaContext {
     val parent: PID?
     val self: PID
     val sender: PID?
-    val actor: JavaActor
+    val actor: FutureActor
     val children: Set<PID>
 
     fun message() : Any
@@ -27,7 +27,7 @@ interface JavaContext {
     fun request(target: PID, message: Any)
     fun respond(message: Any)
 
-    fun <T> requestAwait(target: PID, message: Any, timeout: Duration): Future<T>
-    fun <T> requestAwait(target: PID, message: Any): Future<T>
+    fun <T> requestAwait(target: PID, message: Any, timeout: Duration): CompletableFuture<T>
+    fun <T> requestAwait(target: PID, message: Any): CompletableFuture<T>
     // fun reenterAfter (target : Task, action : (Task) -> Task)
 }
