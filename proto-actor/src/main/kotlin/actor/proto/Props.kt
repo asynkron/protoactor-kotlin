@@ -22,8 +22,8 @@ data class Props(
     fun withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
     fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
     fun withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
-    fun withReceiveMiddleware (vararg middleware : ReceiveMiddleware) : Props = copy(receiveMiddleware = middleware.toList())
-    fun withSenderMiddleware (vararg middleware : SenderMiddleware) : Props = copy (senderMiddleware = middleware.toList())
+    fun withReceiveMiddleware(vararg middleware: ReceiveMiddleware): Props = copy(receiveMiddleware = middleware.toList())
+    fun withSenderMiddleware(vararg middleware: SenderMiddleware): Props = copy(senderMiddleware = middleware.toList())
     fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy(spawner = spawner)
     internal fun spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
 }

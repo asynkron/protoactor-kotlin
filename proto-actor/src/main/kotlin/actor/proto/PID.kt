@@ -11,7 +11,7 @@ fun PID(address: String, id: String): PID {
     return p.build()
 }
 
-fun PID.isLocal() : Boolean = address == ProcessRegistry.noHost || address == ProcessRegistry.address
+fun PID.isLocal(): Boolean = address == ProcessRegistry.noHost || address == ProcessRegistry.address
 internal fun PID.cachedProcess(): Process? {
     if (cachedProcess_ == null) {
         cachedProcess_ = ProcessRegistry.get(this)

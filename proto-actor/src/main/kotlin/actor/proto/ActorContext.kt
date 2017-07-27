@@ -16,18 +16,18 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     private var state: ContextState = ContextState.None
     override lateinit var actor: Actor
     private var _message: Any = NullMessage
-    private val receiveMiddleware : Receive? = when {
+    private val receiveMiddleware: Receive? = when {
         receiveMiddleware.isEmpty() -> null
         else -> receiveMiddleware
                 .reversed()
-                .fold({ctx -> ContextHelper.defaultReceive(ctx)},
+                .fold({ ctx -> ContextHelper.defaultReceive(ctx) },
                         { inner, outer -> outer(inner!!) })
     }
-    private val senderMiddleware : Send? = when {
+    private val senderMiddleware: Send? = when {
         senderMiddleware.isEmpty() -> null
         else -> senderMiddleware
                 .reversed()
-                .fold({ ctx, targetPid, envelope -> ContextHelper.defaultSender(ctx,targetPid,envelope)},
+                .fold({ ctx, targetPid, envelope -> ContextHelper.defaultSender(ctx, targetPid, envelope) },
                         { inner, outer -> outer(inner!!) })
     }
 
@@ -60,7 +60,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     }
 
     suspend override fun respond(message: Any) {
-        sendUserMessage(sender!!,message)
+        sendUserMessage(sender!!, message)
     }
 
     override fun spawnChild(props: Props): PID = spawnNamedChild(props, ProcessRegistry.nextId())

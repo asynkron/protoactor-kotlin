@@ -14,7 +14,7 @@ class EventStreamTests {
         eventStream.subscribe({ theString -> received = theString as String })
         eventStream.publish("hello")
         assertEquals("hello", received)
-        
+
     }
 
     @Test fun `eventStream can subscribe to all event types`() {

@@ -6,7 +6,7 @@
         <compilerSettings />
         <compilerArguments>
           <option name="destination" value="$MODULE_DIR$/../../../proto-mailbox/build/kotlin-classes/main" />
-          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jre8/1.2-M1/7f4274fb0f19c6d5ed71ace4c0d1d4668aab2bc3/kotlin-stdlib-jre8-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/0.17/1523b41cc0bb0add072b28b1d2a47394e289fc7/kotlinx-coroutines-core-0.17.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jre7/1.2-M1/5c4451f59d3b4e4ec75e970e055f33d1c51d07ba/kotlin-stdlib-jre7-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2-M1/58c4fec5fe74e247d7e97a2c44f99e55a57a16d/kotlin-stdlib-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jctools/jctools-core/2.0.2/2609d64858667801f59df5dfcb13358b3941d668/jctools-core-2.0.2.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
+          <option name="classpath" value="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jre8/1.2-M1/7f4274fb0f19c6d5ed71ace4c0d1d4668aab2bc3/kotlin-stdlib-jre8-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-jdk8/0.17/80dd9491ef1294b9f67c77e60b87a48e6112c3fe/kotlinx-coroutines-jdk8-0.17.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlinx/kotlinx-coroutines-core/0.17/1523b41cc0bb0add072b28b1d2a47394e289fc7/kotlinx-coroutines-core-0.17.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib-jre7/1.2-M1/5c4451f59d3b4e4ec75e970e055f33d1c51d07ba/kotlin-stdlib-jre7-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.2-M1/58c4fec5fe74e247d7e97a2c44f99e55a57a16d/kotlin-stdlib-1.2-M1.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jctools/jctools-core/2.0.2/2609d64858667801f59df5dfcb13358b3941d668/jctools-core-2.0.2.jar;C:/Users/rojo01/.gradle/caches/modules-2/files-2.1/org.jetbrains/annotations/13.0/919f0dfe192fb4e063e7dacadee7f8bb9a2672a9/annotations-13.0.jar" />
           <option name="noStdlib" value="true" />
           <option name="noReflect" value="true" />
           <option name="moduleName" value="proto-mailbox_main" />
@@ -37,6 +37,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre8:1.2-M1" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.17" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core:0.17" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jre7:1.2-M1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.2-M1" level="project" />

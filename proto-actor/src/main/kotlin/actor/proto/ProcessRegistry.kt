@@ -3,7 +3,7 @@ package actor.proto
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
-internal typealias ProcessMap = ConcurrentHashMap<String,Process>
+internal typealias ProcessMap = ConcurrentHashMap<String, Process>
 object ProcessRegistry {
     val noHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()
@@ -21,7 +21,7 @@ object ProcessRegistry {
         else -> resolveProcess(pid)
     }
 
-    private fun resolveProcess(pid: PID) : Process {
+    private fun resolveProcess(pid: PID): Process {
         hostResolvers
                 .mapNotNull { it(pid) }
                 .forEach { return it }

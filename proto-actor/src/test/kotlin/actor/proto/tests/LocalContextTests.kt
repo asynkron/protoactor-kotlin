@@ -15,7 +15,7 @@ class LocalContextTests {
         val producer: () -> Actor = { NullActor }
         val supervisorStrategyMock: DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val parent: PID = PID("test", "test")
-        val self = PID("abc","def")
+        val self = PID("abc", "def")
         val context: ActorContext = ActorContext(producer, self, supervisorStrategyMock, listOf(), listOf(), parent)
         assertEquals(parent, context.parent)
         assertNull(context.sender)

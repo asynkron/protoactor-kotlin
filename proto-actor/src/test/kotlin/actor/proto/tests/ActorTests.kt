@@ -3,11 +3,11 @@ package actor.proto.tests
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
 import java.util.*
-import kotlinx.coroutines.experimental.CancellationException
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
