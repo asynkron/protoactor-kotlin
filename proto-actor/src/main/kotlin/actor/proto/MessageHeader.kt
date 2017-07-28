@@ -1,5 +1,6 @@
 package actor.proto
 
+val EmptyMessageHeader = MessageHeader()
 class MessageHeader {
     private val map: MutableMap<String, String> = mutableMapOf()
 
