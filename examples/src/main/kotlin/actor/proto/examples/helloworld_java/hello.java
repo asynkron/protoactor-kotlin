@@ -12,7 +12,6 @@ public class hello {
         Props p = fromFutureProducer(HelloActor::new);
         Protos.PID pid = spawn(p);
         send(pid,"Proto.Actor Java");
-        send(pid,"After some time...");
 
         System.in.read();
     }

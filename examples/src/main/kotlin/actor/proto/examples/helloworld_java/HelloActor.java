@@ -13,8 +13,6 @@ import static actor.proto.Actors.done;
 
 public class HelloActor implements FutureActor {
 
-    private static ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(5);
-
     @NotNull
     @Override
     public CompletableFuture receive(@NotNull FutureContext context) {
@@ -22,10 +20,6 @@ public class HelloActor implements FutureActor {
 
         if (m instanceof String) {
             System.out.println("Hello " + m);
-
-            CompletableFuture<Void> timeoutFuture = new CompletableFuture<>();
-            scheduler.schedule(() -> timeoutFuture.complete(null), 2000, TimeUnit.MILLISECONDS);
-            return timeoutFuture;
         }
 
         return done();
