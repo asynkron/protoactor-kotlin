@@ -57,7 +57,7 @@ object Remote {
     suspend fun spawnNamed(address: String, name: String, kind: String, timeout: Duration): PID {
         val activator: PID = activatorForAddress(address)
         val req = ActorPidRequest(kind, name)
-        val res = activator.requestAwait<RemoteProtos.ActorPidResponse>(req, timeout)
+        val res = requestAwait<RemoteProtos.ActorPidResponse>(activator,req, timeout)
         return res.pid
     }
 

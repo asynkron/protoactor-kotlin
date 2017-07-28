@@ -22,7 +22,7 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(200))
+            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(200))
             assertEquals("hey", reply)
         }
     }
@@ -31,7 +31,7 @@ class ActorTests {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
         assertFailsWith<CancellationException> {
             runBlocking {
-                pid.requestAwait<Any>("", Duration.ofMillis(10))
+                requestAwait<Any>(pid,"", Duration.ofMillis(10))
             }
         }
     }
@@ -44,7 +44,7 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(100))
+            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(100))
             assertEquals("hey", reply)
         }
     }

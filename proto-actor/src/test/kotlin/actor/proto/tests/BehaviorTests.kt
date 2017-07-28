@@ -12,19 +12,19 @@ class BehaviorTests {
     @Test fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        Assert.assertEquals("Turning on", actor.requestAwait<String>(PressSwitch, Duration.ofMillis(200)))
-        Assert.assertEquals("Hot!", actor.requestAwait<String>(Touch, Duration.ofMillis(200)))
-        Assert.assertEquals("Turning off", actor.requestAwait<String>(PressSwitch, Duration.ofMillis(200)))
-        Assert.assertEquals("Cold", actor.requestAwait<String>(Touch, Duration.ofMillis(200)))
+        Assert.assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, Duration.ofMillis(200)))
+        Assert.assertEquals("Hot!", requestAwait<String>(actor, Touch, Duration.ofMillis(200)))
+        Assert.assertEquals("Turning off", requestAwait<String>(actor, PressSwitch, Duration.ofMillis(200)))
+        Assert.assertEquals("Cold", requestAwait<String>(actor, Touch, Duration.ofMillis(200)))
     }
 
     @Test fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        assertEquals("Turning on", actor.requestAwait(PressSwitch, Duration.ofMillis(200)))
-        assertEquals("Smashed!", actor.requestAwait(HitWithHammer, Duration.ofMillis(200)))
-        assertEquals("Broken", actor.requestAwait(PressSwitch, Duration.ofMillis(200)))
-        assertEquals("OW!", actor.requestAwait(Touch, Duration.ofMillis(200)))
+        assertEquals("Turning on", requestAwait(actor, PressSwitch, Duration.ofMillis(200)))
+        assertEquals("Smashed!", requestAwait(actor, HitWithHammer, Duration.ofMillis(200)))
+        assertEquals("Broken", requestAwait(actor, PressSwitch, Duration.ofMillis(200)))
+        assertEquals("OW!", requestAwait(actor, Touch, Duration.ofMillis(200)))
     }
 
     @Test fun `pop behavior should restore pushed behavior`() = runBlocking {
@@ -42,9 +42,9 @@ class BehaviorTests {
 
         val timeout = Duration.ofMillis(200)
         val pid: PID = spawnActorFromFunc({ behavior.receive(it) })
-        assertEquals("number", pid.requestAwait("number", timeout))
-        assertEquals(42, pid.requestAwait(123, timeout))
-        assertEquals("answertolifetheuniverseandeverything", pid.requestAwait("answertolifetheuniverseandeverything", timeout))
+        assertEquals("number", requestAwait(pid,"number", timeout))
+        assertEquals(42, requestAwait(pid,123, timeout))
+        assertEquals("answertolifetheuniverseandeverything", requestAwait(pid,"answertolifetheuniverseandeverything", timeout))
     }
 }
 

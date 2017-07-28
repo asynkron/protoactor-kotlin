@@ -20,9 +20,9 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send("hello")
-            assertEquals("hello", routee1.requestAwait("received?", _timeout))
-            assertEquals("hello", routee2.requestAwait("received?", _timeout))
-            assertEquals("hello", routee3.requestAwait("received?", _timeout))
+            assertEquals("hello", requestAwait(routee1,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee2,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
     }
 
@@ -31,8 +31,8 @@ class BroadcastGroupTests {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             stop(routee2)
             router.send("hello")
-            assertEquals("hello", routee1.requestAwait("received?", _timeout))
-            assertEquals("hello", routee3.requestAwait("received?", _timeout))
+            assertEquals("hello", requestAwait(routee1,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
     }
 
@@ -41,8 +41,8 @@ class BroadcastGroupTests {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             routee2.send("go slow")
             router.send("hello")
-            assertEquals("hello", routee1.requestAwait("received?", _timeout))
-            assertEquals("hello", routee3.requestAwait("received?", _timeout))
+            assertEquals("hello", requestAwait(routee1,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
     }
 
@@ -50,7 +50,7 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send(RouterRemoveRoutee(routee1))
-            val routees = router.requestAwait<Routees>(RouterGetRoutees, _timeout)
+            val routees = requestAwait<Routees>(router,RouterGetRoutees, _timeout)
             assertFalse(routees.pids.contains(routee1))
             assertTrue(routees.pids.contains(routee2))
             assertTrue(routees.pids.contains(routee3))
@@ -62,7 +62,7 @@ class BroadcastGroupTests {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
             router.send(RouterAddRoutee(routee4))
-            val routees = router.requestAwait<Routees>(RouterGetRoutees, _timeout)
+            val routees = requestAwait<Routees>(router,RouterGetRoutees, _timeout)
             assertTrue(routees.pids.contains(routee1))
             assertTrue(routees.pids.contains(routee2))
             assertTrue(routees.pids.contains(routee3))
@@ -76,9 +76,9 @@ class BroadcastGroupTests {
             router.send("first message")
             router.send(RouterRemoveRoutee(routee1))
             router.send("second message")
-            assertEquals("first message", routee1.requestAwait("received?", _timeout))
-            assertEquals("second message", routee2.requestAwait("received?", _timeout))
-            assertEquals("second message", routee3.requestAwait("received?", _timeout))
+            assertEquals("first message", requestAwait(routee1,"received?", _timeout))
+            assertEquals("second message", requestAwait(routee2,"received?", _timeout))
+            assertEquals("second message", requestAwait(routee3,"received?", _timeout))
         }
     }
 
@@ -88,10 +88,10 @@ class BroadcastGroupTests {
             val routee4 = spawn(MyActorProps)
             router.send(RouterAddRoutee(routee4))
             router.send("a message")
-            assertEquals("a message", routee1.requestAwait("received?", _timeout))
-            assertEquals("a message", routee2.requestAwait("received?", _timeout))
-            assertEquals("a message", routee3.requestAwait("received?", _timeout))
-            assertEquals("a message", routee4.requestAwait("received?", _timeout))
+            assertEquals("a message", requestAwait(routee1,"received?", _timeout))
+            assertEquals("a message", requestAwait(routee2,"received?", _timeout))
+            assertEquals("a message", requestAwait(routee3,"received?", _timeout))
+            assertEquals("a message", requestAwait(routee4,"received?", _timeout))
         }
     }
 
@@ -100,9 +100,9 @@ class BroadcastGroupTests {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             router.send(RouterBroadcastMessage("hello"))
             delay(100, TimeUnit.MILLISECONDS)
-            assertEquals("hello", routee1.requestAwait("received?", _timeout))
-            assertEquals("hello", routee2.requestAwait("received?", _timeout))
-            assertEquals("hello", routee3.requestAwait("received?", _timeout))
+            assertEquals("hello", requestAwait(routee1,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee2,"received?", _timeout))
+            assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
     }
 

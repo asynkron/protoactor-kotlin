@@ -29,7 +29,7 @@ private fun run() {
     val remote: PID = PID("127.0.0.1:12000", "remote")
     val startRemote = Messages.StartRemote.newBuilder().setSender(pid).build()
     runBlocking {
-        remote.requestAwait<Messages.Start>(startRemote, Duration.ofSeconds(2))
+        requestAwait<Messages.Start>(remote,startRemote, Duration.ofSeconds(2))
     }
 
     val start = currentTimeMillis()

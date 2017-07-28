@@ -18,7 +18,7 @@ class FutureTests {
             }
         })
         runBlocking {
-            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(200))
+            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(200))
             Assert.assertEquals("hey", reply)
         }
     }
@@ -37,7 +37,7 @@ class FutureTests {
             }
         })
         runBlocking {
-            val reply2 = pid2.requestAwait<String>("hello", Duration.ofMillis(200))
+            val reply2 = requestAwait<String>(pid2,"hello", Duration.ofMillis(200))
             assertEquals("hellohey", reply2)
         }
     }

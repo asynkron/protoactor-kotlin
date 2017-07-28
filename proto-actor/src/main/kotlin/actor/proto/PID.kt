@@ -24,13 +24,6 @@ fun PID.sendSystemMessage(sys: SystemMessage) {
     process.sendSystemMessage(this, sys)
 }
 
-suspend fun <T> PID.requestAwait(message: Any, timeout: Duration): T = requestAwait(message, DeferredProcess(timeout))
-
-suspend private fun <T> PID.requestAwait(message: Any, deferredProcess: DeferredProcess<T>): T {
-    request(this, message, deferredProcess.pid)
-    return deferredProcess.await()
-}
-
 fun PID.toShortString(): String {
     return "$address/$id"
 }

@@ -14,7 +14,7 @@ class WatchTests {
             val watchee: PID = spawn(fromProducer { DoNothingActor() }.withMailbox { TestMailbox() })
             val watcher: PID = spawn(fromProducer { LocalActor(watchee) }.withMailbox { TestMailbox() })
             stop(watchee)
-            val terminatedMessageReceived: Boolean = watcher.requestAwait("?", Duration.ofSeconds(5))
+            val terminatedMessageReceived: Boolean = requestAwait(watcher,"?", Duration.ofSeconds(5))
             assertTrue(terminatedMessageReceived)
         }
     }
