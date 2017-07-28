@@ -1,5 +1,7 @@
 package actor.proto
 
+import java.time.Duration
+
 @Suppress("unused")
 class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") middleware: Array<((SenderContext, PID, MessageEnvelope) -> Unit) -> (SenderContext, PID, MessageEnvelope) -> Unit>) : SenderContext {
     private val _senderMiddleware: ((SenderContext, PID, MessageEnvelope) -> Unit)? = null
@@ -26,12 +28,10 @@ class ActorClient(messageHeader: MessageHeader, @Suppress("UNUSED_PARAMETER") mi
         send(target, envelope)
     }
 
-//    suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T {
-//        throw Exception()
-//    }
-//
-//    suspend fun <T> requestAwait(target: PID, message: Any): T {
-//        throw Exception()
-//    }
+    suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T {
+        val deferredProcess = DeferredProcess<T>(timeout)
+        target.request(message, deferredProcess.pid)
+        return deferredProcess.await()
+    }
 }
 

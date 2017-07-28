@@ -22,7 +22,7 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = pid.requestAwait("hello")
+            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(200))
             assertEquals("hey", reply)
         }
     }

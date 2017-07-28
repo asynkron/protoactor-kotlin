@@ -7,6 +7,7 @@ import actor.proto.spawn
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import java.time.Duration
 import kotlin.test.assertEquals
 
 class FutureTests {
@@ -17,7 +18,7 @@ class FutureTests {
             }
         })
         runBlocking {
-            val reply: Any = pid.requestAwait("hello")
+            val reply: Any = pid.requestAwait("hello", Duration.ofMillis(200))
             Assert.assertEquals("hey", reply)
         }
     }
@@ -31,12 +32,12 @@ class FutureTests {
         val pid2: PID = spawn(fromFunc {
             val m = message
             if (m is String) {
-                val reply1 = requestAwait<String>(pid1, "")
+                val reply1 = requestAwait<String>(pid1, "", Duration.ofMillis(200))
                 respond(m + reply1)
             }
         })
         runBlocking {
-            val reply2 = pid2.requestAwait<String>("hello")
+            val reply2 = pid2.requestAwait<String>("hello", Duration.ofMillis(200))
             assertEquals("hellohey", reply2)
         }
     }

@@ -33,7 +33,6 @@ fun fromFunc(receive : (Context) -> CompletableFuture<*>) {
     }
 }
 
-
 fun spawn(props: Props): PID {
     val name = ProcessRegistry.nextId()
     return spawnNamed(props, name)

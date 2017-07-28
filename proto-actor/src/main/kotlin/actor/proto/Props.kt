@@ -17,13 +17,15 @@ data class Props(
         val dispatcher: Dispatcher = actor.proto.mailbox.Dispatchers.DEFAULT_DISPATCHER,
         val receiveMiddleware: List<ReceiveMiddleware> = listOf(),
         val senderMiddleware: List<SenderMiddleware> = listOf()
-)
+) {
+    fun withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
+    fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
+    fun withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
+}
 
 internal fun Props.spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
 
-fun Props.withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
-fun Props.withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
-fun Props.withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
+
 fun Props.withProducer(producer: () -> Actor): Props = copy(producer = producer)
 fun Props.withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy(spawner = spawner)
 fun Props.withSenderMiddleware(vararg middleware: SenderMiddleware): Props = copy(senderMiddleware = middleware.toList())

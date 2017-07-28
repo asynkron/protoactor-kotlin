@@ -7,6 +7,7 @@ import actor.proto.remote.Remote
 import actor.proto.remote.Serialization.registerFileDescriptor
 import kotlinx.coroutines.experimental.runBlocking
 import java.lang.System.currentTimeMillis
+import java.time.Duration
 import java.util.concurrent.CountDownLatch
 
 fun main(args: Array<String>) {
@@ -28,7 +29,7 @@ private fun run() {
     val remote: PID = PID("127.0.0.1:12000", "remote")
     val startRemote = Messages.StartRemote.newBuilder().setSender(pid).build()
     runBlocking {
-        remote.requestAwait<Messages.Start>(startRemote)
+        remote.requestAwait<Messages.Start>(startRemote, Duration.ofSeconds(2))
     }
 
     val start = currentTimeMillis()

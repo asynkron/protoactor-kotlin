@@ -1,11 +1,5 @@
 apply plugin: 'java'
 
-sourceSets {
-    main {
-
-    }
-}
-
 artifact {
     name 'Proto.Actor Core'
 }

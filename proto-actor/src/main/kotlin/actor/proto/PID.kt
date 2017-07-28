@@ -32,8 +32,6 @@ fun PID.request(message: Any, sender: PID) {
 
 suspend fun <T> PID.requestAwait(message: Any, timeout: Duration): T = requestAwait(message, DeferredProcess(timeout))
 
-suspend fun <T> PID.requestAwait(message: Any): T = requestAwait(message, DeferredProcess())
-
 suspend private fun <T> PID.requestAwait(message: Any, deferredProcess: DeferredProcess<T>): T {
     request(message, deferredProcess.pid)
     return deferredProcess.await()
