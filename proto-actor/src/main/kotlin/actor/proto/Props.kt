@@ -10,23 +10,24 @@ typealias Send = suspend (SenderContext, PID, MessageEnvelope) -> Unit
 typealias ReceiveMiddleware = (Receive) -> Receive
 typealias SenderMiddleware = (Send) -> Send
 data class Props(
-        private val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
+        val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
         val producer: (() -> Actor)? = null,
         val mailboxProducer: () -> Mailbox = { newUnboundedMailbox() },
         val supervisorStrategy: SupervisorStrategy = Supervision.defaultStrategy,
         val dispatcher: Dispatcher = actor.proto.mailbox.Dispatchers.DEFAULT_DISPATCHER,
         val receiveMiddleware: List<ReceiveMiddleware> = listOf(),
         val senderMiddleware: List<SenderMiddleware> = listOf()
-) {
-    fun withProducer(producer: () -> Actor): Props = copy(producer = producer)
-    fun withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
-    fun withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
-    fun withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
-    fun withReceiveMiddleware(vararg middleware: ReceiveMiddleware): Props = copy(receiveMiddleware = middleware.toList())
-    fun withSenderMiddleware(vararg middleware: SenderMiddleware): Props = copy(senderMiddleware = middleware.toList())
-    fun withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy(spawner = spawner)
-    internal fun spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
-}
+)
+
+internal fun Props.spawn(name: String, parent: PID?): PID = spawner(name, this, parent)
+
+fun Props.withChildSupervisorStrategy(supervisorStrategy: SupervisorStrategy): Props = copy(supervisorStrategy = supervisorStrategy)
+fun Props.withMailbox(mailboxProducer: () -> Mailbox): Props = copy(mailboxProducer = mailboxProducer)
+fun Props.withDispatcher(dispatcher: Dispatcher): Props = copy(dispatcher = dispatcher)
+fun Props.withProducer(producer: () -> Actor): Props = copy(producer = producer)
+fun Props.withSpawner(spawner: (String, Props, PID?) -> PID): Props = copy(spawner = spawner)
+fun Props.withSenderMiddleware(vararg middleware: SenderMiddleware): Props = copy(senderMiddleware = middleware.toList())
+fun Props.withReceiveMiddleware(vararg middleware: ReceiveMiddleware): Props = copy(receiveMiddleware = middleware.toList())
 
 fun defaultSpawner(name: String, props: Props, parent: PID?): PID {
     val mailbox = props.mailboxProducer()

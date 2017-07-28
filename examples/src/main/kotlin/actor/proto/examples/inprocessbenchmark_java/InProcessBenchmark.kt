@@ -1,6 +1,12 @@
 package actor.proto.examples.inprocessbenchmark_java
 
 
+
+import actor.proto.java.fromProducer
+import actor.proto.java.spawn
+import actor.proto.java.*
+import actor.proto.java.Actor
+import actor.proto.java.Context
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
@@ -27,13 +33,13 @@ fun run() {
         val clientCount = getRuntime().availableProcessors() * 20
 
         val echoProps =
-                fromFutureProducer { EchoActor() }
+                fromProducer { EchoActor() }
                         .withDispatcher(d)
                         .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
         val latch = CountDownLatch(clientCount)
         val clientProps =
-                fromFutureProducer { PingActor(latch, messageCount, batchSize) }
+                fromProducer { PingActor(latch, messageCount, batchSize) }
                         .withDispatcher(d)
                         .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
@@ -64,8 +70,8 @@ fun run() {
 data class Msg(val sender: PID)
 data class Start(val sender: PID)
 
-class EchoActor : FutureActor {
-    override fun receive(context: FutureContext): CompletableFuture<*> {
+class EchoActor : Actor {
+    override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
             is Msg -> msg.sender.send(msg)
@@ -74,8 +80,8 @@ class EchoActor : FutureActor {
     }
 }
 
-class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : FutureActor {
-    override fun receive(context: FutureContext): CompletableFuture<*> {
+class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
+    override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
             is Start -> sendBatch(context, msg.sender)
@@ -90,7 +96,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
         return done()
     }
 
-    private fun sendBatch(context: FutureContext, sender: PID): Boolean {
+    private fun sendBatch(context: Context, sender: PID): Boolean {
         when (messageCount) {
             0 -> return false
             else -> {

@@ -1,13 +1,15 @@
-package actor.proto
+package actor.proto.java
 
+import actor.proto.PID
+import actor.proto.Props
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
-interface FutureContext {
+interface Context {
     fun parent(): PID?
     fun self(): PID
     fun sender(): PID?
-    fun actor(): FutureActor
+    fun actor(): Actor
     fun children(): Set<PID>
 
     fun message() : Any

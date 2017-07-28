@@ -1,18 +1,17 @@
 package actor.proto.examples.helloworld_java;
 
-import actor.proto.FutureActor;
-import actor.proto.FutureContext;
+
+import actor.proto.java.Actor;
+import actor.proto.java.Context;
 import org.jetbrains.annotations.NotNull;
-
 import java.util.concurrent.CompletableFuture;
+import static actor.proto.java.Actors.done;
 
-import static actor.proto.Actors.done;
-
-public class HelloActor implements FutureActor {
+public class HelloActor implements Actor {
 
     @NotNull
     @Override
-    public CompletableFuture receive(@NotNull FutureContext context) {
+    public CompletableFuture receive(@NotNull Context context) {
         Object m = context.message();
 
         if (m instanceof String) {

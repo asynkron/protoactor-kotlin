@@ -1,12 +1,9 @@
 package actor.proto.router.tests
 
-import actor.proto.Props
+import actor.proto.*
 import actor.proto.router.fixture.DoNothingActor
 import actor.proto.router.fixture.TestMailbox
-import actor.proto.fromProducer
-import actor.proto.requestAwait
 import actor.proto.router.*
-import actor.proto.spawn
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
