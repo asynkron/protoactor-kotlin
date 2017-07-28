@@ -30,6 +30,7 @@
     <output url="file://$MODULE_DIR$/../../../proto-remote/out/production/classes" />
     <exclude-output />
     <content url="file://$MODULE_DIR$/../../../proto-remote/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../proto-remote/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../proto-remote/src/main/kotlin" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../../../proto-remote/src/main/resources" type="java-resource" />
     </content>

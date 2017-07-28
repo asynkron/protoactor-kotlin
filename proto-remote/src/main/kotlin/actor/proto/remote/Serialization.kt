@@ -18,7 +18,7 @@ object Serialization {
 
     init {
         registerFileDescriptor(actor.proto.Protos.getDescriptor())
-        registerFileDescriptor(actor.proto.remote.RemoteProtos.getDescriptor())
+        registerFileDescriptor(RemoteProtos.getDescriptor())
         registerSerializer(ProtobufSerializer, true)
         registerSerializer(JsonSerializer, false)
     }
