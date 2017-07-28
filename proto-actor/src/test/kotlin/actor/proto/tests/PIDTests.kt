@@ -18,7 +18,7 @@ class PIDTests {
 
     @Test fun `given actor died, cachedProcess should not return it`() {
         val pid: PID = spawn(fromFunc(EmptyReceive).withMailbox { TestMailbox() })
-        pid.stop()
+        stop(pid)
         val p = pid.cachedProcess()
         assertNotNull(p)
     }

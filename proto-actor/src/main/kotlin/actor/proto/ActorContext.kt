@@ -169,7 +169,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         _message = msg
         return if (receiveMiddleware != null) receiveMiddleware.invoke(this)
         else when (message) {
-            is PoisonPill -> self.stop()
+            is PoisonPill -> stop(self)
             else -> actor.receive(this)
         }
     }
@@ -201,7 +201,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     suspend private fun handleRestart() {
         state = ContextState.Restarting
         invokeUserMessage(Restarting)
-        children.forEach { it.stop() }
+        children.forEach { stop(it) }
         tryRestartOrTerminate()
     }
 
@@ -238,7 +238,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     suspend private fun handleStop() {
         state = ContextState.Stopping
         invokeUserMessage(Stopping)
-        children.forEach { it.stop() }
+        children.forEach { stop(it) }
         tryRestartOrTerminate()
     }
 

@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
             is Started -> println("Started")
             is String -> {
                 println("Hello " + message)
-                self.stop()
+                stop(self)
             }
             is Stopping -> println("Stopping")
             is Stopped -> println("Stopped")

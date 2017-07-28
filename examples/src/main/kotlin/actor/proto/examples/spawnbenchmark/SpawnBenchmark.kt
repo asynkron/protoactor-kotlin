@@ -62,7 +62,7 @@ class SpawnActor : Actor {
             is Request -> when {
                 msg.size == 1L -> {
                     msg.respondTo.send(msg.num)
-                    context.self.stop()
+                    stop(context.self)
                 }
                 else -> {
                     replies = msg.div

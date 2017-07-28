@@ -3,7 +3,11 @@
 package actor.proto.java
 
 import actor.proto.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.future.asCompletableFuture
 import kotlinx.coroutines.experimental.future.await
+import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
 private val done: CompletableFuture<Void> = CompletableFuture.completedFuture(null)
@@ -47,4 +51,11 @@ fun spawnNamed(props: Props, name: String): PID {
     return props.spawn(name, null)
 }
 
-fun send(pid: PID, message: Any) = pid.send(message)
+fun send(target: PID, message: Any) = DefaultActorClient.send(target, message)
+fun request(target: PID, message: Any, sender: PID) = DefaultActorClient.request(target, message, sender)
+fun <T> requestAwait(target: PID, message: Any, timeout: Duration): CompletableFuture<T> {
+    val d = async(CommonPool) {
+        DefaultActorClient.requestAwait<T>(target, message, timeout)
+    }
+    return d.asCompletableFuture()
+}

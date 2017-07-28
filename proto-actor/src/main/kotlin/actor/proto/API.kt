@@ -22,3 +22,7 @@ fun spawnNamed(props: Props, name: String): PID {
     return props.spawn(name, null)
 }
 
+fun stop(pid : PID) {
+    val process = pid.cachedProcess() ?: ProcessRegistry.get(pid)
+    process.stop(pid)
+}

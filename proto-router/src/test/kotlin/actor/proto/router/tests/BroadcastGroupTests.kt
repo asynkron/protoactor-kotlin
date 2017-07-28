@@ -29,7 +29,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, when one routee is stopped, all other routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            routee2.stop()
+            stop(routee2)
             router.send("hello")
             assertEquals("hello", routee1.requestAwait("received?", _timeout))
             assertEquals("hello", routee3.requestAwait("received?", _timeout))

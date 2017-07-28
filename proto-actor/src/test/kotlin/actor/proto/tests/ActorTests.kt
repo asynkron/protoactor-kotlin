@@ -56,7 +56,7 @@ class ActorTests {
         }.withMailbox { TestMailbox() }
         val pid: PID = spawn(prop)
         pid.send("hello")
-        pid.stop()
+        stop(pid)
         assertEquals(4, messages.count())
         val messageArr: Array<Any> = messages.toTypedArray()
         assertTrue(messageArr[0] is Started)

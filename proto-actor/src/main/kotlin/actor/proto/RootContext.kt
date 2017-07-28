@@ -17,9 +17,6 @@ class ActorClient(messageHeader: MessageHeader = EmptyMessageHeader, senderMiddl
         get() = null
 
     override val headers: MessageHeader = messageHeader
-    private fun defaultSender(@Suppress("UNUSED_PARAMETER") context: SenderContext, target: PID, message: MessageEnvelope): Unit {
-        target.send(message)
-    }
 
     fun send(target: PID, message: Any) = when (senderMiddleware) {
         null -> target.send(message)
@@ -39,9 +36,13 @@ class ActorClient(messageHeader: MessageHeader = EmptyMessageHeader, senderMiddl
 
     suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T {
         val deferredProcess = DeferredProcess<T>(timeout)
-        request(target,message,deferredProcess.pid)
+        request(target, message, deferredProcess.pid)
         return deferredProcess.await()
     }
 }
+
+fun send(target: PID, message: Any) = DefaultActorClient.send(target, message)
+fun request(target: PID, message: Any, sender: PID) = DefaultActorClient.request(target, message, sender)
+suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = DefaultActorClient.requestAwait(target, message, timeout)
 
 val DefaultActorClient = ActorClient()

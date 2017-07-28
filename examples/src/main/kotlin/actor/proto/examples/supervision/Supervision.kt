@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
     actor.send(Recoverable)
     actor.send(Fatal)
     Thread.sleep(2000)
-    actor.stop()
+    stop(actor)
     readLine()
 }
 

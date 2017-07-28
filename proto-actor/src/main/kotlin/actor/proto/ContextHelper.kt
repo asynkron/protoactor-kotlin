@@ -3,7 +3,7 @@ package actor.proto
 internal object ContextHelper {
     suspend internal fun defaultReceive(context: Context) {
         return when (context.message) {
-            is PoisonPill -> context.self.stop()
+            is PoisonPill -> stop(context.self)
             else -> context.actor.receive(context)
         }
     }

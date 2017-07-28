@@ -54,8 +54,8 @@ fun run() {
         val x = ((totalMessages.toDouble() / elapsedNanos * 1_000_000_000.0 ).toInt())
         println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
         for ((client, echo) in pairs) {
-            client.stop()
-            echo.stop()
+            stop(client)
+            stop(echo)
         }
 
         Thread.sleep(500)

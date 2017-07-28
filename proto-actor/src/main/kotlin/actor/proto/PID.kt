@@ -24,26 +24,15 @@ fun PID.sendSystemMessage(sys: SystemMessage) {
     process.sendSystemMessage(this, sys)
 }
 
-fun PID.request(message: Any, sender: PID) {
-    val process = cachedProcess() ?: ProcessRegistry.get(this)
-    val messageEnvelope = MessageEnvelope(message, sender, null)
-    process.sendUserMessage(this, messageEnvelope)
-}
-
 suspend fun <T> PID.requestAwait(message: Any, timeout: Duration): T = requestAwait(message, DeferredProcess(timeout))
 
 suspend private fun <T> PID.requestAwait(message: Any, deferredProcess: DeferredProcess<T>): T {
-    request(message, deferredProcess.pid)
+    request(this, message, deferredProcess.pid)
     return deferredProcess.await()
 }
 
 fun PID.toShortString(): String {
     return "$address/$id"
-}
-
-fun PID.stop() {
-    val process = cachedProcess() ?: ProcessRegistry.get(this)
-    process.stop(this)
 }
 
 fun PID.send(message: Any) {

@@ -27,9 +27,9 @@ class RouterActor(private val config: RouterConfig, private val routerState: Rou
                 }
             }
             is RouterBroadcastMessage -> routerState.getRoutees().forEach {
-                when(context.sender) {
-                     null -> it.send(routerMessage.message)
-                    else -> it.request(routerMessage.message, context.sender!!)
+                when (context.sender) {
+                    null -> send(it, routerMessage.message)
+                    else -> request(it, routerMessage.message, context.sender!!)
                 }
             }
             is RouterGetRoutees -> context.sender!!.send(Routees(routerState.getRoutees()))

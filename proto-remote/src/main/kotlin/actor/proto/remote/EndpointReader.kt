@@ -34,9 +34,9 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
                     when {
                         envelope.hasSender() -> {
                             val sender: PID = envelope.sender
-                            target.request(message, sender)
+                            request(target,message, sender)
                         }
-                        else -> target.send(message)
+                        else -> send(target,message)
                     }
                 }
             }
