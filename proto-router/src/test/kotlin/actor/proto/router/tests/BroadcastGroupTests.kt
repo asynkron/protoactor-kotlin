@@ -19,7 +19,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, all routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            router.send("hello")
+            send(router,"hello")
             assertEquals("hello", requestAwait(routee1,"received?", _timeout))
             assertEquals("hello", requestAwait(routee2,"received?", _timeout))
             assertEquals("hello", requestAwait(routee3,"received?", _timeout))
@@ -30,7 +30,7 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             stop(routee2)
-            router.send("hello")
+            send(router,"hello")
             assertEquals("hello", requestAwait(routee1,"received?", _timeout))
             assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
@@ -39,8 +39,8 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, when one routee is slow, all other routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            routee2.send("go slow")
-            router.send("hello")
+            send(routee2,"go slow")
+            send(router,"hello")
             assertEquals("hello", requestAwait(routee1,"received?", _timeout))
             assertEquals("hello", requestAwait(routee3,"received?", _timeout))
         }
@@ -49,7 +49,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, routees can be removed`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            router.send(RouterRemoveRoutee(routee1))
+            send(router,RouterRemoveRoutee(routee1))
             val routees = requestAwait<Routees>(router,RouterGetRoutees, _timeout)
             assertFalse(routees.pids.contains(routee1))
             assertTrue(routees.pids.contains(routee2))
@@ -61,7 +61,7 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
-            router.send(RouterAddRoutee(routee4))
+            send(router,RouterAddRoutee(routee4))
             val routees = requestAwait<Routees>(router,RouterGetRoutees, _timeout)
             assertTrue(routees.pids.contains(routee1))
             assertTrue(routees.pids.contains(routee2))
@@ -73,9 +73,9 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, removed routees no longer receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            router.send("first message")
-            router.send(RouterRemoveRoutee(routee1))
-            router.send("second message")
+            send(router,"first message")
+            send(router,RouterRemoveRoutee(routee1))
+            send(router,"second message")
             assertEquals("first message", requestAwait(routee1,"received?", _timeout))
             assertEquals("second message", requestAwait(routee2,"received?", _timeout))
             assertEquals("second message", requestAwait(routee3,"received?", _timeout))
@@ -86,8 +86,8 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             val routee4 = spawn(MyActorProps)
-            router.send(RouterAddRoutee(routee4))
-            router.send("a message")
+            send(router,RouterAddRoutee(routee4))
+            send(router,"a message")
             assertEquals("a message", requestAwait(routee1,"received?", _timeout))
             assertEquals("a message", requestAwait(routee2,"received?", _timeout))
             assertEquals("a message", requestAwait(routee3,"received?", _timeout))
@@ -98,7 +98,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, all routees receive router broadcast messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            router.send(RouterBroadcastMessage("hello"))
+            send(router,RouterBroadcastMessage("hello"))
             delay(100, TimeUnit.MILLISECONDS)
             assertEquals("hello", requestAwait(routee1,"received?", _timeout))
             assertEquals("hello", requestAwait(routee2,"received?", _timeout))

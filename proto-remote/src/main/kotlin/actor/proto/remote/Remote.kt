@@ -45,7 +45,7 @@ object Remote {
         endpointManagerPid = spawnNamed(props, "endpointmanager")
         EventStream.subscribe({
             if (it is EndpointTerminatedEvent) {
-                endpointManagerPid.send(it)
+                send(endpointManagerPid, it)
             }
         })
     }
@@ -57,7 +57,7 @@ object Remote {
     suspend fun spawnNamed(address: String, name: String, kind: String, timeout: Duration): PID {
         val activator: PID = activatorForAddress(address)
         val req = ActorPidRequest(kind, name)
-        val res = requestAwait<RemoteProtos.ActorPidResponse>(activator,req, timeout)
+        val res = requestAwait<RemoteProtos.ActorPidResponse>(activator, req, timeout)
         return res.pid
     }
 
@@ -67,7 +67,7 @@ object Remote {
             else -> Pair(msg, null)
         }
         val env: RemoteDeliver = RemoteDeliver(message, pid, sender, serializerId)
-        endpointManagerPid.send(env)
+        send(endpointManagerPid, env)
     }
 }
 

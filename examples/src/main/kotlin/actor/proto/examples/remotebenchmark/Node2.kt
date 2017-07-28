@@ -25,7 +25,7 @@ class EchoActor : Actor {
                 sender = msg.sender
                 context.respond(start)
             }
-            is Messages.Ping -> sender.send(pong)
+            is Messages.Ping -> send(sender,pong)
             else -> {
             }
         }

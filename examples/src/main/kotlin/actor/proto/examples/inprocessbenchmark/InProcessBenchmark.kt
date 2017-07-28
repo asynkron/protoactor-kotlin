@@ -4,11 +4,9 @@ package actor.proto.examples.inprocessbenchmark
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
-import kotlinx.coroutines.experimental.newFixedThreadPoolContext
-import java.lang.Runtime.*
+import java.lang.Runtime.getRuntime
 import java.lang.System.nanoTime
 import java.util.concurrent.CountDownLatch
-
 
 
 fun main(args: Array<String>) {
@@ -44,7 +42,7 @@ fun run() {
 
         val sw = nanoTime()
         for ((client, echo) in pairs) {
-            client.send(Start(echo))
+            send(client, Start(echo))
         }
         latch.await()
 
@@ -69,7 +67,7 @@ class EchoActor : Actor {
     suspend override fun receive(context: Context) {
         val msg = context.message
         when (msg) {
-            is Msg -> msg.sender.send(msg)
+            is Msg -> send(msg.sender,msg)
         }
     }
 }
@@ -94,7 +92,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
             0 -> return false
             else -> {
                 val m = Msg(context.self)
-                repeat(batchSize) { sender.send(m) }
+                repeat(batchSize) { send(sender, m) }
                 messageCount -= batchSize
                 batch = batchSize
                 return true

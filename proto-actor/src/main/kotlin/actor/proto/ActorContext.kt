@@ -85,7 +85,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
             else -> {
                 receiveTimeout = duration
                 cancelReceiveTimeout()
-                _receiveTimeoutTimer = AsyncTimer({ self.send(ReceiveTimeout) }, duration).apply { start() }
+                _receiveTimeoutTimer = AsyncTimer({ DefaultActorClient.send(self,ReceiveTimeout) }, duration).apply { start() }
             }
         }
     }
@@ -185,7 +185,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     suspend private fun sendUserMessage(target: PID, message: Any) {
         when (senderMiddleware) {
-            null -> target.send(message)
+            null -> DefaultActorClient.send(target, message)
             else -> when (message) {
                 is MessageEnvelope -> senderMiddleware.invoke(this, target, message)
                 else -> senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))

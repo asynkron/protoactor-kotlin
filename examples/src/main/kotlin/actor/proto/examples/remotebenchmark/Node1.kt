@@ -36,7 +36,7 @@ private fun run() {
     println("Starting to send")
     val msg: Ping = Ping.newBuilder().build()
     for (i in 0 until messageCount) {
-        remote.send(msg)
+        send(remote,msg)
     }
     wg.await()
     val elapsed = currentTimeMillis() - start

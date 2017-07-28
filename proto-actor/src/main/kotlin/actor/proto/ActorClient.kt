@@ -19,7 +19,10 @@ class ActorClient(messageHeader: MessageHeader = EmptyMessageHeader, senderMiddl
     override val headers: MessageHeader = messageHeader
 
     fun send(target: PID, message: Any) = when (senderMiddleware) {
-        null -> target.send(message)
+        null -> {
+            val process: Process = target.cachedProcess() ?: ProcessRegistry.get(target)
+            process.sendUserMessage(target, message)
+        }
         else -> {
             val c = this
             when (message) {

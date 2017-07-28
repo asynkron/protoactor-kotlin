@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 
 private fun runOnce() {
     val (cd, managerPid: PID) = spawnManager()
-    managerPid.send(Begin)
+    send(managerPid, Begin)
     cd.await()
     System.gc()
     System.runFinalization()
@@ -29,7 +29,7 @@ private fun spawnManager(): Pair<CountDownLatch, PID> {
             is Begin -> {
                 val root = spawn(SpawnActor.props)
                 start = System.currentTimeMillis()
-                root.send(Request(10, 0, 1_000_000, self))
+                send(root,Request(10, 0, 1_000_000, self))
             }
             is Long -> {
                 val millis = System.currentTimeMillis() - start
@@ -61,7 +61,7 @@ class SpawnActor : Actor {
         when (msg) {
             is Request -> when {
                 msg.size == 1L -> {
-                    msg.respondTo.send(msg.num)
+                     context.send(msg.respondTo,msg.num)
                     stop(context.self)
                 }
                 else -> {
@@ -70,7 +70,7 @@ class SpawnActor : Actor {
                     for (i in 0 until msg.div) {
                         val child: PID = spawn(props)
                         val s = msg.size / msg.div
-                        child.send(Request(
+                        context.send(child,Request(
                                 msg.div,
                                 msg.num + i * s,
                                 s,
@@ -81,7 +81,7 @@ class SpawnActor : Actor {
             is Long -> {
                 sum += msg
                 replies--
-                if (replies == 0L) replyTo.send(sum)
+                if (replies == 0L) context.send(replyTo,sum)
             }
         }
     }

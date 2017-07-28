@@ -22,7 +22,7 @@ internal class RandomRouterState(seed: Long?) : RouterState() {
         val v = values
         val i = random.nextInt(v.count())
         val pid = v[i]
-        pid.send(message)
+        send(pid,message)
     }
 
 }

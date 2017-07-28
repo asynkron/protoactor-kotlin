@@ -49,7 +49,7 @@ fun run() {
 
         val sw = nanoTime()
         for ((client, echo) in pairs) {
-            client.send(Start(echo))
+            DefaultActorClient.send(client,Start(echo))
         }
         latch.await()
 
@@ -74,7 +74,7 @@ class EchoActor : Actor {
     override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
-            is Msg -> msg.sender.send(msg)
+            is Msg -> DefaultActorClient.send(msg.sender,msg)
         }
         return done()
     }
@@ -101,7 +101,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
             0 -> return false
             else -> {
                 val m = Msg(context.self())
-                repeat(batchSize) { sender.send(m) }
+                repeat(batchSize) { DefaultActorClient.send(sender,m) }
                 messageCount -= batchSize
                 batch = batchSize
                 return true

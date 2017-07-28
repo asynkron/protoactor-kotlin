@@ -21,7 +21,7 @@ internal class RoundRobinRouterState : RouterState() {
         val v = values
         val i = currentIndex.getAndIncrement() % v.count()
         val pid = v[i]
-        pid.send(message)
+        send(pid,message)
     }
 }
 

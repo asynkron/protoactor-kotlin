@@ -32,7 +32,7 @@ class RouterActor(private val config: RouterConfig, private val routerState: Rou
                     else -> request(it, routerMessage.message, context.sender!!)
                 }
             }
-            is RouterGetRoutees -> context.sender!!.send(Routees(routerState.getRoutees()))
+            is RouterGetRoutees -> context.respond(Routees(routerState.getRoutees()))
         }
     }
 }

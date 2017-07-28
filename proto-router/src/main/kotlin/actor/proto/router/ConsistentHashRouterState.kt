@@ -39,7 +39,7 @@ internal class ConsistentHashRouterState(private val hash: (String) -> Int, priv
                 val key = msg.hashBy()
                 val node = r.hashRing.getNode(key)
                 val routee = r.routeeMap[node]!!
-                routee.send(message)
+                send(routee, message)
             }
             else -> throw Exception("Message is not hashable")
         }

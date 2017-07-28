@@ -27,9 +27,3 @@ fun PID.sendSystemMessage(sys: SystemMessage) {
 fun PID.toShortString(): String {
     return "$address/$id"
 }
-
-fun PID.send(message: Any) {
-    val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
-    process.sendUserMessage(this, message)
-}
-

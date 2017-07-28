@@ -12,7 +12,7 @@ internal class BroadcastRouterState : RouterState() {
     }
 
     override fun routeMessage(message: Any) {
-        routees.forEach { it.send(message) }
+        routees.forEach { send(it,message) }
     }
 }
 
