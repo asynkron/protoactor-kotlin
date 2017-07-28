@@ -1,7 +1,5 @@
 package actor.proto
 
-import actor.proto.PID
-import actor.proto.Props
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.future.asCompletableFuture
@@ -9,15 +7,14 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
-class FutureContextImpl : FutureContext {
+class FutureContextImpl(private val actor: FutureActor) : FutureContext {
 
-    fun wrap(ctx: actor.proto.Context, a: FutureActor) {
+    fun wrap(ctx: actor.proto.Context) : FutureContext {
         this.ctx = ctx
-        this.a = a
+        return this
     }
 
     private lateinit var ctx: actor.proto.Context
-    private lateinit var a: FutureActor
 
     override fun parent(): PID? = ctx.parent
 
@@ -25,7 +22,7 @@ class FutureContextImpl : FutureContext {
 
     override fun sender(): PID? = ctx.sender
 
-    override fun actor(): FutureActor = a //TODO: this is wrong?
+    override fun actor(): FutureActor = actor
 
     override fun children(): Set<PID> = ctx.children
 
