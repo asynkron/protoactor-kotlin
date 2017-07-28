@@ -1,3 +1,4 @@
+@file:JvmName("Router")
 package actor.proto.router
 
 import actor.proto.*

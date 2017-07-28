@@ -1,5 +1,6 @@
-package actor.proto.java
+package actor.proto
 
+import actor.proto.FutureActor
 import actor.proto.PID
 import actor.proto.Props
 import java.time.Duration

@@ -1,4 +1,4 @@
-package actor.proto.java
+package actor.proto
 
 import java.util.concurrent.CompletableFuture
 

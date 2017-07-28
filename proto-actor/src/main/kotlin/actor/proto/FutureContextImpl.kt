@@ -1,4 +1,4 @@
-package actor.proto.java
+package actor.proto
 
 import actor.proto.PID
 import actor.proto.Props
@@ -9,7 +9,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
-class JavaContextImpl : FutureContext {
+class FutureContextImpl : FutureContext {
 
     fun wrap(ctx: actor.proto.Context, a: FutureActor) {
         this.ctx = ctx

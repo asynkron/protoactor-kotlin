@@ -1,8 +1,9 @@
 package actor.proto.examples.helloworld_java;
 
-import actor.proto.java.Actor;
-import actor.proto.java.FutureActor;
-import actor.proto.java.FutureContext;
+
+import actor.proto.Actors;
+import actor.proto.FutureActor;
+import actor.proto.FutureContext;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.*;
@@ -24,6 +25,6 @@ public class HelloActor implements FutureActor {
             return timeoutFuture;
         }
 
-        return Actor.done();
+        return Actors.done();
     }
 }
