@@ -28,15 +28,15 @@ internal class ConsistentHashRouterState(private val hash: (String) -> Int, priv
 
     override fun routeMessage(message: Any) {
 
-        val msg = when (message) {
+        val unwrapped = when (message) {
             is MessageEnvelope -> message.message
             else -> message
         }
 
         val r = routees
-        when (msg) {
+        when (unwrapped) {
             is Hashable -> {
-                val key = msg.hashBy()
+                val key = unwrapped.hashBy()
                 val node = r.hashRing.getNode(key)
                 val routee = r.routeeMap[node]!!
                 send(routee, message)

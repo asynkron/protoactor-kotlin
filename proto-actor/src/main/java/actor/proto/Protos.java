@@ -907,6 +907,7 @@ public final class Protos {
      */
     public static final class PoisonPill extends
             GeneratedMessageV3 implements
+            AutoReceiveMessage,
             // @@protoc_insertion_point(message_implements:actor.PoisonPill)
             PoisonPillOrBuilder {
         private static final long serialVersionUID = 0L;
