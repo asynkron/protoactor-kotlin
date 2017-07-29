@@ -22,7 +22,6 @@ interface Context {
     fun setReceiveTimeout(duration: Duration)
     fun getReceiveTimeout(): Duration
     fun cancelReceiveTimeout()
-    fun receive(message: Any): Unit
     fun send(target: PID, message: Any)
     fun request(target: PID, message: Any)
     fun respond(message: Any)

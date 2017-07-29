@@ -2,14 +2,11 @@ package actor.proto.examples.inprocessbenchmark_java
 
 
 
-import actor.proto.java.fromProducer
-import actor.proto.java.spawn
+import actor.proto.PID
 import actor.proto.java.*
-import actor.proto.java.Actor
-import actor.proto.java.Context
-import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
+import actor.proto.stop
 import java.lang.Runtime.getRuntime
 import java.lang.System.nanoTime
 import java.util.concurrent.CompletableFuture
@@ -49,7 +46,7 @@ fun run() {
 
         val sw = nanoTime()
         for ((client, echo) in pairs) {
-            DefaultActorClient.send(client,Start(echo))
+            send(client,Start(echo))
         }
         latch.await()
 
@@ -74,7 +71,7 @@ class EchoActor : Actor {
     override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
-            is Msg -> DefaultActorClient.send(msg.sender,msg)
+            is Msg -> send(msg.sender,msg)
         }
         return done()
     }
@@ -101,7 +98,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
             0 -> return false
             else -> {
                 val m = Msg(context.self())
-                repeat(batchSize) { DefaultActorClient.send(sender,m) }
+                repeat(batchSize) { send(sender,m) }
                 messageCount -= batchSize
                 batch = batchSize
                 return true

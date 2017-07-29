@@ -21,7 +21,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         receiveMiddleware.isEmpty() -> null
         else -> receiveMiddleware
                 .reversed()
-                .fold({ ctx -> ContextHelper.defaultReceive(ctx) },
+                .fold({ ctx -> ctx.actor.autoReceive(ctx) },
                         { inner, outer -> outer(inner!!) })
     }
     private val senderMiddleware: Send? = when {
@@ -102,8 +102,6 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         }
     }
 
-    suspend override fun receive(message: Any): Unit = invokeUserMessage(message)
-
     override fun send(target: PID, message: Any) = sendUserMessage(target, message)
 
     override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
@@ -169,10 +167,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         }
         _message = msg
         return if (receiveMiddleware != null) receiveMiddleware.invoke(this)
-        else when (message) {
-            is PoisonPill -> stop(self)
-            else -> actor.receiveInner(this)
-        }
+        else actor.autoReceive(this)
     }
 
     suspend override fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
@@ -186,7 +181,10 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     private fun sendUserMessage(target: PID, message: Any) {
         when (senderMiddleware) {
-            null -> DefaultActorClient.send(target, message)
+            null -> {
+                val process: Process = target.cachedProcess() ?: ProcessRegistry.get(target)
+                process.sendUserMessage(target, message)
+            }
             else -> {
                 val c = this
                 when (message) {

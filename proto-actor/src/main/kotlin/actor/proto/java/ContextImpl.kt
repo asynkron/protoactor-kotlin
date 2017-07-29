@@ -32,7 +32,6 @@ class ContextImpl(private val actor: Actor) : Context {
     override fun setReceiveTimeout(duration: Duration) = ctx.setReceiveTimeout(duration)
     override fun getReceiveTimeout(): Duration = ctx.getReceiveTimeout()
     override fun cancelReceiveTimeout() = ctx.cancelReceiveTimeout()
-    override fun receive(message: Any) = runBlocking { ctx.receive(message) }
     override fun send(target: PID, message: Any) = runBlocking { ctx.send(target, message) }
     override fun request(target: PID, message: Any) = runBlocking { ctx.request(target, message) }
     override fun respond(message: Any) = runBlocking { ctx.respond(message) }
