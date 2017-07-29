@@ -13,11 +13,11 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class ActorTests {
-    private fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
+    private fun spawnActorFromFunc(receive: suspend Context.(msg:Any) -> Unit): PID = spawn(fromFunc(receive))
     @Test fun requestActorAsync(): Unit {
-        val pid: PID = spawnActorFromFunc { ctx ->
-            when (ctx.message) {
-                is String -> ctx.respond("hey")
+        val pid: PID = spawnActorFromFunc { msg ->
+            when (msg) {
+                is String -> respond("hey")
             }
         }
 
@@ -37,9 +37,9 @@ class ActorTests {
     }
 
     @Test fun `request actor async should not raise timeout exception when result is first`(): Unit {
-        val pid: PID = spawnActorFromFunc { ctx ->
-            when (ctx.message) {
-                is String -> ctx.respond("hey")
+        val pid: PID = spawnActorFromFunc { msg ->
+            when (msg) {
+                is String -> respond("hey")
             }
         }
 

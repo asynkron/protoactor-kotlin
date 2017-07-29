@@ -12,8 +12,8 @@ import kotlin.test.assertEquals
 
 class FutureTests {
     @Test fun `given actor when requestAwait should return reply`() {
-        val pid: PID = spawn(fromFunc {
-            if (message is String) {
+        val pid: PID = spawn(fromFunc { msg ->
+            if (msg is String) {
                 respond("hey")
             }
         })
@@ -24,16 +24,15 @@ class FutureTests {
     }
 
     @Test fun `given actor when await context_requestAwait should get reply`() {
-        val pid1: PID = spawn(fromFunc {
-            if (message is String) {
+        val pid1: PID = spawn(fromFunc { msg ->
+            if (msg is String) {
                 respond("hey")
             }
         })
-        val pid2: PID = spawn(fromFunc {
-            val m = message
-            if (m is String) {
+        val pid2: PID = spawn(fromFunc { msg ->
+            if (msg is String) {
                 val reply1 = requestAwait<String>(pid1, "", Duration.ofMillis(200))
-                respond(m + reply1)
+                respond(msg + reply1)
             }
         })
         runBlocking {

@@ -4,10 +4,10 @@ import actor.proto.*
 import actor.proto.router.newRoundRobinPool
 
 fun main(args: Array<String>) {
-    val prop = fromFunc {
-        when (message) {
+    val prop = fromFunc { msg ->
+        when (msg) {
             is Started -> println("Started ${self.toShortString()}")
-            is String -> println("Got message ${self.toShortString()} $message")
+            is String -> println("Got message ${self.toShortString()} $msg")
         }
     }
     val config = newRoundRobinPool(prop, 5)

@@ -22,8 +22,7 @@ private fun runOnce() {
 private fun spawnManager(): Pair<CountDownLatch, PID> {
     var start: Long = 0
     val cd = CountDownLatch(1)
-    val managerProps = fromFunc {
-        val msg = message
+    val managerProps = fromFunc { msg ->
         when (msg) {
 
             is Begin -> {

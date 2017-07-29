@@ -1,6 +1,5 @@
 package actor.proto.examples.inprocessbenchmark
 
-
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox

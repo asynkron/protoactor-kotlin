@@ -6,9 +6,8 @@ class EndpointWatcher(address: String) : Actor {
     private val behavior: Behavior = Behavior({ connectedAsync(it) })
     private val watched: HashMap<String, PID> = HashMap()
     private var _address: String = address
-    suspend override fun Context.receive(msg: Any) = behavior.receive(this)
-    private suspend fun connectedAsync(context: Context) {
-        val msg = context.message
+    suspend override fun Context.receive(msg: Any) = behavior.receive(this,msg)
+    private suspend fun connectedAsync(msg: Any) {
         when (msg) {
             is RemoteTerminate -> {
                 watched.remove(msg.watcher.id)
@@ -19,7 +18,7 @@ class EndpointWatcher(address: String) : Actor {
                     val watcher: PID = PID(ProcessRegistry.address, id)
                     sendSystemMessage(watcher,Terminated(pid, true))
                 }
-                behavior.become({ terminatedAsync(it) })
+                behavior.become({ terminatedAsync() })
             }
             is RemoteUnwatch -> {
                 watched.remove(msg.watcher.id)
@@ -32,8 +31,8 @@ class EndpointWatcher(address: String) : Actor {
         }
     }
 
-    private suspend fun terminatedAsync(context: Context) {
-        val msg = context.message
+    private suspend fun Context.terminatedAsync() {
+        val msg = message
         when (msg) {
             is RemoteWatch -> sendSystemMessage(msg.watcher,Terminated(msg.watchee, true))
             else -> {

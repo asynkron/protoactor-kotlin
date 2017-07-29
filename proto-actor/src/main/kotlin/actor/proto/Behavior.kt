@@ -2,14 +2,15 @@ package actor.proto
 
 import java.util.*
 
-class Behavior(receive: suspend (Context) -> Unit = {}) {
-    private val behaviors: Stack<suspend (Context) -> Unit> = Stack()
-    fun become(receive: suspend (Context) -> Unit) {
+private typealias Receive2 = suspend Context.(msg:Any) -> Unit
+class Behavior(receive: Receive2 = {}) {
+    private val behaviors: Stack<Receive2> = Stack()
+    fun become(receive: Receive2) {
         behaviors.clear()
         behaviors.push(receive)
     }
 
-    fun becomeStacked(receive: suspend (Context) -> Unit) {
+    fun becomeStacked(receive: Receive2) {
         behaviors.push(receive)
     }
 
@@ -17,9 +18,9 @@ class Behavior(receive: suspend (Context) -> Unit = {}) {
         behaviors.pop()
     }
 
-    suspend fun receive(context: Context): Unit {
+    suspend fun receive(ctx:Context, msg:Any ) {
         val behavior = behaviors.peek()
-        return behavior(context)
+        behavior(ctx,msg)
     }
 
     init {

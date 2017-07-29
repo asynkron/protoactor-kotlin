@@ -8,40 +8,41 @@ import java.time.Duration
 import kotlin.test.assertEquals
 
 class BehaviorTests {
-    private fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
+    private val timeout = Duration.ofMillis(200)
+
     @Test fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        Assert.assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, Duration.ofMillis(200)))
-        Assert.assertEquals("Hot!", requestAwait<String>(actor, Touch, Duration.ofMillis(200)))
-        Assert.assertEquals("Turning off", requestAwait<String>(actor, PressSwitch, Duration.ofMillis(200)))
-        Assert.assertEquals("Cold", requestAwait<String>(actor, Touch, Duration.ofMillis(200)))
+        Assert.assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, timeout))
+        Assert.assertEquals("Hot!", requestAwait<String>(actor, Touch, timeout))
+        Assert.assertEquals("Turning off", requestAwait<String>(actor, PressSwitch, timeout))
+        Assert.assertEquals("Cold", requestAwait<String>(actor, Touch, timeout))
     }
 
     @Test fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        assertEquals("Turning on", requestAwait(actor, PressSwitch, Duration.ofMillis(200)))
-        assertEquals("Smashed!", requestAwait(actor, HitWithHammer, Duration.ofMillis(200)))
-        assertEquals("Broken", requestAwait(actor, PressSwitch, Duration.ofMillis(200)))
-        assertEquals("OW!", requestAwait(actor, Touch, Duration.ofMillis(200)))
+        assertEquals("Turning on", requestAwait(actor, PressSwitch, timeout))
+        assertEquals("Smashed!", requestAwait(actor, HitWithHammer, timeout))
+        assertEquals("Broken", requestAwait(actor, PressSwitch, timeout))
+        assertEquals("OW!", requestAwait(actor, Touch, timeout))
     }
 
     @Test fun `pop behavior should restore pushed behavior`() = runBlocking {
         val behavior: Behavior = Behavior()
-        behavior.become { ctx ->
-            if (ctx.message is String) {
-                behavior.becomeStacked { ctx2 ->
-                    ctx2.respond(42)
+        behavior.become { msg ->
+            if (msg is String) {
+                behavior.becomeStacked {
+                    respond(42)
                     behavior.unbecomeStacked()
                 }
 
-                ctx.respond(ctx.message)
+                respond(msg)
             }
         }
 
-        val timeout = Duration.ofMillis(200)
-        val pid: PID = spawnActorFromFunc({ behavior.receive(it) })
+        val timeout = timeout
+        val pid: PID = spawn(fromFunc({ msg -> behavior.receive(this,msg)}))
         assertEquals("number", requestAwait(pid,"number", timeout))
         assertEquals(42, requestAwait(pid,123, timeout))
         assertEquals("answertolifetheuniverseandeverything", requestAwait(pid,"answertolifetheuniverseandeverything", timeout))
@@ -50,13 +51,13 @@ class BehaviorTests {
 
 
 class LightBulb : Actor {
-    private val _behavior: Behavior = Behavior()
-    private var _smashed: Boolean = false
+    private val behavior: Behavior = Behavior()
+    private var smashed: Boolean = false
     private suspend fun Context.off() {
         when (message) {
             is PressSwitch -> {
                 respond("Turning on")
-                _behavior.become { on() }
+                behavior.become { on() }
             }
             is Touch -> {
                 respond("Cold")
@@ -68,7 +69,7 @@ class LightBulb : Actor {
         when (message) {
             is PressSwitch -> {
                 respond("Turning off")
-                _behavior.become { off() }
+                behavior.become { off() }
             }
             is Touch -> {
                 respond("Hot!")
@@ -78,24 +79,25 @@ class LightBulb : Actor {
 
     suspend override fun Context.receive(msg: Any) {
         when (msg) {
-            is Started -> {
-                _behavior.become { off() }
-            }
             is HitWithHammer -> {
                 respond("Smashed!")
-                _smashed = true
+                smashed = true
                 return
             }
-            is PressSwitch -> if (_smashed) {
+            is PressSwitch -> if (smashed) {
                 respond("Broken")
                 return
             }
-            is Touch -> if (_smashed) {
+            is Touch -> if (smashed) {
                 respond("OW!")
                 return
             }
         }
-        _behavior.receive(this)
+        behavior.receive(this,msg)
+    }
+
+    init{
+        behavior.become { off() }
     }
 }
 
