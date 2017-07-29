@@ -3,7 +3,6 @@ package actor.proto.examples.hellorouter
 import actor.proto.*
 import actor.proto.router.newRoundRobinPool
 
-
 fun main(args: Array<String>) {
     val prop = fromFunc {
         when (message) {
