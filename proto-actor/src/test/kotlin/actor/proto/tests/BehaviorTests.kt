@@ -52,51 +52,50 @@ class BehaviorTests {
 class LightBulb : Actor {
     private val _behavior: Behavior = Behavior()
     private var _smashed: Boolean = false
-    private suspend fun off(context: Context) {
-        when (context.message) {
+    private suspend fun Context.off() {
+        when (message) {
             is PressSwitch -> {
-                context.respond("Turning on")
-                _behavior.become { on(it) }
+                respond("Turning on")
+                _behavior.become { on() }
             }
             is Touch -> {
-                context.respond("Cold")
+                respond("Cold")
             }
         }
     }
 
-    private suspend fun on(context: Context) {
-        when (context.message) {
+    private suspend fun Context.on() {
+        when (message) {
             is PressSwitch -> {
-                context.respond("Turning off")
-                _behavior.become { off(it) }
+                respond("Turning off")
+                _behavior.become { off() }
             }
             is Touch -> {
-                context.respond("Hot!")
+                respond("Hot!")
             }
         }
     }
 
-    suspend override fun receive(context: Context) {
-        when (context.message) {
+    suspend override fun Context.receive() {
+        when (message) {
+            is Started -> {
+                _behavior.become { off() }
+            }
             is HitWithHammer -> {
-                context.respond("Smashed!")
+                respond("Smashed!")
                 _smashed = true
                 return
             }
             is PressSwitch -> if (_smashed) {
-                context.respond("Broken")
+                respond("Broken")
                 return
             }
             is Touch -> if (_smashed) {
-                context.respond("OW!")
+                respond("OW!")
                 return
             }
         }
-        _behavior.receive(context)
-    }
-
-    init {
-        _behavior.become { off(it) }
+        _behavior.receive(this)
     }
 }
 

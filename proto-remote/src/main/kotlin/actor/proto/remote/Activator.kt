@@ -4,8 +4,8 @@ import actor.proto.*
 
 
 class Activator : Actor {
-    suspend override fun receive(context: Context) {
-        val msg = context.message
+    suspend override fun Context.receive() {
+        val msg = message
         when (msg) {
             is RemoteProtos.ActorPidRequest -> {
                 val props: Props = Remote.getKnownKind(msg.kind)
@@ -15,7 +15,7 @@ class Activator : Actor {
                 }
                 val pid: PID = spawnNamed(props, name)
                 val res = ActorPidResponse(pid)
-                context.respond(res)
+                respond(res)
             }
             else -> {
             }

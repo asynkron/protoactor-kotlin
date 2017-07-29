@@ -10,7 +10,7 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
 object NullActor : Actor {
-    suspend override fun receive(context: Context) {
+    suspend override fun Context.receive() {
     }
 }
 

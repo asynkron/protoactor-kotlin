@@ -117,10 +117,10 @@ class BroadcastGroupTests {
 
     open internal class MyTestActor : Actor {
         private lateinit var _received: String
-        suspend override fun receive(context: Context) {
-            val tmp = context.message
+        suspend override fun Context.receive() {
+            val tmp = message
             when (tmp) {
-                "received?" -> context.respond(_received)
+                "received?" -> respond(_received)
                 "go slow" -> delay(5000)
                 is String -> _received = tmp
             }

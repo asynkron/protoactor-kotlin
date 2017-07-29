@@ -31,21 +31,21 @@ object Recoverable
 
 class ParentActor : Actor {
     private lateinit var child: PID
-    suspend override fun receive(context: Context) {
-        val msg = context.message
+    suspend override fun Context.receive() {
+        val msg = message
         when (msg) {
-            is Started -> child = context.spawnChild(fromProducer { ChildActor() })
-            is Hello -> context.send(child,msg)
-            is Recoverable -> context.send(child,msg)
-            is Fatal -> context.send(child,msg)
+            is Started -> child = spawnChild(fromProducer { ChildActor() })
+            is Hello -> send(child,msg)
+            is Recoverable -> send(child,msg)
+            is Fatal -> send(child,msg)
             is Terminated -> println("Watched actor was Terminated ${msg.who.toShortString()}")
         }
     }
 }
 
 class ChildActor : Actor {
-    suspend override fun receive(context: Context) {
-        val msg = context.message
+    suspend override fun Context.receive() {
+        val msg = message
         when (msg) {
             is Hello -> println("Hello ${msg.who}")
             is Recoverable -> throw RecoverableException()

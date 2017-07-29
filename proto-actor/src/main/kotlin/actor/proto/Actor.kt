@@ -1,5 +1,8 @@
 package actor.proto
 
 interface Actor {
-    suspend fun receive(context: Context)
+    suspend fun Context.receive()
+    suspend fun receiveInner(context: Context) {
+        context.receive()
+    }
 }

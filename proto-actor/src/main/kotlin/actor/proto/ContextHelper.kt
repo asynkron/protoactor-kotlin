@@ -4,7 +4,7 @@ internal object ContextHelper {
     suspend internal fun defaultReceive(context: Context) {
         return when (context.message) {
             is PoisonPill -> stop(context.self)
-            else -> context.actor.receive(context)
+            else -> context.actor.receiveInner(context)
         }
     }
 

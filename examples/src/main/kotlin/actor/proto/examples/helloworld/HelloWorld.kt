@@ -19,4 +19,30 @@ fun main(args: Array<String>) {
     val pid = spawn(prop)
     send(pid, "Proto.Actor")
     readLine()
+
+    val clazz : Receiver = ReceiverClass()
+    val d = Data()
+}
+
+class Data {
+    fun doStuff(){}
+}
+
+interface Receiver {
+    fun Data.receive()
+}
+
+class ReceiverClass : Receiver {
+    fun x(){
+        val d = Data()
+        d.receive()
+    }
+    override fun Data.receive() {
+        doStuff()
+        bar()
+    }
+
+    private fun Data.bar(){
+        doStuff()
+    }
 }

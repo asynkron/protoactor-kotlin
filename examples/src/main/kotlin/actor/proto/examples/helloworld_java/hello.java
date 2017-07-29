@@ -9,9 +9,9 @@ import static actor.proto.java.Actors.*;
 
 public class hello {
     public static void main(String[] args) throws IOException {
-        Props p = fromProducer(HelloActor::new);
-        PID pid = spawn(p);
-        send(pid,"Proto.Actor Java");
+        Props props = fromProducer(HelloActor::new);
+        PID pid = spawn(props);
+        send(pid, "Proto.Actor Java");
         System.in.read();
     }
 }

@@ -11,8 +11,8 @@ class EndpointWriter(private val address: String) : Actor {
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
     private lateinit var streamWriter: StreamObserver<RemoteProtos.MessageBatch>
-    suspend override fun receive(context: Context) {
-        val msg = context.message
+    suspend override fun Context.receive() {
+        val msg = message
         when (msg) {
             is Started -> started()
             is Stopped -> stopped()
@@ -50,16 +50,16 @@ class EndpointWriter(private val address: String) : Actor {
                         .addAllTypeNames(typeNameList)
                         .addAllEnvelopes(envelopes)
                         .build()
-                sendEnvelopesAsync(batch, context)
+                sendEnvelopesAsync(batch)
             }
         }
     }
 
-    private suspend fun sendEnvelopesAsync(batch: RemoteProtos.MessageBatch, context: Context) {
+    private suspend fun Context.sendEnvelopesAsync(batch: RemoteProtos.MessageBatch) {
         try {
             streamWriter.onNext(batch)
         } catch (x: Exception) {
-            context.stash()
+            stash()
             println("gRPC Failed to send to address $address, reason ${x.message}")
             throw  x
         }

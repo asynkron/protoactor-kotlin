@@ -16,16 +16,16 @@ fun main(args: Array<String>) {
 }
 
 class EchoActor : Actor {
-    private lateinit var sender: PID
-    suspend override fun receive(context: Context) {
-        val msg = context.message
+    private lateinit var _sender: PID
+    suspend override fun Context.receive() {
+        val msg = message
         when (msg) {
             is Messages.StartRemote -> {
                 println("Starting")
-                sender = msg.sender
-                context.respond(start)
+                _sender = msg.sender
+                respond(start)
             }
-            is Messages.Ping -> send(sender,pong)
+            is Messages.Ping -> send(_sender,pong)
             else -> {
             }
         }

@@ -4,6 +4,7 @@ import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.ResumeMailbox
 import actor.proto.mailbox.SuspendMailbox
 import actor.proto.mailbox.SystemMessage
+import kotlinx.coroutines.experimental.runBlocking
 import java.time.Duration
 import java.util.*
 
@@ -59,7 +60,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         stash.push(message)
     }
 
-    suspend override fun respond(message: Any) {
+    override fun respond(message: Any) {
         sendUserMessage(sender!!, message)
     }
 
@@ -103,9 +104,9 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     suspend override fun receive(message: Any): Unit = invokeUserMessage(message)
 
-    suspend override fun send(target: PID, message: Any) = sendUserMessage(target, message)
+    override fun send(target: PID, message: Any) = sendUserMessage(target, message)
 
-    suspend override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
+    override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
     suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, DeferredProcess(timeout))
 
@@ -170,7 +171,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         return if (receiveMiddleware != null) receiveMiddleware.invoke(this)
         else when (message) {
             is PoisonPill -> stop(self)
-            else -> actor.receive(this)
+            else -> actor.receiveInner(this)
         }
     }
 
@@ -183,12 +184,15 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         return deferredProcess.await()
     }
 
-    suspend private fun sendUserMessage(target: PID, message: Any) {
+    private fun sendUserMessage(target: PID, message: Any) {
         when (senderMiddleware) {
             null -> DefaultActorClient.send(target, message)
-            else -> when (message) {
-                is MessageEnvelope -> senderMiddleware.invoke(this, target, message)
-                else -> senderMiddleware.invoke(this, target, MessageEnvelope(message, null, null))
+            else -> {
+                val c = this
+                when (message) {
+                    is MessageEnvelope -> runBlocking { senderMiddleware.invoke(c, target, message) }
+                    else -> runBlocking { senderMiddleware.invoke(c, target, MessageEnvelope(message, null, null)) }
+                }
             }
         }
     }
