@@ -73,8 +73,8 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         return pid
     }
 
-    override fun watch(pid: PID) = pid.sendSystemMessage(Watch(self))
-    override fun unwatch(pid: PID) = pid.sendSystemMessage(Unwatch(self))
+    override fun watch(pid: PID) = sendSystemMessage(pid,Watch(self))
+    override fun unwatch(pid: PID) = sendSystemMessage(pid,Unwatch(self))
     private var receiveTimeout: Duration = Duration.ZERO
     override fun getReceiveTimeout(): Duration = receiveTimeout
 
@@ -123,16 +123,16 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         when (parent) {
             null -> handleRootFailure(failure)
             else -> {
-                self.sendSystemMessage(SuspendMailbox)
-                parent.sendSystemMessage(failure)
+                sendSystemMessage(self,SuspendMailbox)
+                sendSystemMessage(parent,failure)
             }
         }
     }
 
 
-    override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { it.sendSystemMessage(Restart(reason)) }
-    override fun stopChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(StopInstance) }
-    override fun resumeChildren(vararg pids: PID) = pids.forEach { it.sendSystemMessage(ResumeMailbox) }
+    override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { sendSystemMessage(it,Restart(reason)) }
+    override fun stopChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,StopInstance) }
+    override fun resumeChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,ResumeMailbox) }
 
     suspend override fun invokeSystemMessage(msg: SystemMessage): Unit {
         try {
@@ -211,7 +211,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     private fun handleWatch(w: Watch) {
         when (state) {
-            ContextState.Stopping -> w.watcher.sendSystemMessage(Terminated(self, false))
+            ContextState.Stopping -> sendSystemMessage(w.watcher,Terminated(self, false))
             else -> watchers += w.watcher
         }
     }
@@ -259,13 +259,14 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         ProcessRegistry.remove(self)
         invokeUserMessage(Stopped)
         val terminated = Terminated(self, false)
-        watchers.forEach { it.sendSystemMessage(terminated) }
-        parent?.sendSystemMessage(terminated)
+        watchers.forEach { sendSystemMessage(it, terminated) }
+
+        if (parent != null) sendSystemMessage(parent, terminated)
     }
 
     suspend private fun restart() {
         incarnateActor()
-        self.sendSystemMessage(ResumeMailbox)
+        sendSystemMessage(self,ResumeMailbox)
         invokeUserMessage(Started)
         while (stash.isNotEmpty()) invokeUserMessage(stash.pop())
     }

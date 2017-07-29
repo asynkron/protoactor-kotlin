@@ -12,12 +12,12 @@ class EndpointWatcher(address: String) : Actor {
         when (msg) {
             is RemoteTerminate -> {
                 watched.remove(msg.watcher.id)
-                msg.watcher.sendSystemMessage(Terminated(msg.watchee, true))
+                sendSystemMessage(msg.watcher,Terminated(msg.watchee, true))
             }
             is EndpointTerminatedEvent -> {
                 for ((id, pid) in watched) {
                     val watcher: PID = PID(ProcessRegistry.address, id)
-                    watcher.sendSystemMessage(Terminated(pid, true))
+                    sendSystemMessage(watcher,Terminated(pid, true))
                 }
                 behavior.become({ terminatedAsync(it) })
             }
@@ -35,7 +35,7 @@ class EndpointWatcher(address: String) : Actor {
     private suspend fun terminatedAsync(context: Context) {
         val msg = context.message
         when (msg) {
-            is RemoteWatch -> msg.watcher.sendSystemMessage(Terminated(msg.watchee, true))
+            is RemoteWatch -> sendSystemMessage(msg.watcher,Terminated(msg.watchee, true))
             else -> {
             }
         }

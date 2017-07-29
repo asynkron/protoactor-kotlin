@@ -19,11 +19,6 @@ internal fun PID.cachedProcess(): Process? {
     return cachedProcess_
 }
 
-fun PID.sendSystemMessage(sys: SystemMessage) {
-    val process: Process = cachedProcess() ?: ProcessRegistry.get(this)
-    process.sendSystemMessage(this, sys)
-}
-
 fun PID.toShortString(): String {
     return "$address/$id"
 }

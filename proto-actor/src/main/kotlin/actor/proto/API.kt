@@ -2,6 +2,8 @@
 @file:JvmMultifileClass
 package actor.proto
 
+import actor.proto.mailbox.SystemMessage
+
 @JvmSynthetic fun fromProducer(producer: () -> Actor): Props = Props().withProducer(producer)
 @JvmSynthetic fun fromFunc(receive: suspend Context.() -> Unit): Props = fromProducer {
     object : Actor {
@@ -25,4 +27,9 @@ fun spawnNamed(props: Props, name: String): PID {
 fun stop(pid : PID) {
     val process = pid.cachedProcess() ?: ProcessRegistry.get(pid)
     process.stop(pid)
+}
+
+fun sendSystemMessage(pid : PID, sys: SystemMessage) {
+    val process: Process = pid.cachedProcess() ?: ProcessRegistry.get(pid)
+    process.sendSystemMessage(pid, sys)
 }
