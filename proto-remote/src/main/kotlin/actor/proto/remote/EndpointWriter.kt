@@ -11,14 +11,14 @@ class EndpointWriter(private val address: String) : Actor {
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
     private lateinit var streamWriter: StreamObserver<RemoteProtos.MessageBatch>
-    suspend override fun Context.receive(message: Any) {
-        when (message) {
+    suspend override fun Context.receive(msg: Any) {
+        when (msg) {
             is Started -> started()
             is Stopped -> stopped()
             is Restarting -> restarting()
             is MutableList<*> -> {
                 @Suppress("UNCHECKED_CAST")
-                val m = message as MutableList<RemoteDeliver>
+                val m = msg as MutableList<RemoteDeliver>
                 val envelopes: MutableList<RemoteProtos.MessageEnvelope> = mutableListOf()
                 val typeNames: HashMap<String, Int> = HashMap()
                 val targetNames: HashMap<String, Int> = HashMap()

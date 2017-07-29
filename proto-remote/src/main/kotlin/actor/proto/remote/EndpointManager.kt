@@ -6,8 +6,8 @@ class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrat
 
 
     private val _connections: HashMap<String, Endpoint> = HashMap()
-    suspend override fun Context.receive(message : Any) {
-        val msg = message
+    suspend override fun Context.receive(msg: Any) {
+        val msg = msg
         when (msg) {
             is Started -> println("Started EndpointManager")
             is EndpointTerminatedEvent ->  ensureConnected(msg.address).watcher.let { send(it,msg) }

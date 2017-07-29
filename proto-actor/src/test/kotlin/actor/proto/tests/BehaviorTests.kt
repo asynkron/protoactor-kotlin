@@ -76,8 +76,8 @@ class LightBulb : Actor {
         }
     }
 
-    suspend override fun Context.receive(message : Any) {
-        when (message) {
+    suspend override fun Context.receive(msg: Any) {
+        when (msg) {
             is Started -> {
                 _behavior.become { off() }
             }

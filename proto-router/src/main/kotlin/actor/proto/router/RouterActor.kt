@@ -5,8 +5,8 @@ import java.util.concurrent.CountDownLatch
 
 
 class RouterActor(private val config: RouterConfig, private val routerState: RouterState, private val wg: CountDownLatch) : Actor {
-    suspend override fun Context.receive(message : Any) {
-        val routerMessage = message
+    suspend override fun Context.receive(msg: Any) {
+        val routerMessage = msg
         when (routerMessage) {
             is Started -> {
                 config.onStarted(this, routerState)

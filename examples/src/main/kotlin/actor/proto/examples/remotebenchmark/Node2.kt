@@ -17,11 +17,11 @@ fun main(args: Array<String>) {
 
 class EchoActor : Actor {
     private lateinit var _sender: PID
-    suspend override fun Context.receive(message: Any) {
-        when (message) {
+    suspend override fun Context.receive(msg: Any) {
+        when (msg) {
             is Messages.StartRemote -> {
                 println("Starting")
-                _sender = message.sender
+                _sender = msg.sender
                 respond(start)
             }
             is Messages.Ping -> send(_sender,pong)

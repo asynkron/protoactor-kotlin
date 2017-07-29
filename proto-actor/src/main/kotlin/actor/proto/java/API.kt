@@ -18,7 +18,7 @@ fun fromProducer(producer: () -> Actor): Props {
         val actor = producer()
         val ctx = ContextImpl(actor)
         object : actor.proto.Actor  {
-            suspend override fun actor.proto.Context.receive(message : Any) {
+            suspend override fun actor.proto.Context.receive(msg: Any) {
                 actor.receive(ctx.wrap(this)).await()
             }
         }
@@ -31,7 +31,7 @@ fun fromFunc(receive : (Context) -> CompletableFuture<*>) {
     }
     val ctx = ContextImpl(actor)
     object : actor.proto.Actor {
-        suspend override fun actor.proto.Context.receive(message : Any) {
+        suspend override fun actor.proto.Context.receive(msg: Any) {
             actor.receive(ctx.wrap(this)).await()
         }
     }

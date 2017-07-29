@@ -4,12 +4,12 @@ import actor.proto.*
 
 
 class Activator : Actor {
-    suspend override fun Context.receive(message: Any) {
-        when (message) {
+    suspend override fun Context.receive(msg: Any) {
+        when (msg) {
             is RemoteProtos.ActorPidRequest -> {
-                val props: Props = Remote.getKnownKind(message.kind)
+                val props: Props = Remote.getKnownKind(msg.kind)
                 val name: String = when {
-                    message.name.isEmpty() -> message.name
+                    msg.name.isEmpty() -> msg.name
                     else -> ProcessRegistry.nextId()
                 }
                 val pid: PID = spawnNamed(props, name)
