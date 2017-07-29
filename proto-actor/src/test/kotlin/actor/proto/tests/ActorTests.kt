@@ -51,8 +51,8 @@ class ActorTests {
 
     @Test fun actorLifeCycle(): Unit {
         val messages: Queue<Any> = ArrayDeque<Any>()
-        val prop = fromFunc {
-            messages.offer(message)
+        val prop = fromFunc { msg ->
+            messages.offer(msg)
         }.withMailbox { TestMailbox() }
         val pid: PID = spawn(prop)
         send(pid,"hello")

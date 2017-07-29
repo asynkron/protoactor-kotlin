@@ -5,89 +5,69 @@ import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class ReceiveTimeoutTests {
     @Test fun `receive timeout received within expected time`() {
-        var timeoutReceived: Boolean = false
-        val props: Props = fromFunc {
-            val tmp = message
-            when (tmp) {
-                is Started -> {
-                    setReceiveTimeout(Duration.ofMillis(150))
-                }
-                is ReceiveTimeout -> {
-                    timeoutReceived = true
-                }
+        val cd = CountDownLatch(1)
+        val props: Props = fromFunc { msg ->
+            when (msg) {
+                is Started -> setReceiveTimeout(Duration.ofMillis(150))
+                is ReceiveTimeout -> cd.countDown()
             }
-
         }
 
         spawn(props)
-        Thread.sleep(1500)
-        assertTrue(timeoutReceived)
+        cd.await(1000,TimeUnit.MILLISECONDS)
     }
 
     @Test fun `receive timeout not received within expected_time`() {
-        var timeoutReceived: Boolean = false
-        val props: Props = fromFunc {
-            val tmp = message
-            when (tmp) {
-                is Started -> {
-                    setReceiveTimeout(Duration.ofMillis(1500))
-                }
-                is ReceiveTimeout -> {
-                    timeoutReceived = true
-                }
+        val cd = CountDownLatch(1)
+        val props: Props = fromFunc {msg ->
+            when (msg) {
+                is Started -> setReceiveTimeout(Duration.ofMillis(1500))
+                is ReceiveTimeout -> cd.countDown()
             }
-
         }
 
         spawn(props)
-        Thread.sleep(1500)
-        assertFalse(timeoutReceived)
+        cd.await(1000,TimeUnit.MILLISECONDS)
     }
 
     @Test fun `can cancel receive timeout`() {
-        var timeoutReceived: Boolean = false
-        val props: Props = fromFunc {
-            val tmp = message
-            when (tmp) {
+        val cd = CountDownLatch(1)
+        val props: Props = fromFunc { msg ->
+            when (msg) {
                 is Started -> {
                     setReceiveTimeout(Duration.ofMillis(150))
                     cancelReceiveTimeout()
                 }
-                is ReceiveTimeout -> {
-                    timeoutReceived = true
-                }
+                is ReceiveTimeout -> cd.countDown()
             }
 
         }
 
         spawn(props)
-        Thread.sleep(1500)
-        assertFalse(timeoutReceived)
+        cd.await(1000,TimeUnit.MILLISECONDS)
     }
 
     @Test fun `can still set receive timeout after cancelling`() {
-        var timeoutReceived: Boolean = false
-        val props: Props = fromFunc {
-            val tmp = message
-            when (tmp) {
+        val cd = CountDownLatch(1)
+        val props: Props = fromFunc { msg ->
+            when (msg) {
                 is Started -> {
                     setReceiveTimeout(Duration.ofMillis(150))
                     cancelReceiveTimeout()
                     setReceiveTimeout(Duration.ofMillis(150))
                 }
-                is ReceiveTimeout -> {
-                    timeoutReceived = true
-                }
+                is ReceiveTimeout -> cd.countDown()
             }
 
         }
 
         spawn(props)
-        Thread.sleep(1500)
-        assertTrue(timeoutReceived)
+        cd.await(1000,TimeUnit.MILLISECONDS)
     }
 }
 
