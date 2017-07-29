@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.withTimeout
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
-class DeferredProcess<out T>(val timeout: Duration = Duration.ofMillis(5000)) : Process() {
+class DeferredProcess<out T>(private val timeout: Duration = Duration.ofMillis(5000)) : Process() {
     val pid = ProcessRegistry.put(ProcessRegistry.nextId(), this)
     private val cd = CompletableDeferred<T>()
     override fun sendUserMessage(pid: PID, message: Any) {

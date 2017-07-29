@@ -56,30 +56,29 @@ class SpawnActor : Actor {
     private lateinit var replyTo: PID
     private var sum: Long = 0
 
-    suspend override fun Context.receive() {
-        val msg = message
-        when (msg) {
+    suspend override fun Context.receive(message: Any) {
+        when (message) {
             is Request -> when {
-                msg.size == 1L -> {
-                     send(msg.respondTo,msg.num)
+                message.size == 1L -> {
+                     send(message.respondTo, message.num)
                     stop(self)
                 }
                 else -> {
-                    replies = msg.div
-                    replyTo = msg.respondTo
-                    for (i in 0 until msg.div) {
+                    replies = message.div
+                    replyTo = message.respondTo
+                    for (i in 0 until message.div) {
                         val child: PID = spawn(props)
-                        val s = msg.size / msg.div
+                        val s = message.size / message.div
                         send(child,Request(
-                                msg.div,
-                                msg.num + i * s,
+                                message.div,
+                                message.num + i * s,
                                 s,
                                 self))
                     }
                 }
             }
             is Long -> {
-                sum += msg
+                sum += message
                 replies--
                 if (replies == 0L) send(replyTo,sum)
             }

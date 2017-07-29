@@ -8,7 +8,7 @@ import java.time.Duration
 import kotlin.test.assertEquals
 
 class BehaviorTests {
-    fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
+    private fun spawnActorFromFunc(receive: suspend (Context) -> Unit): PID = spawn(fromFunc(receive))
     @Test fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
@@ -76,7 +76,7 @@ class LightBulb : Actor {
         }
     }
 
-    suspend override fun Context.receive() {
+    suspend override fun Context.receive(message : Any) {
         when (message) {
             is Started -> {
                 _behavior.become { off() }

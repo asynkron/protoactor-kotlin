@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.concurrent.CompletableFuture;
 import static actor.proto.java.Actors.done;
 
-public class HelloActor implements Actor {
+class HelloActor implements Actor {
 
     @NotNull
     @Override

@@ -7,7 +7,7 @@ import java.io.IOException;
 import static actor.proto.Protos.PID;
 import static actor.proto.java.Actors.*;
 
-public class hello {
+class hello {
     public static void main(String[] args) throws IOException {
         Props props = fromProducer(HelloActor::new);
         PID pid = spawn(props);

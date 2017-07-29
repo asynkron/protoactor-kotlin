@@ -1,8 +1,5 @@
 package actor.proto
 
-import actor.proto.mailbox.SystemMessage
-import java.time.Duration
-
 typealias PID = Protos.PID
 fun PID(address: String, id: String): PID {
     val p = PID.newBuilder()

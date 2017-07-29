@@ -7,7 +7,7 @@ import actor.proto.mailbox.SystemMessage
 @JvmSynthetic fun fromProducer(producer: () -> Actor): Props = Props().withProducer(producer)
 @JvmSynthetic fun fromFunc(receive: suspend Context.() -> Unit): Props = fromProducer {
     object : Actor {
-        suspend override fun Context.receive() = receive(this)
+        suspend override fun Context.receive(message : Any) = receive(this)
     }
 }
 fun spawn(props: Props): PID {
