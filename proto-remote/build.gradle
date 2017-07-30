@@ -4,6 +4,12 @@ artifact {
     name 'Proto.Actor Remote'
 }
 
+jar {
+    from('src/main/proto') {
+        include '**/*.proto'
+    }
+}
+
 dependencies {
     compile group: 'io.grpc', name: 'grpc-netty', version:'1.4.0'
     compile group: 'io.grpc', name: 'grpc-protobuf', version:'1.4.0'

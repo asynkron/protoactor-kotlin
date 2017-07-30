@@ -3,7 +3,7 @@ package messages;
 option java_package = "actor.proto.examples.remotebenchmark";
 option java_outer_classname = "Messages";
 
-import "ActorProtos.proto";
+import "actor/proto/ActorProtos.proto";
 
 message Start {
 }
