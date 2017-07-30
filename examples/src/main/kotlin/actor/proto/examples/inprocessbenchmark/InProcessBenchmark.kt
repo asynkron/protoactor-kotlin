@@ -1,6 +1,7 @@
 package actor.proto.examples.inprocessbenchmark
 
 import actor.proto.*
+import actor.proto.mailbox.AffinityDispatcher
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.DefaultMailbox
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
@@ -54,7 +55,6 @@ fun run() {
             stop(client)
             stop(echo)
         }
-
         Thread.sleep(500)
     }
 }
