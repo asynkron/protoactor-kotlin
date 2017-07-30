@@ -1,6 +1,7 @@
 package actor.proto.router.fixture
 
 import actor.proto.mailbox.Dispatcher
+import actor.proto.mailbox.Mailbox
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.runBlocking
@@ -20,8 +21,8 @@ class TestMailboxHandler : MessageInvoker, Dispatcher {
     }
 
     override var throughput: Int = 10
-    override fun schedule(runner: suspend () -> Unit) {
-        runBlocking { runner() }
+    override fun schedule(mailbox:Mailbox) {
+        runBlocking { mailbox.run() }
     }
 }
 

@@ -16,12 +16,10 @@ open class EventStreamImpl {
 
     fun publish(msg: Any) {
         for (value in subscriptions.values) {
-            value.dispatcher.schedule {
-                try {
-                    value.action(msg)
-                } catch (ex: Exception) {
-                    // _logger.logWarning(0, ex, "Exception has occurred when publishing a message.")
-                }
+            try {
+                value.action(msg)
+            } catch (ex: Exception) {
+                // _logger.logWarning(0, ex, "Exception has occurred when publishing a message.")
             }
         }
     }

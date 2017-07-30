@@ -24,6 +24,9 @@ class TestMailbox : Mailbox {
         _invoker = invoker
     }
 
+    override suspend fun run() {
+    }
+
     override fun start() {}
 }
 

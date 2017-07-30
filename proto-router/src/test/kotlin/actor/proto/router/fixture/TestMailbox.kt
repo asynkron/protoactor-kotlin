@@ -15,6 +15,10 @@ class TestMailbox : Mailbox {
         runBlocking { _invoker.invokeUserMessage(msg) }
     }
 
+    override suspend fun run() {
+
+    }
+
     override fun postSystemMessage(msg: Any) {
         systemMessages.add(msg)
         runBlocking { _invoker.invokeSystemMessage(msg as SystemMessage) }

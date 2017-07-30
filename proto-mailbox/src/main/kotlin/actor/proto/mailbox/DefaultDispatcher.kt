@@ -8,7 +8,8 @@ import kotlin.coroutines.experimental.startCoroutine
 
 class DefaultDispatcher(coroutineContext: CoroutineContext = CommonPool, override var throughput: Int = 300) : Dispatcher {
     private val f = EmptyContinuation(coroutineContext)
-    override fun schedule(runner: suspend () -> Unit) {
+    override fun schedule(mailbox:Mailbox) {
+        val runner: suspend () -> Unit = {mailbox.run()}
         runner.startCoroutine(f)
     }
 }

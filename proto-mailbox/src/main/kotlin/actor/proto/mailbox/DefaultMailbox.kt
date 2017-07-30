@@ -34,10 +34,11 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         for (stats in stats) stats.mailboxStarted()
     }
 
-    private suspend fun run(){
+    override suspend fun run() {
         var msg: Any? = null
         try {
             for (i in 0 until dispatcher.throughput) {
+
                 if (sysCount.get() > 0) {
                     msg = systemMessages.poll()
                     sysCount.decrementAndGet()
@@ -74,12 +75,11 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         }
     }
 
+    private val r: suspend () -> Unit = { run() }
     private fun schedule() {
         val wasIdle = status.compareAndSet(MailboxStatus.IDLE, MailboxStatus.BUSY)
         if (wasIdle) {
-            dispatcher.schedule {
-                run()
-            }
+            dispatcher.schedule(this)
         }
     }
 }

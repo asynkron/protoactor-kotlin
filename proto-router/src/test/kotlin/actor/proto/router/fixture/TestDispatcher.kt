@@ -1,10 +1,11 @@
 package actor.proto.router.fixture
 
 import actor.proto.mailbox.Dispatcher
+import actor.proto.mailbox.Mailbox
 
 class TestDispatcher : Dispatcher {
     override var throughput: Int = 10
-    override fun schedule(runner: suspend () -> Unit) {
+    override fun schedule(mailbox:Mailbox) {
     }
 }
 

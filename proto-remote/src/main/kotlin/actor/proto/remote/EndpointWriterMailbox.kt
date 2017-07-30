@@ -32,7 +32,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
     override fun start() {}
 
     private val batch: MutableList<RemoteDeliver> = mutableListOf()
-    private suspend fun run() {
+    override suspend fun run() {
         var msg: Any? = null
         try {
 
@@ -74,7 +74,7 @@ open class EndpointWriterMailbox(private val batchSize: Int) : Mailbox {
     private fun schedule() {
         val wasIdle = status.compareAndSet(MailboxStatus.IDLE, MailboxStatus.BUSY)
         if (wasIdle) {
-            dispatcher.schedule({ run() })
+            dispatcher.schedule(this)
         }
     }
 }

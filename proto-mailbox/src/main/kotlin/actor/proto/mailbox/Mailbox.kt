@@ -5,4 +5,5 @@ interface Mailbox {
     fun postSystemMessage(msg: Any)
     fun registerHandlers(invoker: MessageInvoker, dispatcher: Dispatcher)
     fun start()
+    suspend fun run()
 }

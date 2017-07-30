@@ -2,6 +2,7 @@ package actor.proto.examples.inprocessbenchmark
 
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
+import actor.proto.mailbox.DefaultMailbox
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import java.lang.Runtime.getRuntime
 import java.lang.System.nanoTime
@@ -17,7 +18,7 @@ fun main(args: Array<String>) {
 
 fun run() {
     val messageCount = 1_000_000
-    val batchSize = 5
+    val batchSize = 50
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
     val tps = arrayOf(/*1,2,5,10,20,50,100,150,200,*/300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
@@ -44,7 +45,6 @@ fun run() {
             send(client, Start(echo))
         }
         latch.await()
-
         val elapsedNanos = (nanoTime() - sw).toDouble()
         val elapsedMillis = (elapsedNanos / 1_000_000).toInt()
         val totalMessages = messageCount * 2 * clientCount
