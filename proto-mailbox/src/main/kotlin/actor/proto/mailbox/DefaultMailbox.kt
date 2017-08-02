@@ -13,7 +13,7 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
     private var suspended: Boolean = false
 
     override fun postUserMessage(msg: Any) {
-        userMailbox.add(msg)
+        userMailbox.offer (msg)
         for (stats in stats) stats.messagePosted(msg)
         schedule()
     }
