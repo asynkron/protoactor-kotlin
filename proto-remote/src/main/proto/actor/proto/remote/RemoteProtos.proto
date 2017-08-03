@@ -3,7 +3,7 @@ package remote;
 option java_package = "actor.proto.remote";
 option java_outer_classname = "RemoteProtos";
 
-import "ActorProtos.proto";
+import "actor/proto/ActorProtos.proto";
 
 message MessageBatch {
     repeated string type_names = 1;

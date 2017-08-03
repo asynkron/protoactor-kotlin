@@ -4,6 +4,12 @@ artifact {
     name 'Proto.Actor Core'
 }
 
+jar {
+    from('src/main/proto') {
+        include '**/*.proto'
+    }
+}
+
 dependencies {
     compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
     compile project(':proto-mailbox')

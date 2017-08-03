@@ -1,12 +1,13 @@
 apply plugin: 'java'
 
-sourceSets {
-    main {
-    }
-}
-
 artifact {
     name 'Proto.Actor Remote'
+}
+
+jar {
+    from('src/main/proto') {
+        include '**/*.proto'
+    }
 }
 
 dependencies {
