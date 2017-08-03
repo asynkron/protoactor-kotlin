@@ -1,4 +1,4 @@
-package actor.proto.examples.helloworld_java;
+package actor.proto.examples.java.helloworld;
 
 
 import actor.proto.java.Actor;
