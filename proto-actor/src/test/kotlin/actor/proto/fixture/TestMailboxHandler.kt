@@ -8,12 +8,21 @@ import kotlinx.coroutines.experimental.runBlocking
 
 class TestMailboxHandler : MessageInvoker, Dispatcher {
     var escalatedFailures: MutableList<Exception> = mutableListOf()
+
     suspend override fun invokeSystemMessage(msg: SystemMessage) {
-        return //(TestMessagemsg).taskCompletionSource.task
+        when (msg) {
+            is TestSystemMessage -> {
+                msg.taskCompletionSource.get()
+            }
+        }
     }
 
     suspend override fun invokeUserMessage(msg: Any) {
-        return //(msg as TestMessage).taskCompletionSource.
+        when (msg) {
+            is TestMessage -> {
+                msg.taskCompletionSource.get()
+            }
+        }
     }
 
     override suspend fun escalateFailure(reason: Exception, message: Any) {
