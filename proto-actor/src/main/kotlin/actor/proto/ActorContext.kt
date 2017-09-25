@@ -118,7 +118,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 //        }
 //    }
     override fun escalateFailure(reason: Exception, who: PID) {
-        val failure: Failure = Failure(who, reason, restartStatistics)
+        val failure = Failure(who, reason, restartStatistics)
         when (parent) {
             null -> handleRootFailure(failure)
             else -> {
@@ -133,7 +133,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     override fun stopChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,StopInstance) }
     override fun resumeChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,ResumeMailbox) }
 
-    suspend override fun invokeSystemMessage(msg: SystemMessage): Unit {
+    suspend override fun invokeSystemMessage(msg: SystemMessage) {
         try {
             when (msg) {
                 is Started -> invokeUserMessage(msg)

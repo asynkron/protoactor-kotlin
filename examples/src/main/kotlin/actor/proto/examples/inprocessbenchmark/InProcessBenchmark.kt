@@ -44,8 +44,8 @@ fun run() {
                 .toTypedArray()
 
         val sw = nanoTime()
-        for ((client, echo) in pairs) {
-            send(client, Start(echo))
+        for ((ping, pong) in pairs) {
+            send(ping, Start(Msg(ping,pong)))
         }
         latch.await()
         val elapsedNanos = (nanoTime() - sw).toDouble()
@@ -61,13 +61,13 @@ fun run() {
     }
 }
 
-data class Msg(val sender: PID)
-data class Start(val sender: PID)
+data class Msg(val ping: PID, val pong: PID)
+data class Start(val msg : Msg)
 
 class EchoActor : Actor {
     suspend override fun Context.receive(msg: Any) {
         when (msg) {
-            is Msg -> send(msg.sender, msg)
+            is Msg -> send(msg.ping, msg)
         }
     }
 }
@@ -75,27 +75,25 @@ class EchoActor : Actor {
 class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
     suspend override fun Context.receive(msg: Any) {
         when (msg) {
-            is Start -> sendBatch(msg.sender)
+            is Start -> sendBatch(msg.msg)
             is Msg -> {
                 batch--
                 if (batch > 0) return
-                if (!sendBatch(msg.sender)) {
+                if (!sendBatch(msg)) {
                     latch.countDown()
                 }
             }
         }
     }
 
-    private fun Context.sendBatch(sender: PID): Boolean {
-        when (messageCount) {
-            0 -> return false
-            else -> {
-                val m = Msg(self)
-                repeat(batchSize) { send(sender, m) }
-                messageCount -= batchSize
-                batch = batchSize
-                return true
-            }
+    private fun Context.sendBatch(msg : Msg): Boolean = when (messageCount) {
+        0 -> false
+        else -> {
+
+            repeat(batchSize) { send(msg.pong, msg) }
+            messageCount -= batchSize
+            batch = batchSize
+            true
         }
     }
 }

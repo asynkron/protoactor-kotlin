@@ -20,9 +20,7 @@ fun spawnPrefix(props: Props, prefix: String): PID {
     return spawnNamed(props, name)
 }
 
-fun spawnNamed(props: Props, name: String): PID {
-    return props.spawn(name, null)
-}
+fun spawnNamed(props: Props, name: String): PID = props.spawn(name, null)
 
 fun stop(pid : PID) {
     val process = pid.cachedProcess() ?: ProcessRegistry.get(pid)
