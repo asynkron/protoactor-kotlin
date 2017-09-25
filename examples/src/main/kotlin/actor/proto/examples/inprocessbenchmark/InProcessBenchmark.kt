@@ -2,6 +2,7 @@ package actor.proto.examples.inprocessbenchmark
 
 import actor.proto.*
 import actor.proto.mailbox.DefaultDispatcher
+import actor.proto.mailbox.newMpscArrayMailbox
 import actor.proto.mailbox.newSpecifiedMailbox
 import org.jctools.queues.spec.ConcurrentQueueSpec
 import org.jctools.queues.spec.Ordering
@@ -21,7 +22,7 @@ fun main(args: Array<String>) {
 fun run() {
     val mailboxSpec = ConcurrentQueueSpec(1,1,5000, Ordering.PRODUCER_FIFO , Preference.NONE)
     val messageCount = 1_000_000
-    val batchSize = 50
+    val batchSize = 400
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
     val tps = arrayOf(/*1,2,5,10,20,50,100,150,200,*/300, 400, 500, 600, 700, 800, 900)
     for (t in tps) {
@@ -37,7 +38,7 @@ fun run() {
         val clientProps =
                 fromProducer { PingActor(latch, messageCount, batchSize) }
                 .withDispatcher(d)
-                .withMailbox { newSpecifiedMailbox(mailboxSpec) }
+                .withMailbox {  newSpecifiedMailbox(mailboxSpec)}
 
         val pairs = (0 until clientCount)
                 .map { Pair(spawn(clientProps), spawn(echoProps)) }
