@@ -3,5 +3,5 @@ artifact {
 }
 
 dependencies {
-    compile group: 'org.jctools', name: 'jctools-core', version:'2.0.2'
+    compile group: 'org.jctools', name: 'jctools-core', version:'2.1.1'
 }
