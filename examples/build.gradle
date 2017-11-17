@@ -4,7 +4,7 @@ apply plugin: 'application'
 mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 
 dependencies {
-    compile 'org.jctools:jctools-core:2.0.2'
+    compile 'org.jctools:jctools-core:2.1.1'
     compile 'com.google.protobuf:protobuf-java:+'
 
     compile project(':proto-actor')
