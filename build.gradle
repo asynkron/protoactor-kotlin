@@ -11,6 +11,7 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
+        classpath 'com.netflix.nebula:nebula-release-plugin:6.1.0'
     }
 }
 
@@ -18,11 +19,12 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
+apply plugin: 'nebula.release'
+
 allprojects {
     apply plugin: "idea"
 
     group = 'actor.proto'
-    version = '0.8-SNAPSHOT'
 }
 
 subprojects {
