@@ -57,7 +57,7 @@ bintray {
         repo = 'protoactor-kotlin'
         userOrg = 'asynkronit'
         name = project.name
-        desc = project.artifact.name
+        desc = project.artifact.description
         websiteUrl = "http://proto.actor/"
         issueTrackerUrl = "https://github.com/AsynkronIT/protoactor-kotlin/issues"
         vcsUrl = "https://github.com/AsynkronIT/protoactor-kotlin.git"
