@@ -57,7 +57,9 @@ bintray {
         repo = 'protoactor-kotlin'
         userOrg = 'asynkronit'
         name = project.name
+        desc = project.artifact.name
         websiteUrl = "http://proto.actor/"
+        issueTrackerUrl = "https://github.com/AsynkronIT/protoactor-kotlin/issues"
         vcsUrl = "https://github.com/AsynkronIT/protoactor-kotlin.git"
         licenses = ['Apache-2.0']
         labels = ['actor']
@@ -68,4 +70,5 @@ bintray {
 
 class ArtifactExtension {
     String name = 'Proto.Actor'
+    String description = 'Ultra-fast, distributed, cross-platform actors.'
 }
