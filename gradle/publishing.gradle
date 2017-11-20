@@ -1,6 +1,17 @@
 apply plugin: 'maven-publish'
 apply plugin: 'nebula.nebula-bintray'
 
+tasks.bintrayUpload.dependsOn tasks.check
+
+gradle.taskGraph.whenReady { graph ->
+    tasks.bintrayUpload.onlyIf {
+        graph.hasTask(':final') || graph.hasTask(':candidate')
+    }
+    tasks.artifactoryPublish.onlyIf {
+        graph.hasTask(':snapshot') || graph.hasTask(':devSnapshot')
+    }
+}
+
 task sourcesJar(type: Jar, dependsOn: project.classes) {
     classifier = 'sources'
     from sourceSets.main.allSource

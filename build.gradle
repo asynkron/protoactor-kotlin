@@ -21,7 +21,6 @@ plugins {
 }
 
 
-
 allprojects {
     group = 'actor.proto'
 
@@ -64,20 +63,6 @@ subprojects {
 
 configure(subprojects - project(':examples')) {
     apply from: "$rootDir/gradle/publishing.gradle"
-
-    // release.finalizedBy tasks.bintrayUpload
-    tasks.bintrayUpload.dependsOn tasks.check
-    
-    gradle.taskGraph.whenReady { graph ->
-        tasks.bintrayUpload.onlyIf {
-            graph.hasTask(':final') || graph.hasTask(':candidate')
-        }
-        tasks.artifactoryPublish.onlyIf {
-            graph.hasTask(':snapshot') || graph.hasTask(':devSnapshot')
-        }
-    }
-
-
     apply plugin: 'jacoco'
 
     jacocoTestReport {
