@@ -1,5 +1,5 @@
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'nebula.nebula-bintray'
 
 task sourcesJar(type: Jar, dependsOn: project.classes) {
     classifier = 'sources'

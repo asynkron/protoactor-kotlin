@@ -12,6 +12,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0'
         classpath 'com.netflix.nebula:nebula-release-plugin:6.1.0'
+        classpath 'com.netflix.nebula:nebula-bintray-plugin:3.5.2'
     }
 }
 
@@ -19,12 +20,13 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
-apply plugin: 'nebula.release'
+
 
 allprojects {
-    apply plugin: "idea"
-
     group = 'actor.proto'
+
+    apply plugin: 'idea'
+    apply plugin: 'nebula.release'
 }
 
 subprojects {
@@ -62,6 +64,20 @@ subprojects {
 
 configure(subprojects - project(':examples')) {
     apply from: "$rootDir/gradle/publishing.gradle"
+
+    // release.finalizedBy tasks.bintrayUpload
+    tasks.bintrayUpload.dependsOn tasks.check
+    
+    gradle.taskGraph.whenReady { graph ->
+        tasks.bintrayUpload.onlyIf {
+            graph.hasTask(':final') || graph.hasTask(':candidate')
+        }
+        tasks.artifactoryPublish.onlyIf {
+            graph.hasTask(':snapshot') || graph.hasTask(':devSnapshot')
+        }
+    }
+
+
     apply plugin: 'jacoco'
 
     jacocoTestReport {
