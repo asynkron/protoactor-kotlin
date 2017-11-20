@@ -1,5 +1,16 @@
 apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
+apply plugin: 'nebula.nebula-bintray'
+
+tasks.bintrayUpload.dependsOn tasks.check
+
+gradle.taskGraph.whenReady { graph ->
+    tasks.bintrayUpload.onlyIf {
+        graph.hasTask(':final') || graph.hasTask(':candidate') || graph.hasTask(':devSnapshot')
+    }
+    tasks.artifactoryPublish.onlyIf {
+        graph.hasTask(':snapshot')
+    }
+}
 
 task sourcesJar(type: Jar, dependsOn: project.classes) {
     classifier = 'sources'
@@ -46,30 +57,26 @@ publishing {
 }
 
 bintray {
-    dryRun = true
+    dryRun = false
     publish = false
-
-    user = findProperty("protoBintrayUser")
-    key = findProperty("protoBintrayKey")
 
     publications = ['maven']
     pkg {
-        repo = 'protoactor'
-        userOrg = 'protoactor'
+        repo = 'protoactor-kotlin'
+        userOrg = 'asynkronit'
         name = project.name
+        desc = project.artifact.description
         websiteUrl = "http://proto.actor/"
+        issueTrackerUrl = "https://github.com/AsynkronIT/protoactor-kotlin/issues"
         vcsUrl = "https://github.com/AsynkronIT/protoactor-kotlin.git"
         licenses = ['Apache-2.0']
         labels = ['actor']
-        version {
-            gpg {
-                sign = false //Determines whether to GPG sign the files. The default is false
-                // passphrase = 'passphrase' //Optional. The passphrase for GPG signing'
-            }
-        }
+        githubRepo = 'AsynkronIT/protoactor-kotlin'
+        githubReleaseNotesFile = 'README.md'
     }
 }
 
 class ArtifactExtension {
     String name = 'Proto.Actor'
+    String description = 'Ultra-fast, distributed, cross-platform actors.'
 }
