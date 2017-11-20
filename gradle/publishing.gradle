@@ -5,10 +5,10 @@ tasks.bintrayUpload.dependsOn tasks.check
 
 gradle.taskGraph.whenReady { graph ->
     tasks.bintrayUpload.onlyIf {
-        graph.hasTask(':final') || graph.hasTask(':candidate')
+        graph.hasTask(':final') || graph.hasTask(':candidate') || graph.hasTask(':devSnapshot')
     }
     tasks.artifactoryPublish.onlyIf {
-        graph.hasTask(':snapshot') || graph.hasTask(':devSnapshot')
+        graph.hasTask(':snapshot')
     }
 }
 
