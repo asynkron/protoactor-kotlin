@@ -1,7 +1,10 @@
 apply plugin: 'maven-publish'
-apply plugin: 'nebula.nebula-bintray'
+apply plugin: 'nebula.nebula-bintray-publishing'
+apply plugin: 'com.jfrog.artifactory'
+
 
 tasks.bintrayUpload.dependsOn tasks.check
+tasks.artifactoryPublish.dependsOn tasks.check
 
 gradle.taskGraph.whenReady { graph ->
     tasks.bintrayUpload.onlyIf {
@@ -73,6 +76,23 @@ bintray {
         labels = ['actor']
         githubRepo = 'AsynkronIT/protoactor-kotlin'
         githubReleaseNotesFile = 'README.md'
+    }
+}
+
+artifactory {
+    publish {
+        contextUrl = 'https://oss.jfrog.org'
+        repository {
+            repoKey = 'oss-snapshot-local'
+
+            if (project.hasProperty('bintrayUser')) {
+                username = project.property('bintrayUser')
+                password = project.property('bintrayKey')
+            }
+        }
+        defaults {
+            publications 'maven'
+        }
     }
 }
 

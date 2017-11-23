@@ -18,8 +18,9 @@ Other implementations:
 * JavaScript (unstable/WIP): [https://github.com/AsynkronIT/protoactor-js](https://github.com/AsynkronIT/protoactor-js)
 
 ## How to build
-
-...
+```
+./gradlew build
+```
 
 ## Design principles
 
@@ -79,6 +80,35 @@ pid.send(Hello("Kotlin"))
 ```
 
 You should see the output `Hello Kotlin`.
+
+## Release management
+
+### Snapshot
+Commits on the master branch are deployed as snapshots to
+https://oss.jfrog.org/artifactory/oss-snapshot-local/actor/proto/ and can be consumed by adding the following configuration to your gradle file:
+
+```
+repositories {
+    repositories {
+        maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local' }
+    }
+}
+
+dependencies {
+    compile 'actor.proto:proto-actor:0.1.0-SNAPSHOT'
+}
+```
+
+### Releases
+Tagged commits e.g. `v0.0.1` or `1.0.0-rc.1` are published to bintray and linked to jcenter.
+
+```
+repositories {
+    jcenter()
+}
+```
+
+
 
 ### Support
 

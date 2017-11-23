@@ -10,8 +10,7 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
   ./gradlew check $SWITCHES
 elif [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" == "" ]; then
   echo -e 'Build Branch with Snapshot => Branch ['$TRAVIS_BRANCH']'
-  # We should publish unstable versions to OJO when the integration is working
-  ./gradlew check $SWITCHES
+  ./gradlew snapshot $SWITCHES
 elif [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_TAG" != "" ]; then
   echo -e 'Build Branch for Release => Branch ['$TRAVIS_BRANCH']  Tag ['$TRAVIS_TAG']'
   case "$TRAVIS_TAG" in
