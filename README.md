@@ -1,21 +1,18 @@
 [![Build Status](https://travis-ci.org/AsynkronIT/protoactor-kotlin.svg?branch=master)](https://travis-ci.org/AsynkronIT/protoactor-kotlin)
 [![Coverage Status](https://codecov.io/gh/AsynkronIT/protoactor-kotlin/branch/master/graph/badge.svg)](https://codecov.io/gh/AsynkronIT/protoactor-kotlin)
+[![Download](https://api.bintray.com/packages/asynkronit/protoactor-kotlin/proto-actor/images/download.svg)](https://bintray.com/asynkronit/protoactor-kotlin/proto-actor/_latestVersion)
 
 # Proto.Actor
-Ultra-fast, distributed, cross-platform actors.
-
-## Installing
-
-...
+Ultra-fast, distributed, cross-platform actors. http://proto.actor/
 
 ## Source code
 This is the Kotlin repository for Proto Actor.
 
 Other implementations:
-* C#  [https://github.com/AsynkronIT/protoactor-dotnet](https://github.com/AsynkronIT/protoactor-dotnet)
-* Go: [https://github.com/AsynkronIT/protoactor-go](https://github.com/AsynkronIT/protoactor-go)
-* Python (unstable/WIP): [https://github.com/AsynkronIT/protoactor-python](https://github.com/AsynkronIT/protoactor-python)
-* JavaScript (unstable/WIP): [https://github.com/AsynkronIT/protoactor-js](https://github.com/AsynkronIT/protoactor-js)
+* [C#](https://github.com/AsynkronIT/protoactor-dotnet)
+* [Go](https://github.com/AsynkronIT/protoactor-go)
+* [Python (unstable/WIP)](https://github.com/AsynkronIT/protoactor-python)
+* [JavaScript (unstable/WIP)](https://github.com/AsynkronIT/protoactor-js)
 
 ## How to build
 ```
