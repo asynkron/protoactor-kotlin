@@ -4,8 +4,6 @@ import org.jctools.queues.*
 import org.jctools.queues.QueueFactory.newQueue
 import org.jctools.queues.atomic.*
 import org.jctools.queues.spec.ConcurrentQueueSpec
-import org.jctools.queues.spec.Ordering
-import org.jctools.queues.spec.Preference
 import java.util.concurrent.ConcurrentLinkedQueue
 
 private val emptyStats : Array<MailboxStatistics> = arrayOf()
@@ -22,6 +20,6 @@ fun newMpscGrowableArrayMailbox(initialCapacity: Int = 5, stats: Array<MailboxSt
 fun newMpscGrowableAtomicArrayMailbox(initialCapacity: Int = 5, stats: Array<MailboxStatistics> = emptyStats): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), MpscGrowableAtomicArrayQueue(initialCapacity, 2 shl 11), stats)
 
 
-fun newMpscLinkedMailbox(capacity: Int = 5, stats: Array<MailboxStatistics> = emptyStats): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), MpscLinkedQueue8(), stats)
+fun newMpscLinkedMailbox(stats: Array<MailboxStatistics> = emptyStats): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), MpscLinkedQueue8(), stats)
 
 fun newSpecifiedMailbox(spec:ConcurrentQueueSpec, stats: Array<MailboxStatistics> = emptyStats): Mailbox = DefaultMailbox(ConcurrentLinkedQueue<Any>(), newQueue(spec) , stats)

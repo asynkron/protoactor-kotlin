@@ -94,7 +94,7 @@ class SupervisionTests_OneForOne {
 
     @Test fun `Should pass exception on restart`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
-        val strategy: OneForOneStrategy = OneForOneStrategy({ pid, reason -> SupervisorDirective.Restart }, 1, null)
+        val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
         val parentProps: Props = fromProducer { ParentActor(childProps) }.withChildSupervisorStrategy(strategy)
         val parent: PID = spawn(parentProps)
@@ -108,7 +108,7 @@ class SupervisionTests_OneForOne {
 
     @Test fun `Should stop child when restart limit has been reached`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
-        val strategy: OneForOneStrategy = OneForOneStrategy({ pid, reason -> SupervisorDirective.Restart }, 1, null)
+        val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
         val parentProps: Props = fromProducer { ParentActor(childProps) }.withChildSupervisorStrategy(strategy)
         val parent: PID = spawn(parentProps)
