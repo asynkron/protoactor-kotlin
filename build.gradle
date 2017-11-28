@@ -77,6 +77,12 @@ configure(subprojects - project(':examples')) {
     check.dependsOn jacocoTestReport
 }
 
+gradle.taskGraph.whenReady { graph ->
+    tasks.artifactoryPublish.onlyIf {
+        graph.hasTask(':snapshot')
+    }
+}
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.3.1'
 }
