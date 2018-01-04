@@ -1,85 +1,75 @@
 package actor.proto.mailbox
 
+import actor.proto.fixture.ExceptionalMessage
+import actor.proto.fixture.ExceptionalSystemMessage
 import actor.proto.fixture.TestMailboxHandler
-import actor.proto.fixture.TestMessage
 import actor.proto.fixture.TestSystemMessage
 import kotlinx.coroutines.experimental.*
 import org.junit.Test
-import java.util.concurrent.ExecutionException
-import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 open class EscalateFailureTests {
-    fun Iterable<Exception>.singleExecutionException(): ExecutionException {
-        return this.filterIsInstance<java.util.concurrent.ExecutionException>()
+    private inline fun <reified T> Iterable<Exception>.singleExceptionOf(): T {
+        return this.filterIsInstance<T>()
                 .single()
     }
+
+    class MessageHandlerTestException : Exception("Handler Exception")
 
     @Test fun `Should escalate failure when a User message is completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
-        val message = TestMessage()
-        val taskException = Exception("cannot complete future")
-        message.taskCompletionSource.completeExceptionally(taskException)
+        val taskException = MessageHandlerTestException()
+        val message = ExceptionalMessage(taskException)
 
         mailbox.postUserMessage(message)
 
-        val escalatedFailure = mailboxHandler.escalatedFailures.singleExecutionException()
-        assertEquals(taskException, escalatedFailure.cause)
+        val escalatedFailure = mailboxHandler.escalatedFailures
+                .singleExceptionOf<MessageHandlerTestException>()
+        assertEquals(taskException, escalatedFailure)
     }
 
     @Test fun `Should escalate failure when a System message is completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
-        val systemMessage = TestSystemMessage()
-        val taskException = Exception()
+        val taskException = MessageHandlerTestException()
+        val systemMessage = ExceptionalSystemMessage(taskException)
 
-        systemMessage.taskCompletionSource.completeExceptionally(taskException)
         mailbox.postSystemMessage(systemMessage)
 
-        val escalatedFailure = mailboxHandler.escalatedFailures.singleExecutionException()
-        assertEquals(taskException, escalatedFailure.cause)
+        val escalatedFailure = mailboxHandler.escalatedFailures
+                .singleExceptionOf<MessageHandlerTestException>()
+        assertEquals(taskException, escalatedFailure)
     }
 
     @Test fun `Should escalate failure when waiting for a User message to be completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
-        val message = TestMessage()
-        val taskException = Exception()
+        val taskException = MessageHandlerTestException()
 
-        runBlocking {
-            val job = async(CommonPool) {
-                mailbox.postUserMessage(message)
-            }
+        val message = ExceptionalMessage(taskException)
+        mailbox.postUserMessage(message)
 
-            message.taskCompletionSource.completeExceptionally(taskException)
-            job.await()
-        }
-
-        val escalatedFailure = mailboxHandler.escalatedFailures.singleExecutionException()
-        assertEquals(taskException, escalatedFailure.cause)
+        val escalatedFailures = mailboxHandler.escalatedFailures
+        val escalatedFailure = escalatedFailures
+                .singleExceptionOf<MessageHandlerTestException>()
+        assertEquals(taskException, escalatedFailure)
     }
 
     @Test fun `Should escalate failure when waiting for a System message to be completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
-        val systemMessage = TestSystemMessage()
-        val taskException = Exception()
+        val taskException = MessageHandlerTestException()
+        val systemMessage = ExceptionalSystemMessage(taskException)
 
-        runBlocking {
-            val job = async(CommonPool) {
-                mailbox.postSystemMessage(systemMessage)
-            }
+        mailbox.postSystemMessage(systemMessage)
 
-            systemMessage.taskCompletionSource.completeExceptionally(taskException)
-            job.await()
-        }
-
-        val escalatedFailure = mailboxHandler.escalatedFailures.singleExecutionException()
-        assertEquals(taskException, escalatedFailure.cause)
+        val escalatedFailure = mailboxHandler.escalatedFailures
+                .singleExceptionOf<MessageHandlerTestException>()
+        assertEquals(taskException, escalatedFailure)
     }
 }

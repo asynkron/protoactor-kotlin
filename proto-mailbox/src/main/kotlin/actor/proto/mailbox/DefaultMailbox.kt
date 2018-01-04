@@ -12,6 +12,8 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
     private lateinit var invoker: MessageInvoker
     private var suspended: Boolean = false
 
+    fun status(): Int = status.get()
+
     override fun postUserMessage(msg: Any) {
         userMailbox.offer (msg)
         for (stats in stats) stats.messagePosted(msg)
