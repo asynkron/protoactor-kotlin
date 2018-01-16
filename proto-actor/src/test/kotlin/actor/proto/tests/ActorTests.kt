@@ -64,4 +64,37 @@ class ActorTests {
         assertTrue(messageArr[2] is Stopping)
         assertTrue(messageArr[3] is Stopped)
     }
+
+    @Test fun actorStartedException(): Unit {
+        val numberExceptions = 2
+        var exceptionCount = 0
+        val messages: Queue<Any> = ArrayDeque<Any>()
+        val prop = fromFunc { msg ->
+            messages.offer(msg)
+            when (msg) {
+                is Started -> {
+                    exceptionCount++
+                    if (exceptionCount <= 2) throw Exception()
+                }
+                else -> {
+
+                }
+            }
+        }
+        val pid: PID = spawn(prop)
+        send(pid,"hello")
+        Thread.sleep(100)
+        stop(pid)
+        Thread.sleep(100)
+        assertEquals(8, messages.count())
+        val messageArr: Array<Any> = messages.toTypedArray()
+        assertTrue(messageArr[0] is Started)
+        assertTrue(messageArr[1] is Restarting)
+        assertTrue(messageArr[2] is Started)
+        assertTrue(messageArr[3] is Restarting)
+        assertTrue(messageArr[4] is Started)
+        assertTrue(messageArr[5] is String)
+        assertTrue(messageArr[6] is Stopping)
+        assertTrue(messageArr[7] is Stopped)
+    }
 }
