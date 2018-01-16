@@ -78,19 +78,21 @@ class EndpointWriter(private val address: String) : Actor {
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
         val res = blockingClient.connect(ConnectRequest())
         serializerId = res.defaultSerializerId
-        streamWriter = client.receive(null)
-//        launch(CommonPool){
-//            try  {
-//                stream.responseStream.forEachAsync{
-//
-//                }
-//            }
-//            catch (x : Exception) {
-//                println("Lost connection to address $address, reason ${x.message}")
-//                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent(address)
-//                EventStream.publish(terminated)
-//            }
-//        }
+        streamWriter = client.receive(object : StreamObserver<RemoteProtos.Unit> {
+            override fun onNext(value: RemoteProtos.Unit?) {
+                //never called
+            }
+            override fun onCompleted() {
+                //never called
+            }
+            override fun onError(t: Throwable?) {
+                //According to gRPC docs any call to error is the final call and signals termination
+                //val status = Status.fromThrowable(t)
+                val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
+                EventStream.publish(terminated)
+                println("Lost connection to address $address")
+            }
+        })
 
         println("Connected to address $address")
     }
