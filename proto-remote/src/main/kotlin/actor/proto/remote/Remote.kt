@@ -4,7 +4,9 @@ import actor.proto.*
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import io.grpc.Server
 import io.grpc.ServerBuilder
+import io.grpc.netty.NettyServerBuilder
 import java.time.Duration
+import java.util.concurrent.TimeUnit
 
 object Remote {
     private lateinit var _server: Server
@@ -24,7 +26,10 @@ object Remote {
 
     fun start(hostname: String, port: Int, config: RemoteConfig = RemoteConfig()) {
         ProcessRegistry.registerHostResolver { pid -> RemoteProcess(pid) }
-        _server = ServerBuilder.forPort(port).addService(EndpointReader()).build().start()
+        _server = NettyServerBuilder.forPort(port).addService(EndpointReader())
+                .permitKeepAliveTime(10, TimeUnit.SECONDS)
+                .permitKeepAliveWithoutCalls(true)
+                .build().start()
         val boundPort: Int = _server.port
         val boundAddress: String = "$hostname:$boundPort"
         val address: String = "${config.advertisedHostname ?: hostname}:${config.advertisedPort ?: boundPort}"

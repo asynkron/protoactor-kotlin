@@ -5,6 +5,7 @@ import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
+import java.util.concurrent.TimeUnit
 
 class EndpointWriter(private val address: String) : Actor {
     private var serializerId: Int = 0
@@ -72,6 +73,10 @@ class EndpointWriter(private val address: String) : Actor {
         channel = ManagedChannelBuilder
                 .forAddress(host, port)
                 .usePlaintext(true)
+                .idleTimeout(24, TimeUnit.HOURS)
+                .keepAliveTime(10, TimeUnit.SECONDS)
+                .keepAliveTimeout(10, TimeUnit.SECONDS)
+                .keepAliveWithoutCalls(true)
                 .build()
 
         client = RemotingGrpc.newStub(channel)
