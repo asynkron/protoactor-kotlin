@@ -72,10 +72,10 @@ class EndpointWriter(private val address : String, private val config : RemoteCo
         val (host, port) = parseAddress(address)
         var channelBuilder = ManagedChannelBuilder
                 .forAddress(host, port)
-        config.usePlainText?.let {channelBuilder.usePlaintext(true)}
+        if (config.usePlainText) channelBuilder.usePlaintext(true)
         config.idleTimeout?.let { channelBuilder.idleTimeout(it, TimeUnit.MILLISECONDS) }
         config.keepAliveTime?.let { channelBuilder.keepAliveTime(it, TimeUnit.MILLISECONDS) }
-        config.keepAliveTimout?.let { channelBuilder.keepAliveTimeout(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveTimeout?.let { channelBuilder.keepAliveTimeout(it, TimeUnit.MILLISECONDS) }
         config.keepAliveWithoutCalls?.let { channelBuilder.keepAliveWithoutCalls(it) }
         channel = channelBuilder.build()
         client = RemotingGrpc.newStub(channel)

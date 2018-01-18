@@ -6,7 +6,7 @@ data class RemoteConfig(
         val advertisedPort: Int? = null,
         val idleTimeout: Long? = null,
         val keepAliveTime: Long? = null,
-        val keepAliveTimout: Long? = null,
+        val keepAliveTimeout: Long? = null,
         val keepAliveWithoutCalls : Boolean? = null,
-        val usePlainText : Boolean? = true
+        val usePlainText : Boolean = true
 )
