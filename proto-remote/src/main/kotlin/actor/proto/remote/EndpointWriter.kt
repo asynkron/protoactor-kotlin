@@ -7,7 +7,7 @@ import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import java.util.concurrent.TimeUnit
 
-class EndpointWriter(private val address: String) : Actor {
+class EndpointWriter(private val address : String, private val config : RemoteConfig) : Actor {
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
@@ -70,15 +70,14 @@ class EndpointWriter(private val address: String) : Actor {
     private suspend fun started() {
         println("Connecting to address $address")
         val (host, port) = parseAddress(address)
-        channel = ManagedChannelBuilder
+        var channelBuilder = ManagedChannelBuilder
                 .forAddress(host, port)
-                .usePlaintext(true)
-                .idleTimeout(24, TimeUnit.HOURS)
-                .keepAliveTime(10, TimeUnit.SECONDS)
-                .keepAliveTimeout(10, TimeUnit.SECONDS)
-                .keepAliveWithoutCalls(true)
-                .build()
-
+        config.usePlainText?.let {channelBuilder.usePlaintext(true)}
+        config.idleTimeout?.let { channelBuilder.idleTimeout(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveTime?.let { channelBuilder.keepAliveTime(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveTimout?.let { channelBuilder.keepAliveTimeout(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveWithoutCalls?.let { channelBuilder.keepAliveWithoutCalls(it) }
+        channel = channelBuilder.build()
         client = RemotingGrpc.newStub(channel)
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
         val res = blockingClient.connect(ConnectRequest())

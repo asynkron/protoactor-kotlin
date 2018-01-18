@@ -26,10 +26,10 @@ object Remote {
 
     fun start(hostname: String, port: Int, config: RemoteConfig = RemoteConfig()) {
         ProcessRegistry.registerHostResolver { pid -> RemoteProcess(pid) }
-        _server = NettyServerBuilder.forPort(port).addService(EndpointReader())
-                .permitKeepAliveTime(10, TimeUnit.SECONDS)
-                .permitKeepAliveWithoutCalls(true)
-                .build().start()
+        val serverBuilder = NettyServerBuilder.forPort(port).addService(EndpointReader())
+        config.keepAliveTime?.let { serverBuilder.permitKeepAliveTime(config.keepAliveTime, TimeUnit.MILLISECONDS) }
+        config.keepAliveWithoutCalls?.let {serverBuilder.permitKeepAliveWithoutCalls(config.keepAliveWithoutCalls)}
+        _server = serverBuilder.build().start()
         val boundPort: Int = _server.port
         val boundAddress: String = "$hostname:$boundPort"
         val address: String = "${config.advertisedHostname ?: hostname}:${config.advertisedPort ?: boundPort}"
