@@ -5,9 +5,14 @@ import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
+import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
-class EndpointWriter(private val address : String, private val config : RemoteConfig) : Actor {
+class EndpointWriter(private val address: String, private val config: RemoteConfig) : Actor {
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(EndpointWriter::class.java)
+    }
+
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
@@ -60,7 +65,7 @@ class EndpointWriter(private val address : String, private val config : RemoteCo
             streamWriter.onNext(batch)
         } catch (x: Exception) {
             stash()
-            println("gRPC Failed to send to address $address, reason ${x.message}")
+            LOGGER.error("gRPC Failed to send to address $address, reason ${x.message}")
             throw  x
         }
     }
@@ -68,7 +73,7 @@ class EndpointWriter(private val address : String, private val config : RemoteCo
     private suspend fun restarting() = channel.shutdownNow()
     private suspend fun stopped() = channel.shutdownNow()
     private suspend fun started() {
-        println("Connecting to address $address")
+        LOGGER.error("Connecting to address $address")
         val (host, port) = parseAddress(address)
         var channelBuilder = ManagedChannelBuilder
                 .forAddress(host, port)
@@ -86,19 +91,20 @@ class EndpointWriter(private val address : String, private val config : RemoteCo
             override fun onNext(value: RemoteProtos.Unit?) {
                 //never called
             }
+
             override fun onCompleted() {
                 //never called
             }
+
             override fun onError(t: Throwable?) {
                 //According to gRPC docs any call to error is the final call and signals termination
                 //val status = Status.fromThrowable(t)
                 val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
                 EventStream.publish(terminated)
-                println("Lost connection to address $address")
+                LOGGER.error("Lost connection to address $address")
             }
         })
-
-        println("Connected to address $address")
+        LOGGER.error("Connected to address $address")
     }
 }
 
