@@ -65,7 +65,7 @@ class EndpointWriter(private val address: String, private val config: RemoteConf
             streamWriter.onNext(batch)
         } catch (x: Exception) {
             stash()
-            LOGGER.error("gRPC Failed to send to address $address, reason ${x.message}")
+            LOGGER.error("gRPC Failed to send to address $address", x)
             throw  x
         }
     }
@@ -73,7 +73,7 @@ class EndpointWriter(private val address: String, private val config: RemoteConf
     private suspend fun restarting() = channel.shutdownNow()
     private suspend fun stopped() = channel.shutdownNow()
     private suspend fun started() {
-        LOGGER.error("Connecting to address $address")
+        LOGGER.info("Connecting to address $address")
         val (host, port) = parseAddress(address)
         var channelBuilder = ManagedChannelBuilder
                 .forAddress(host, port)
@@ -101,10 +101,10 @@ class EndpointWriter(private val address: String, private val config: RemoteConf
                 //val status = Status.fromThrowable(t)
                 val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
                 EventStream.publish(terminated)
-                LOGGER.error("Lost connection to address $address")
+                LOGGER.error("Lost connection to address $address", t)
             }
         })
-        LOGGER.error("Connected to address $address")
+        LOGGER.info("Connected to address $address")
     }
 }
 
