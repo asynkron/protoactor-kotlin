@@ -8,14 +8,17 @@ typealias MailboxQueue = Queue<Any>
 class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
     private val status = AtomicInteger(MailboxStatus.IDLE)
     private val sysCount = AtomicInteger(0)
+    private val userCount = AtomicInteger(0)
     private lateinit var dispatcher: Dispatcher
     private lateinit var invoker: MessageInvoker
     private var suspended: Boolean = false
 
     override fun postUserMessage(msg: Any) {
-        userMailbox.offer (msg)
-        for (stats in stats) stats.messagePosted(msg)
-        schedule()
+        if (userMailbox.offer(msg)) {
+            userCount.incrementAndGet()
+            schedule()
+            for (stats in stats) stats.messagePosted(msg)
+        }
     }
 
     override fun postSystemMessage(msg: Any) {
@@ -52,8 +55,9 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
                         for (stat in stats) stat.messageReceived(msg)
                     }
                 }
-                if (!suspended) {
+                if (!suspended && userCount.get() > 0) {
                     msg = userMailbox.poll()
+                    userCount.decrementAndGet()
                     if (msg == null) break
                     else {
                         invoker.invokeUserMessage(msg)
@@ -68,7 +72,7 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         }
 
         status.set(MailboxStatus.IDLE)
-        if (systemMessages.isNotEmpty() || (!suspended && userMailbox.isNotEmpty())) {
+        if (sysCount.get() > 0 || (!suspended && userCount.get() > 0)) {
             schedule()
         } else {
             for (stat in stats) stat.mailboxEmpty()
