@@ -4,6 +4,7 @@ import actor.proto.*
 import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
+import io.grpc.Status
 import io.grpc.stub.StreamObserver
 import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
@@ -98,10 +99,18 @@ class EndpointWriter(private val address: String, private val config: RemoteConf
 
             override fun onError(t: Throwable?) {
                 //According to gRPC docs any call to error is the final call and signals termination
-                //val status = Status.fromThrowable(t)
-                val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
-                EventStream.publish(terminated)
-                LOGGER.error("Lost connection to address $address", t)
+                val status = Status.fromThrowable(t).code.name
+                when (status) {
+                    "RESOURCE_EXHAUSTED" -> {
+                        LOGGER.warn("Resource exhausted received", t)
+                    }
+
+                    else -> {
+                        val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
+                        EventStream.publish(terminated)
+                        LOGGER.error("Lost connection to address $address", t)
+                    }
+                }
             }
         })
         LOGGER.info("Connected to address $address")
