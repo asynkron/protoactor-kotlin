@@ -1,11 +1,17 @@
 package actor.proto.mailbox
 
+import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 private val emptyStats = arrayOf<MailboxStatistics>()
 typealias MailboxQueue = Queue<Any>
 class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
+
+    companion object {
+        private val LOGGER = LoggerFactory.getLogger(DefaultMailbox::class.java)
+    }
+
     private val status = AtomicInteger(MailboxStatus.IDLE)
     private val sysCount = AtomicInteger(0)
     private val userCount = AtomicInteger(0)
@@ -18,6 +24,11 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
             userCount.incrementAndGet()
             schedule()
             for (stats in stats) stats.messagePosted(msg)
+        } else {
+            //debug
+            LOGGER.warn("Offer to user mailbox was unsuccessful")
+            LOGGER.info("User mailbox size is " + userMailbox.size)
+            LOGGER.info("User mailbox is not empty: " + userMailbox.isNotEmpty().toString())
         }
     }
 
@@ -76,6 +87,16 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
             schedule()
         } else {
             for (stat in stats) stat.mailboxEmpty()
+            //debug
+            if (systemMessages.isNotEmpty() || (!suspended && userMailbox.isNotEmpty())) {
+                LOGGER.warn("isNotEmpty check, but atomic counter shows no messages")
+                LOGGER.info("Size of system mailbox" + systemMessages.size)
+                LOGGER.info("Size of user mailbox" + userMailbox.size)
+                LOGGER.info("System Messages is not Empty: " + systemMessages.isNotEmpty().toString())
+                LOGGER.info("User Mailbox is not Empty: " + userMailbox.isNotEmpty().toString())
+                LOGGER.info("System message count " + sysCount)
+                LOGGER.info("User mailbox count " + userCount)
+            }
         }
     }
 
