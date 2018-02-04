@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory
 import java.util.concurrent.TimeUnit
 
 class EndpointWriter(private val address: String, private val config: RemoteConfig) : Actor {
+
     companion object {
         private val LOGGER = LoggerFactory.getLogger(EndpointWriter::class.java)
     }
