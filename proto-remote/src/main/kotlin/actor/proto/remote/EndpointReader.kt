@@ -3,7 +3,9 @@ package actor.proto.remote
 import actor.proto.*
 import actor.proto.mailbox.SystemMessage
 import io.grpc.stub.StreamObserver
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 class EndpointReader : RemotingGrpc.RemotingImplBase() {
     override fun connect(request: RemoteProtos.ConnectRequest, responseObserver: StreamObserver<RemoteProtos.ConnectResponse>) {
         responseObserver.onNext(ConnectResponse(Serialization.defaultSerializerId))
@@ -13,7 +15,7 @@ class EndpointReader : RemotingGrpc.RemotingImplBase() {
     override fun receive(responseObserver: StreamObserver<RemoteProtos.Unit>): StreamObserver<RemoteProtos.MessageBatch> {
         return object : StreamObserver<RemoteProtos.MessageBatch> {
             override fun onCompleted() = responseObserver.onCompleted()
-            override fun onError(err: Throwable): Unit = println(err)
+            override fun onError(err: Throwable): Unit = logger.error("Stream observer exception",err)
             override fun onNext(batch: RemoteProtos.MessageBatch) = receiveBatch(batch)
         }
     }

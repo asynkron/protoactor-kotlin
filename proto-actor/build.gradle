@@ -13,4 +13,7 @@ jar {
 dependencies {
     compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
     compile project(':proto-mailbox')
+    compile 'io.github.microutils:kotlin-logging:1.4.9'
+
+    testCompile 'org.slf4j:slf4j-simple:1.7.7'
 }

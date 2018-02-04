@@ -4,8 +4,9 @@ import actor.proto.*
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import io.grpc.Server
 import io.grpc.ServerBuilder
+import mu.KotlinLogging
 import java.time.Duration
-
+private val logger = KotlinLogging.logger {}
 object Remote {
     private lateinit var _server: Server
     private val Kinds: HashMap<String, Props> = HashMap()
@@ -31,7 +32,7 @@ object Remote {
         ProcessRegistry.address = address
         spawnEndpointManager(config)
         spawnActivator()
-        println("Starting Proto.Actor server on $boundAddress")
+        logger.info("Starting Proto.Actor server on $boundAddress")
     }
 
     private fun spawnActivator() {
