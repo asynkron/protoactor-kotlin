@@ -25,10 +25,7 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
             schedule()
             for (stats in stats) stats.messagePosted(msg)
         } else {
-            //debug
-            LOGGER.warn("Offer to user mailbox was unsuccessful")
-            LOGGER.info("User mailbox size is " + userMailbox.size)
-            LOGGER.info("User mailbox is not empty: " + userMailbox.isNotEmpty().toString())
+            for (stats in stats) stats.messageDropped(msg)
         }
     }
 
