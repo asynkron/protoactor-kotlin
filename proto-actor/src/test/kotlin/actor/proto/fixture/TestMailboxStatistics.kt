@@ -28,5 +28,9 @@ class TestMailboxStatistics(private val waitForReceived: ((Any) -> Boolean)? = n
     override fun mailboxEmpty() {
         stats.add("Empty")
     }
+
+    override fun messageDropped(msg: Any) {
+        //not needed
+    }
 }
 
