@@ -21,8 +21,13 @@ class DeferredProcess<out T>(private val timeout: Duration = Duration.ofMillis(5
     override fun sendSystemMessage(pid: PID, message: SystemMessage) {}
 
     suspend fun await(): T {
-        val result = withTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS) { cd.await() }
-        ProcessRegistry.remove(pid)
-        return result
+        try {
+            val result = withTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS) { cd.await() }
+            ProcessRegistry.remove(pid)
+            return result;
+        } catch (exception: Exception) {
+            ProcessRegistry.remove(pid)
+            throw exception;
+        }
     }
 }
