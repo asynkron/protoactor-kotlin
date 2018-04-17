@@ -8,6 +8,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
 import java.util.*
+import java.util.concurrent.CountDownLatch
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
@@ -66,15 +67,17 @@ class ActorTests {
     }
 
     @Test fun actorStartedException(): Unit {
-        val numberExceptions = 2
-        var exceptionCount = 0
+        val exceptionCount = CountDownLatch(2)
+        val messageCount = CountDownLatch(8)
         val messages: Queue<Any> = ArrayDeque<Any>()
         val prop = fromFunc { msg ->
             messages.offer(msg)
+            messageCount.countDown()
             when (msg) {
                 is Started -> {
-                    exceptionCount++
-                    if (exceptionCount <= 2) throw Exception()
+                    val shouldThrow = exceptionCount.count > 0
+                    exceptionCount.countDown()
+                    if (shouldThrow) throw Exception()
                 }
                 else -> {
 
@@ -83,9 +86,9 @@ class ActorTests {
         }
         val pid: PID = spawn(prop)
         send(pid,"hello")
-        Thread.sleep(100)
+        exceptionCount.await()
         stop(pid)
-        Thread.sleep(100)
+        messageCount.await()
         assertEquals(8, messages.count())
         val messageArr: Array<Any> = messages.toTypedArray()
         assertTrue(messageArr[0] is Started)
