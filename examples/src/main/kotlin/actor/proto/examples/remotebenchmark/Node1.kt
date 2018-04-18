@@ -16,18 +16,10 @@ fun main(args: Array<String>) {
     registerFileDescriptor(Messages.getDescriptor())
     Remote.start("127.0.0.1", 0)
     run()
-    //readLine()
+    readLine()
     run()
-    //readLine()
+    readLine()
     run()
-    run()
-    run()
-    run()
-    run()
-    run()
-    run()
-    //readLine()
-
 }
 
 private fun run() {
