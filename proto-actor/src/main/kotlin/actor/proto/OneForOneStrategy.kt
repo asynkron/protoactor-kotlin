@@ -1,7 +1,8 @@
 package actor.proto
 
+import mu.KotlinLogging
 import java.time.Duration
-
+private val logger = KotlinLogging.logger {}
 class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirective, private val maxNrOfRetries: Int, private val withinTimeSpan: Duration? = null) : SupervisorStrategy {
     override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
         val directive: SupervisorDirective = decider(child, reason)
@@ -9,15 +10,15 @@ class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirec
             SupervisorDirective.Resume -> supervisor.resumeChildren(child)
             SupervisorDirective.Restart -> {
                 if (requestRestartPermission(rs)) {
-                    Logger.logInformation("Restarting ${child.toShortString()} Reason $reason")
+                    logger.debug("Restarting ${child.toShortString()} Reason $reason")
                     supervisor.restartChildren(reason, child)
                 } else {
-                    Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                    logger.debug("Stopping ${child.toShortString()} Reason $reason")
                     supervisor.stopChildren(child)
                 }
             }
             SupervisorDirective.Stop -> {
-                Logger.logInformation("Stopping ${child.toShortString()} Reason $reason")
+                logger.debug("Stopping ${child.toShortString()} Reason $reason")
                 supervisor.stopChildren(child)
             }
             SupervisorDirective.Escalate -> supervisor.escalateFailure(reason, child)
@@ -30,11 +31,5 @@ class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirec
         if (withinTimeSpan == null || rs.isWithinDuration(withinTimeSpan)) return rs.failureCount <= maxNrOfRetries
         rs.reset()
         return true
-    }
-}
-
-object Logger {
-    fun logInformation(message: String) {
-        println(message)
     }
 }

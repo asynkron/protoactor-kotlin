@@ -1,14 +1,16 @@
 package actor.proto.remote
 
 import actor.proto.*
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 class EndpointManager(private val config: RemoteConfig) : Actor, SupervisorStrategy {
 
 
     private val _connections: HashMap<String, Endpoint> = HashMap()
     suspend override fun Context.receive(msg: Any) {
         when (msg) {
-            is Started -> println("Started EndpointManager")
+            is Started -> logger.info("Started EndpointManager")
             is EndpointTerminatedEvent ->  ensureConnected(msg.address).watcher.let { send(it,msg) }
             is RemoteTerminate -> ensureConnected(msg.watchee.address).watcher.let {send(it,msg) }
             is RemoteWatch -> ensureConnected(msg.watchee.address).watcher.let { send(it,msg) }
