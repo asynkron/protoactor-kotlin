@@ -6,6 +6,7 @@ mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 dependencies {
     compile 'org.jctools:jctools-core:2.1.1'
     compile 'com.google.protobuf:protobuf-java:+'
+    compile 'org.slf4j:slf4j-simple:1.7.7'
 
     compile project(':proto-actor')
     compile project(':proto-router')
