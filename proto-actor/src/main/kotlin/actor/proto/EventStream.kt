@@ -3,7 +3,6 @@ package actor.proto
 import actor.proto.mailbox.Dispatchers
 import mu.KotlinLogging
 
-
 private val logger = KotlinLogging.logger {}
 object EventStream : EventStreamImpl() {
     init {

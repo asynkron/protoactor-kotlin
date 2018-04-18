@@ -8,8 +8,8 @@ import io.grpc.stub.StreamObserver
 import java.util.concurrent.TimeUnit
 import mu.KotlinLogging
 
-class EndpointWriter(private val address : String, private val config : RemoteConfig) : Actor {
 private val logger = KotlinLogging.logger {}
+class EndpointWriter(private val address : String, private val config : RemoteConfig) : Actor {
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub

@@ -2,7 +2,6 @@ package actor.proto
 
 import mu.KotlinLogging
 import java.time.Duration
-
 private val logger = KotlinLogging.logger {}
 class AllForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirective, private val maxNrOfRetries: Int, private val withinTimeSpan: Duration?) : SupervisorStrategy {
     override fun handleFailure(supervisor: Supervisor, child: PID, rs: RestartStatistics, reason: Exception) {
