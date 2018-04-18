@@ -269,8 +269,8 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     suspend private fun restart() {
         incarnateActor()
-        sendSystemMessage(self,ResumeMailbox)
         invokeUserMessage(Started)
+        sendSystemMessage(self,ResumeMailbox)
         while (stash.isNotEmpty()) invokeUserMessage(stash.pop())
     }
 
