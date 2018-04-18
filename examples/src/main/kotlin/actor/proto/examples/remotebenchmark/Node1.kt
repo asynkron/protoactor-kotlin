@@ -6,11 +6,10 @@ import actor.proto.examples.remotebenchmark.Messages.Pong
 import actor.proto.remote.Remote
 import actor.proto.remote.Serialization.registerFileDescriptor
 import kotlinx.coroutines.experimental.runBlocking
-import mu.KotlinLogging
 import java.lang.System.currentTimeMillis
 import java.time.Duration
 import java.util.concurrent.CountDownLatch
-private val logger = KotlinLogging.logger {}
+
 fun main(args: Array<String>) {
 
     registerFileDescriptor(Messages.getDescriptor())
@@ -34,7 +33,7 @@ private fun run() {
     }
 
     val start = currentTimeMillis()
-    logger.info("Starting to send")
+    println("Starting to send")
     val msg: Ping = Ping.newBuilder().build()
     for (i in 0 until messageCount) {
         send(remote,msg)
