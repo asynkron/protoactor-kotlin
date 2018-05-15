@@ -7,12 +7,10 @@ import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import java.time.Duration
-import java.util.*
 import java.util.concurrent.CountDownLatch
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
-import kotlin.test.assertTrue
 
 class ActorTests {
     private fun spawnActorFromFunc(receive: suspend Context.(msg: Any) -> Unit): PID = spawn(fromFunc(receive))
@@ -56,19 +54,19 @@ class ActorTests {
 
     @Test
     fun actorLifeCycle(): Unit {
-        val messages: Queue<Any> = ArrayDeque<Any>()
+        val messages: MutableList<Any> = mutableListOf()
         val prop = fromFunc { msg ->
-            messages.offer(msg)
+            messages.add(msg)
         }.withMailbox { TestMailbox() }
         val pid: PID = spawn(prop)
         send(pid, "hello")
         stop(pid)
         assertEquals(4, messages.count())
-        val messageArr: Array<Any> = messages.toTypedArray()
-        assertTrue(messageArr[0] is Started)
-        assertTrue(messageArr[1] is String)
-        assertTrue(messageArr[2] is Stopping)
-        assertTrue(messageArr[3] is Stopped)
+
+        assertSame(messages[0], Started)
+        assertEquals(messages[1], "hello")
+        assertSame(messages[2], Stopping)
+        assertSame(messages[3], Stopped)
     }
 
     @Test
