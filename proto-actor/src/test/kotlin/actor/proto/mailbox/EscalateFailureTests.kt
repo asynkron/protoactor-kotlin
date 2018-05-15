@@ -3,12 +3,7 @@ package actor.proto.mailbox
 import actor.proto.fixture.ExceptionalMessage
 import actor.proto.fixture.ExceptionalSystemMessage
 import actor.proto.fixture.TestMailboxHandler
-import actor.proto.fixture.TestSystemMessage
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
-import java.util.concurrent.ExecutionException
 import kotlin.test.assertEquals
 
 open class EscalateFailureTests {
@@ -19,7 +14,7 @@ open class EscalateFailureTests {
 
     class MessageHandlerTestException : Exception("Handler Exception")
 
-    @Test 
+    @Test
     fun `Should escalate failure when a User message is completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()

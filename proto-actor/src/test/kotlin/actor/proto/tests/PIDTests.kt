@@ -28,7 +28,7 @@ class PIDTests {
     @Test
     fun `given other process, cachedProcess should return it`() {
         val id = UUID.randomUUID().toString()
-        val p: TestProcess = TestProcess()
+        val p = TestProcess()
         val pid = ProcessRegistry.put(id, p)
         val p2 = pid.cachedProcess()
         assertSame(p, p2)

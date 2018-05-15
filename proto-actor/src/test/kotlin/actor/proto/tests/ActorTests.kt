@@ -70,7 +70,7 @@ class ActorTests {
         assertTrue(messageArr[3] is Stopped)
     }
 
-    @Test 
+    @Test
     fun actorStartedException(): Unit {
         val exceptionCount = CountDownLatch(2)
         val messageCount = CountDownLatch(8)
@@ -90,7 +90,7 @@ class ActorTests {
             }
         }
         val pid: PID = spawn(prop)
-        send(pid,"hello")
+        send(pid, "hello")
         exceptionCount.await()
         stop(pid)
         messageCount.await()

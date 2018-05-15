@@ -18,7 +18,7 @@ class SupervisionTests_OneForOne {
         private val _childProps: Props = childProps
         lateinit var child: PID
 
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             if (msg is Started)
                 child = spawnChild(_childProps)
 
@@ -28,7 +28,7 @@ class SupervisionTests_OneForOne {
     }
 
     class ChildActor : Actor {
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             val tmp = msg
             when (tmp) {
                 is String -> {
@@ -40,7 +40,7 @@ class SupervisionTests_OneForOne {
     }
 
     class ThrowOnStartedChildActor : Actor {
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             val tmp = msg
             when (tmp) {
                 is Started -> {

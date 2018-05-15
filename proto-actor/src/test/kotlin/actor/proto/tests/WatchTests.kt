@@ -23,7 +23,7 @@ class WatchTests {
     class LocalActor(watchee: PID) : Actor {
         private val _watchee: PID = watchee
         private var _terminateReceived: Boolean = false
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             when (msg) {
                 is Started -> watch(_watchee)
                 is String -> respond(_terminateReceived)
