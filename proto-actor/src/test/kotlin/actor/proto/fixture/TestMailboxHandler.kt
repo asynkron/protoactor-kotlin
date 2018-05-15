@@ -28,7 +28,7 @@ class TestMailboxHandler : MessageInvoker, Dispatcher {
     }
 
     override var throughput: Int = 10
-    override fun schedule(mailbox : Mailbox) {
+    override fun schedule(mailbox: Mailbox) {
         runBlocking { mailbox.run() }
     }
 }

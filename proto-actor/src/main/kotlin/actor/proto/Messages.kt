@@ -6,7 +6,9 @@ interface AutoReceiveMessage
 
 //map Proto Messages
 typealias PoisonPill = Protos.PoisonPill
+
 typealias Terminated = Protos.Terminated
+
 fun Terminated(who: PID, addressTerminated: Boolean): Terminated {
     val t = Terminated.newBuilder()
     t.who = who
@@ -14,18 +16,21 @@ fun Terminated(who: PID, addressTerminated: Boolean): Terminated {
     return t.build()
 }
 typealias Watch = Protos.Watch
+
 fun Watch(watcher: PID): Watch {
     val w = Watch.newBuilder()
     w.watcher = watcher
     return w.build()
 }
 typealias Unwatch = Protos.Unwatch
+
 fun Unwatch(watcher: PID): Unwatch {
     val w = Unwatch.newBuilder()
     w.watcher = watcher
     return w.build()
 }
 typealias Stop = Protos.Stop
+
 internal val StopInstance: Stop = Stop.newBuilder().build()
 
 object ReceiveTimeout : SystemMessage

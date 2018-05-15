@@ -8,8 +8,9 @@ import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 class EventStreamTests {
-    @Test fun `event stream can subscribe to specific event types`() {
-        var received: String = ""
+    @Test
+    fun `event stream can subscribe to specific event types`() {
+        var received = ""
         val eventStream = EventStreamImpl()
         eventStream.subscribe({ theString -> received = theString as String })
         eventStream.publish("hello")
@@ -17,7 +18,8 @@ class EventStreamTests {
 
     }
 
-    @Test fun `eventStream can subscribe to all event types`() {
+    @Test
+    fun `eventStream can subscribe to all event types`() {
         val receivedEvents = mutableListOf<Any>()
         val eventStream = EventStreamImpl()
         eventStream.subscribe({ msg -> receivedEvents.add(msg) })
@@ -27,7 +29,8 @@ class EventStreamTests {
         assertEquals(3, receivedEvents.count())
     }
 
-    @Test fun `eventStream can unsubscribe from events`() {
+    @Test
+    fun `eventStream can unsubscribe from events`() {
         val receivedEvents = mutableListOf<Any>()
         val eventStream = EventStreamImpl()
         val subscription = eventStream.subscribe({ msg -> receivedEvents.add(msg) })
@@ -44,7 +47,8 @@ class EventStreamTests {
 //        eventStream.publish("not an int")
 //        Assert.assertEquals(0, eventsReceived.count())
 //    }
-    @Test fun `event stream can subscribe to specific event types async`() {
+    @Test
+    fun `event stream can subscribe to specific event types async`() {
         val eventStream = EventStreamImpl()
         val cd = CountDownLatch(1)
         eventStream.subscribe({ cd.countDown() }, Dispatchers.DEFAULT_DISPATCHER)

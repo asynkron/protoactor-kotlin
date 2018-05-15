@@ -12,7 +12,7 @@ interface Context {
     fun actor(): Actor
     fun children(): Set<PID>
 
-    fun message() : Any
+    fun message(): Any
     fun stash()
     fun spawnChild(props: Props): PID
     fun spawnPrefixChild(props: Props, prefix: String): PID

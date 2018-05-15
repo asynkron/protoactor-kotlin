@@ -14,8 +14,9 @@ import kotlin.test.assertFailsWith
 import kotlin.test.assertTrue
 
 class ActorTests {
-    private fun spawnActorFromFunc(receive: suspend Context.(msg:Any) -> Unit): PID = spawn(fromFunc(receive))
-    @Test fun requestActorAsync(): Unit {
+    private fun spawnActorFromFunc(receive: suspend Context.(msg: Any) -> Unit): PID = spawn(fromFunc(receive))
+    @Test
+    fun requestActorAsync(): Unit {
         val pid: PID = spawnActorFromFunc { msg ->
             when (msg) {
                 is String -> respond("hey")
@@ -23,21 +24,23 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(200))
+            val reply: Any = requestAwait(pid, "hello", Duration.ofMillis(200))
             assertEquals("hey", reply)
         }
     }
 
-    @Test fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
+    @Test
+    fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
         assertFailsWith<CancellationException> {
             runBlocking {
-                requestAwait<Any>(pid,"", Duration.ofMillis(10))
+                requestAwait<Any>(pid, "", Duration.ofMillis(10))
             }
         }
     }
 
-    @Test fun `request actor async should not raise timeout exception when result is first`(): Unit {
+    @Test
+    fun `request actor async should not raise timeout exception when result is first`(): Unit {
         val pid: PID = spawnActorFromFunc { msg ->
             when (msg) {
                 is String -> respond("hey")
@@ -45,18 +48,19 @@ class ActorTests {
         }
 
         runBlocking {
-            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(100))
+            val reply: Any = requestAwait(pid, "hello", Duration.ofMillis(100))
             assertEquals("hey", reply)
         }
     }
 
-    @Test fun actorLifeCycle(): Unit {
+    @Test
+    fun actorLifeCycle(): Unit {
         val messages: Queue<Any> = ArrayDeque<Any>()
         val prop = fromFunc { msg ->
             messages.offer(msg)
         }.withMailbox { TestMailbox() }
         val pid: PID = spawn(prop)
-        send(pid,"hello")
+        send(pid, "hello")
         stop(pid)
         assertEquals(4, messages.count())
         val messageArr: Array<Any> = messages.toTypedArray()
@@ -66,7 +70,8 @@ class ActorTests {
         assertTrue(messageArr[3] is Stopped)
     }
 
-    @Test fun actorStartedException(): Unit {
+    @Test 
+    fun actorStartedException(): Unit {
         val exceptionCount = CountDownLatch(2)
         val messageCount = CountDownLatch(8)
         val messages: Queue<Any> = ArrayDeque<Any>()
@@ -101,3 +106,4 @@ class ActorTests {
         assertTrue(messageArr[7] is Stopped)
     }
 }
+

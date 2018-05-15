@@ -12,7 +12,8 @@ import java.util.*
 import kotlin.test.assertFailsWith
 
 class ProcessRegistryTests {
-    @Test fun `given pid does not exist, add should add local pid`() {
+    @Test
+    fun `given pid does not exist, add should add local pid`() {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
@@ -20,7 +21,8 @@ class ProcessRegistryTests {
         assertEquals(reg.address, pid.address)
     }
 
-    @Test fun `given pid exists, add should not add local pid`() {
+    @Test
+    fun `given pid exists, add should not add local pid`() {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
@@ -31,7 +33,8 @@ class ProcessRegistryTests {
         }
     }
 
-    @Test fun `given pid exists, get should return it`() {
+    @Test
+    fun `given pid exists, get should return it`() {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
@@ -40,7 +43,8 @@ class ProcessRegistryTests {
         assertSame(p, p2)
     }
 
-    @Test fun `given pid was removed, get should return deadLetter process`() {
+    @Test
+    fun `given pid was removed, get should return deadLetter process`() {
         val id = UUID.randomUUID().toString()
         val p = TestProcess()
         val reg = ProcessRegistry
@@ -50,7 +54,8 @@ class ProcessRegistryTests {
         assertSame(DeadLetterProcess, p2)
     }
 
-    @Test fun `given pid exists in host resolver, get should return it`() {
+    @Test
+    fun `given pid exists in host resolver, get should return it`() {
         val pid = PID("abc", "def")
         val p = TestProcess()
         val reg = ProcessRegistry

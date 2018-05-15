@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture
 
 class ContextImpl(private val actor: Actor) : Context {
 
-    fun wrap(ctx: actor.proto.Context) : Context {
+    fun wrap(ctx: actor.proto.Context): Context {
         this.ctx = ctx
         return this
     }
@@ -22,7 +22,7 @@ class ContextImpl(private val actor: Actor) : Context {
     override fun sender(): PID? = ctx.sender
     override fun actor(): Actor = actor
     override fun children(): Set<PID> = ctx.children
-    override fun message() : Any = ctx.message
+    override fun message(): Any = ctx.message
     override fun stash() = ctx.stash()
     override fun spawnChild(props: Props): PID = ctx.spawnChild(props)
     override fun spawnPrefixChild(props: Props, prefix: String): PID = ctx.spawnPrefixChild(props, prefix)

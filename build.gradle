@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.2.0'
+    ext.kotlin_version = '1.2.41'
 
     repositories {
         jcenter()
@@ -36,7 +36,7 @@ subprojects {
 
     dependencies {
         compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: kotlin_version
-        compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jre8', version: kotlin_version
+        compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib-jdk8', version: kotlin_version
         compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.19.3'
         compile 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:0.19.3'
 

@@ -9,12 +9,13 @@ import org.junit.Test
 import java.time.Duration
 
 class WatchTests {
-    @Test fun `can watch local actors`() {
+    @Test
+    fun `can watch local actors`() {
         runBlocking {
             val watchee: PID = spawn(fromProducer { DoNothingActor() }.withMailbox { TestMailbox() })
             val watcher: PID = spawn(fromProducer { LocalActor(watchee) }.withMailbox { TestMailbox() })
             stop(watchee)
-            val terminatedMessageReceived: Boolean = requestAwait(watcher,"?", Duration.ofSeconds(5))
+            val terminatedMessageReceived: Boolean = requestAwait(watcher, "?", Duration.ofSeconds(5))
             assertTrue(terminatedMessageReceived)
         }
     }

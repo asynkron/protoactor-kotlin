@@ -1,7 +1,7 @@
 package actor.proto
 
 interface Actor {
-    suspend fun Context.receive(msg : Any)
+    suspend fun Context.receive(msg: Any)
     suspend fun autoReceive(context: Context) {
         val msg = context.message
         when (msg) {

@@ -75,8 +75,8 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         return pid
     }
 
-    override fun watch(pid: PID) = sendSystemMessage(pid,Watch(self))
-    override fun unwatch(pid: PID) = sendSystemMessage(pid,Unwatch(self))
+    override fun watch(pid: PID) = sendSystemMessage(pid, Watch(self))
+    override fun unwatch(pid: PID) = sendSystemMessage(pid, Unwatch(self))
     private var receiveTimeout: Duration = Duration.ZERO
     override fun getReceiveTimeout(): Duration = receiveTimeout
 
@@ -87,7 +87,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
             else -> {
                 receiveTimeout = duration
                 cancelReceiveTimeout()
-                _receiveTimeoutTimer = AsyncTimer({ DefaultActorClient.send(self,ReceiveTimeout) }, duration).apply { start() }
+                _receiveTimeoutTimer = AsyncTimer({ DefaultActorClient.send(self, ReceiveTimeout) }, duration).apply { start() }
             }
         }
     }
@@ -107,9 +107,9 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     override fun request(target: PID, message: Any) = sendUserMessage(target, MessageEnvelope(message, self, null))
 
-    suspend override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, DeferredProcess(timeout))
+    override suspend fun <T> requestAwait(target: PID, message: Any, timeout: Duration): T = requestAwait(target, message, DeferredProcess(timeout))
 
-    suspend override fun <T> requestAwait(target: PID, message: Any): T = requestAwait(target, message, DeferredProcess())
+    override suspend fun <T> requestAwait(target: PID, message: Any): T = requestAwait(target, message, DeferredProcess())
 
     //    override fun reenterAfter (target : Task, action : (Task) -> Task) {
 //        val msg : Any = _message!!
@@ -123,18 +123,18 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         when (parent) {
             null -> handleRootFailure(failure)
             else -> {
-                sendSystemMessage(self,SuspendMailbox)
-                sendSystemMessage(parent,failure)
+                sendSystemMessage(self, SuspendMailbox)
+                sendSystemMessage(parent, failure)
             }
         }
     }
 
 
-    override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { sendSystemMessage(it,Restart(reason)) }
-    override fun stopChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,StopInstance) }
-    override fun resumeChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it,ResumeMailbox) }
+    override fun restartChildren(reason: Exception, vararg pids: PID) = pids.forEach { sendSystemMessage(it, Restart(reason)) }
+    override fun stopChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it, StopInstance) }
+    override fun resumeChildren(vararg pids: PID) = pids.forEach { sendSystemMessage(it, ResumeMailbox) }
 
-    suspend override fun invokeSystemMessage(msg: SystemMessage) {
+    override suspend fun invokeSystemMessage(msg: SystemMessage) {
         try {
             when (msg) {
                 is Started -> invokeUserMessage(msg)
@@ -162,7 +162,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         msg.action()
     }
 
-    suspend override fun invokeUserMessage(msg: Any) {
+    override suspend fun invokeUserMessage(msg: Any) {
         if (receiveTimeout > Duration.ZERO && msg !is NotInfluenceReceiveTimeout) {
             _receiveTimeoutTimer?.reset()
         }
@@ -171,10 +171,10 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         else actor.autoReceive(this)
     }
 
-    suspend override fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
+    override suspend fun escalateFailure(reason: Exception, message: Any) = escalateFailure(reason, self)
 
 
-    suspend private fun <T> requestAwait(target: PID, message: Any, deferredProcess: DeferredProcess<T>): T {
+    private suspend fun <T> requestAwait(target: PID, message: Any, deferredProcess: DeferredProcess<T>): T {
         val messageEnvelope = MessageEnvelope(message, deferredProcess.pid, null)
         sendUserMessage(target, messageEnvelope)
         return deferredProcess.await()
@@ -201,7 +201,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         actor = producer()
     }
 
-    suspend private fun handleRestart() {
+    private suspend fun handleRestart() {
         state = ContextState.Restarting
         invokeUserMessage(Restarting)
         children.forEach { stop(it) }
@@ -214,20 +214,21 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     private fun handleWatch(w: Watch) {
         when (state) {
-            ContextState.Stopping -> sendSystemMessage(w.watcher,Terminated(self, false))
+            ContextState.Stopping -> sendSystemMessage(w.watcher, Terminated(self, false))
             else -> watchers += w.watcher
         }
     }
 
     private fun handleFailure(msg: Failure) {
-        val a = actor
-        when (a) {
-            is SupervisorStrategy -> a
-            else -> supervisorStrategy
-        }.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
+        actor.let {
+            when (it) {
+                is SupervisorStrategy -> it
+                else -> supervisorStrategy
+            }.handleFailure(this, msg.who, msg.restartStatistics, msg.reason)
+        }
     }
 
-    suspend private fun handleTerminated(msg: Terminated) {
+    private suspend fun handleTerminated(msg: Terminated) {
         children -= msg.who
         invokeUserMessage(msg)
         tryRestartOrTerminate()
@@ -238,14 +239,14 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         Supervision.defaultStrategy.handleFailure(this, failure.who, failure.restartStatistics, failure.reason)
     }
 
-    suspend private fun handleStop() {
+    private suspend fun handleStop() {
         state = ContextState.Stopping
         invokeUserMessage(Stopping)
         children.forEach { stop(it) }
         tryRestartOrTerminate()
     }
 
-    suspend private fun tryRestartOrTerminate() {
+    private suspend fun tryRestartOrTerminate() {
         cancelReceiveTimeout()
         when {
             children.isNotEmpty() -> return
@@ -258,7 +259,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         }
     }
 
-    suspend private fun stop() {
+    private suspend fun stop() {
         ProcessRegistry.remove(self)
         invokeUserMessage(Stopped)
         val terminated = Terminated(self, false)
@@ -267,7 +268,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
         if (parent != null) sendSystemMessage(parent, terminated)
     }
 
-    suspend private fun restart() {
+    private suspend fun restart() {
         incarnateActor()
         invokeUserMessage(Started)
         sendSystemMessage(self,ResumeMailbox)
