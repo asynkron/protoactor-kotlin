@@ -3,10 +3,13 @@ package actor.proto.remote
 import actor.proto.*
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import io.grpc.Server
-import io.grpc.ServerBuilder
+import io.grpc.netty.NettyServerBuilder
 import mu.KotlinLogging
 import java.time.Duration
+import java.util.concurrent.TimeUnit
+
 private val logger = KotlinLogging.logger {}
+
 object Remote {
     private lateinit var _server: Server
     private val Kinds: HashMap<String, Props> = HashMap()
@@ -25,7 +28,10 @@ object Remote {
 
     fun start(hostname: String, port: Int, config: RemoteConfig = RemoteConfig()) {
         ProcessRegistry.registerHostResolver { pid -> RemoteProcess(pid) }
-        _server = ServerBuilder.forPort(port).addService(EndpointReader()).build().start()
+        val serverBuilder = NettyServerBuilder.forPort(port).addService(EndpointReader())
+        config.keepAliveTime?.let { serverBuilder.permitKeepAliveTime(config.keepAliveTime / 2, TimeUnit.MILLISECONDS) }
+        config.keepAliveWithoutCalls?.let { serverBuilder.permitKeepAliveWithoutCalls(config.keepAliveWithoutCalls) }
+        _server = serverBuilder.build().start()
         val boundPort: Int = _server.port
         val boundAddress: String = "$hostname:$boundPort"
         val address: String = "${config.advertisedHostname ?: hostname}:${config.advertisedPort ?: boundPort}"
