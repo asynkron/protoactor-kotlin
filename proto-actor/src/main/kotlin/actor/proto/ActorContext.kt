@@ -120,12 +120,10 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 //    }
     override fun escalateFailure(reason: Exception, who: PID) {
         val failure = Failure(who, reason, restartStatistics)
+        sendSystemMessage(self, SuspendMailbox)
         when (parent) {
             null -> handleRootFailure(failure)
-            else -> {
-                sendSystemMessage(self, SuspendMailbox)
-                sendSystemMessage(parent, failure)
-            }
+            else -> sendSystemMessage(parent, failure)
         }
     }
 
