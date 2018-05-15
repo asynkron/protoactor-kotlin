@@ -1,6 +1,7 @@
 package actor.proto
 
 typealias PID = Protos.PID
+
 fun PID(address: String, id: String): PID {
     val p = PID.newBuilder()
     p.address = address

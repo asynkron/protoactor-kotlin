@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 internal typealias ProcessMap = ConcurrentHashMap<String, Process>
+
 object ProcessRegistry {
     val noHost: String = "nonhost"
     private val hostResolvers: MutableList<(PID) -> Process> = mutableListOf()

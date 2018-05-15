@@ -9,6 +9,7 @@ typealias Send = suspend (SenderContext, PID, MessageEnvelope) -> Unit
 
 typealias ReceiveMiddleware = (Receive) -> Receive
 typealias SenderMiddleware = (Send) -> Send
+
 data class Props(
         val spawner: (name: String, props: Props, parent: PID?) -> PID = ::defaultSpawner,
         val producer: (() -> Actor)? = null,

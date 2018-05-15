@@ -11,7 +11,8 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class LocalContextTests {
-    @Test fun `given context ctor should set required fields`() {
+    @Test
+    fun `given context ctor should set required fields`() {
         val producer: () -> Actor = { NullActor }
         val supervisorStrategyMock: DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
         val parent: PID = PID("test", "test")
