@@ -11,6 +11,7 @@ import java.util.*
 import java.util.concurrent.CountDownLatch
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class ActorTests {
@@ -71,12 +72,12 @@ class ActorTests {
     }
 
     @Test
-    fun actorStartedException(): Unit {
+    fun actorStartedException() {
         val exceptionCount = CountDownLatch(2)
         val messageCount = CountDownLatch(8)
-        val messages: Queue<Any> = ArrayDeque<Any>()
+        val messages: MutableList<Any> = mutableListOf()
         val prop = fromFunc { msg ->
-            messages.offer(msg)
+            messages.add(msg)
             messageCount.countDown()
             when (msg) {
                 is Started -> {
@@ -95,15 +96,15 @@ class ActorTests {
         stop(pid)
         messageCount.await()
         assertEquals(8, messages.count())
-        val messageArr: Array<Any> = messages.toTypedArray()
-        assertTrue(messageArr[0] is Started)
-        assertTrue(messageArr[1] is Restarting)
-        assertTrue(messageArr[2] is Started)
-        assertTrue(messageArr[3] is Restarting)
-        assertTrue(messageArr[4] is Started)
-        assertTrue(messageArr[5] is String)
-        assertTrue(messageArr[6] is Stopping)
-        assertTrue(messageArr[7] is Stopped)
+
+        assertSame(messages[0], Started)
+        assertSame(messages[1], Restarting)
+        assertSame(messages[2], Started)
+        assertSame(messages[3], Restarting)
+        assertSame(messages[4], Started)
+        assertEquals(messages[5], "hello")
+        assertSame(messages[6], Stopping)
+        assertSame(messages[7], Stopped)
     }
 }
 
