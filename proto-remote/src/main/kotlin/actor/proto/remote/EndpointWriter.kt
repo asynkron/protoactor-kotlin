@@ -6,9 +6,12 @@ import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
 import mu.KotlinLogging
+import java.util.concurrent.TimeUnit
 
 private val logger = KotlinLogging.logger {}
-class EndpointWriter(private val address: String) : Actor {
+class EndpointWriter(private val address: String, private val config: RemoteConfig) : Actor {
+
+
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
@@ -71,29 +74,35 @@ class EndpointWriter(private val address: String) : Actor {
     private suspend fun started() {
         logger.info("Connecting to address $address")
         val (host, port) = parseAddress(address)
-        channel = ManagedChannelBuilder
+        var channelBuilder = ManagedChannelBuilder
                 .forAddress(host, port)
-                .usePlaintext(true)
-                .build()
-
+        if (config.usePlainText) channelBuilder.usePlaintext(true)
+        config.idleTimeout?.let { channelBuilder.idleTimeout(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveTime?.let { channelBuilder.keepAliveTime(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveTimeout?.let { channelBuilder.keepAliveTimeout(it, TimeUnit.MILLISECONDS) }
+        config.keepAliveWithoutCalls?.let { channelBuilder.keepAliveWithoutCalls(it) }
+        channel = channelBuilder.build()
         client = RemotingGrpc.newStub(channel)
         val blockingClient = RemotingGrpc.newBlockingStub(channel)
         val res = blockingClient.connect(ConnectRequest())
         serializerId = res.defaultSerializerId
-        streamWriter = client.receive(null)
-//        launch(CommonPool){
-//            try  {
-//                stream.responseStream.forEachAsync{
-//
-//                }
-//            }
-//            catch (x : Exception) {
-//                println("Lost connection to address $address, reason ${x.message}")
-//                val terminated : EndpointTerminatedEvent = EndpointTerminatedEvent(address)
-//                EventStream.publish(terminated)
-//            }
-//        }
+        streamWriter = client.receive(object : StreamObserver<RemoteProtos.Unit> {
+            override fun onNext(value: RemoteProtos.Unit?) {
+                //never called
+            }
 
+            override fun onCompleted() {
+                //never called
+            }
+
+            override fun onError(t: Throwable?) {
+                //According to gRPC docs any call to error is the final call and signals termination
+                // val status = Status.fromThrowable(t).code.name
+                val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
+                EventStream.publish(terminated)
+                logger.error("Lost connection to address $address", t)
+            }
+        })
         logger.info("Connected to address $address")
     }
 }

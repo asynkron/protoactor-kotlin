@@ -4,4 +4,5 @@ artifact {
 
 dependencies {
     compile group: 'org.jctools', name: 'jctools-core', version:'2.1.1'
+    compile 'org.slf4j:slf4j-api:1.7.7'
 }
