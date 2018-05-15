@@ -5,9 +5,10 @@ import actor.proto.mailbox.ResumeMailbox
 import actor.proto.mailbox.SuspendMailbox
 import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.experimental.runBlocking
+import mu.KotlinLogging
 import java.time.Duration
 import java.util.*
-
+private val logger = KotlinLogging.logger {}
 class ActorContext(private val producer: () -> Actor, override val self: PID, private val supervisorStrategy: SupervisorStrategy, receiveMiddleware: List<ReceiveMiddleware>, senderMiddleware: List<SenderMiddleware>, override val parent: PID?) : MessageInvoker, Context, SenderContext, Supervisor {
     override var children: Set<PID> = setOf()
     private var watchers: Set<PID> = setOf()
@@ -234,7 +235,7 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
     }
 
     private fun handleRootFailure(failure: Failure) {
-        println("Handling root failure for " + failure.who.toShortString())
+        logger.warn("Handling root failure for " + failure.who.toShortString())
         Supervision.defaultStrategy.handleFailure(this, failure.who, failure.restartStatistics, failure.reason)
     }
 
@@ -269,8 +270,8 @@ class ActorContext(private val producer: () -> Actor, override val self: PID, pr
 
     private suspend fun restart() {
         incarnateActor()
-        sendSystemMessage(self, ResumeMailbox)
         invokeUserMessage(Started)
+        sendSystemMessage(self,ResumeMailbox)
         while (stash.isNotEmpty()) invokeUserMessage(stash.pop())
     }
 

@@ -11,17 +11,15 @@ class TestMailboxHandler : MessageInvoker, Dispatcher {
 
     suspend override fun invokeSystemMessage(msg: SystemMessage) {
         when (msg) {
-            is TestSystemMessage -> {
-                msg.taskCompletionSource.get()
-            }
+            is TestSystemMessage -> msg.taskCompletionSource.complete(1)
+            is ExceptionalSystemMessage -> throw msg.exception
         }
     }
 
     suspend override fun invokeUserMessage(msg: Any) {
         when (msg) {
-            is TestMessage -> {
-                msg.taskCompletionSource.get()
-            }
+            is TestMessage -> msg.taskCompletionSource.complete(1)
+            is ExceptionalMessage -> throw msg.exception
         }
     }
 

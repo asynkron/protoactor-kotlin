@@ -5,7 +5,9 @@ import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
+import mu.KotlinLogging
 
+private val logger = KotlinLogging.logger {}
 class EndpointWriter(private val address: String) : Actor {
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
@@ -59,7 +61,7 @@ class EndpointWriter(private val address: String) : Actor {
             streamWriter.onNext(batch)
         } catch (x: Exception) {
             stash()
-            println("gRPC Failed to send to address $address, reason ${x.message}")
+            logger.error("gRPC Failed to send to address $address, reason ${x.message}")
             throw  x
         }
     }
@@ -67,7 +69,7 @@ class EndpointWriter(private val address: String) : Actor {
     private suspend fun restarting() = channel.shutdownNow()
     private suspend fun stopped() = channel.shutdownNow()
     private suspend fun started() {
-        println("Connecting to address $address")
+        logger.info("Connecting to address $address")
         val (host, port) = parseAddress(address)
         channel = ManagedChannelBuilder
                 .forAddress(host, port)
@@ -92,7 +94,7 @@ class EndpointWriter(private val address: String) : Actor {
 //            }
 //        }
 
-        println("Connected to address $address")
+        logger.info("Connected to address $address")
     }
 }
 
