@@ -11,7 +11,7 @@ fun fromProducer(producer: () -> Actor): Props = Props().withProducer(producer)
 @JvmSynthetic
 fun fromFunc(receive: suspend Context.(msg: Any) -> Unit): Props = fromProducer {
     object : Actor {
-        suspend override fun Context.receive(msg: Any) = receive(this, msg)
+        override suspend fun Context.receive(msg: Any) = receive(this, msg)
     }
 }
 

@@ -44,7 +44,8 @@ open class MailboxSchedulingTests {
     }
     */
 
-    @Test fun givenCompletedUserMessage_ShouldContinueProcessing () {
+    @Test
+    fun givenCompletedUserMessage_ShouldContinueProcessing() {
         val mailboxHandler = TestMailboxHandler()
         val userMailbox = unboundedQueue()
         val systemMessages = unboundedQueue()
@@ -60,24 +61,25 @@ open class MailboxSchedulingTests {
         assertFalse(userMailbox.hasMessages(), "Mailbox should have processed both messages because they were already completed.")
     }
 
-/*
-    @Test fun givenNonCompletedSystemMessage_ShouldHaltProcessingUntilCompletion () {
-        val mailboxHandler = TestMailboxHandler()
-        val userMailbox = unboundedQueue()
-        val systemMessages = unboundedQueue()
-        val mailbox = DefaultMailbox(systemMessages, userMailbox)
-        mailbox.registerHandlers(mailboxHandler, mailboxHandler)
-        val msg1 = TestMessage()
-        val msg2 = TestMessage()
-        mailbox.postSystemMessage(msg1)
-        mailbox.postSystemMessage(msg2)
-        assertTrue(systemMessages.hasMessages, "Mailbox should not have processed msg2 because processing of msg1 is not completed.")
-        msg1.taskCompletionSource.setResult(0)
+    /*
+        @Test fun givenNonCompletedSystemMessage_ShouldHaltProcessingUntilCompletion () {
+            val mailboxHandler = TestMailboxHandler()
+            val userMailbox = unboundedQueue()
+            val systemMessages = unboundedQueue()
+            val mailbox = DefaultMailbox(systemMessages, userMailbox)
+            mailbox.registerHandlers(mailboxHandler, mailboxHandler)
+            val msg1 = TestMessage()
+            val msg2 = TestMessage()
+            mailbox.postSystemMessage(msg1)
+            mailbox.postSystemMessage(msg2)
+            assertTrue(systemMessages.hasMessages, "Mailbox should not have processed msg2 because processing of msg1 is not completed.")
+            msg1.taskCompletionSource.setResult(0)
 
-        assertFalse(systemMessages.hasMessages, "Mailbox should have processed msg2 because processing of msg1 is completed.")
-    }
-*/
-    @Test fun givenCompletedSystemMessage_ShouldContinueProcessing () {
+            assertFalse(systemMessages.hasMessages, "Mailbox should have processed msg2 because processing of msg1 is completed.")
+        }
+    */
+    @Test
+    fun givenCompletedSystemMessage_ShouldContinueProcessing() {
         val mailboxHandler = TestMailboxHandler()
         val userMailbox = unboundedQueue()
         val systemMessages = unboundedQueue()
@@ -92,7 +94,9 @@ open class MailboxSchedulingTests {
         assertEquals(1, msg2.taskCompletionSource.get())
         assertFalse(systemMessages.hasMessages(), "Mailbox should have processed both messages because they were already completed.")
     }
-    @Test fun givenNonCompletedUserMessage_ShouldSetMailboxToIdleAfterCompletion () {
+
+    @Test
+    fun givenNonCompletedUserMessage_ShouldSetMailboxToIdleAfterCompletion() {
         val mailboxHandler = TestMailboxHandler()
         val userMailbox = unboundedQueue()
         val systemMessages = unboundedQueue()

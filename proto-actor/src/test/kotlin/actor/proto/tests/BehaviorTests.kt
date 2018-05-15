@@ -80,7 +80,7 @@ class LightBulb : Actor {
         }
     }
 
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is HitWithHammer -> {
                 respond("Smashed!")
