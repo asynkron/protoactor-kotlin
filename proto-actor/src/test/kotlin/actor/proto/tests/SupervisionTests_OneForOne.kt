@@ -18,7 +18,7 @@ class SupervisionTests_OneForOne {
         private val _childProps: Props = childProps
         lateinit var child: PID
 
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             if (msg is Started)
                 child = spawnChild(_childProps)
 
@@ -28,7 +28,7 @@ class SupervisionTests_OneForOne {
     }
 
     class ChildActor : Actor {
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             val tmp = msg
             when (tmp) {
                 is String -> {
@@ -40,7 +40,7 @@ class SupervisionTests_OneForOne {
     }
 
     class ThrowOnStartedChildActor : Actor {
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             val tmp = msg
             when (tmp) {
                 is Started -> {
@@ -50,7 +50,8 @@ class SupervisionTests_OneForOne {
         }
     }
 
-    @Test fun `Should resume child on failure`() {
+    @Test
+    fun `Should resume child on failure`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is ResumeMailbox }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Resume }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
@@ -64,7 +65,8 @@ class SupervisionTests_OneForOne {
         assertTrue { childMailboxStats.received.contains(ResumeMailbox) }
     }
 
-    @Test fun `Should stop child on failure`() {
+    @Test
+    fun `Should stop child on failure`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Stop }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
@@ -78,7 +80,8 @@ class SupervisionTests_OneForOne {
         assertTrue { childMailboxStats.received.contains(StopInstance) }
     }
 
-    @Test fun `Should restart child on failure`() {
+    @Test
+    fun `Should restart child on failure`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
@@ -92,7 +95,8 @@ class SupervisionTests_OneForOne {
         assertTrue { childMailboxStats.received.any { it is Restart } }
     }
 
-    @Test fun `Should pass exception on restart`() {
+    @Test
+    fun `Should pass exception on restart`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
@@ -106,7 +110,8 @@ class SupervisionTests_OneForOne {
         assertTrue { childMailboxStats.received.any { it is Restart && it.reason == Exception } }
     }
 
-    @Test fun `Should stop child when restart limit has been reached`() {
+    @Test
+    fun `Should stop child when restart limit has been reached`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Restart }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }
@@ -121,7 +126,8 @@ class SupervisionTests_OneForOne {
         assertTrue { childMailboxStats.received.contains(StopInstance) }
     }
 
-    @Test fun `Should revert to default directive when escalate directive without grand parent`() {
+    @Test
+    fun `Should revert to default directive when escalate directive without grand parent`() {
         val parentMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Escalate }, 1, null)
         val childProps: Props = fromProducer { ThrowOnStartedChildActor() }
@@ -138,7 +144,8 @@ class SupervisionTests_OneForOne {
         }
     }
 
-    @Test fun `Should escalate failure to parent`() {
+    @Test
+    fun `Should escalate failure to parent`() {
         val parentMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Escalate }, 1, null)
         val childProps: Props = fromProducer { ChildActor() }
@@ -152,7 +159,8 @@ class SupervisionTests_OneForOne {
         assertEquals("boo hoo", failure.reason.message)
     }
 
-    @Test fun `Should stop child on failure when started`() {
+    @Test
+    fun `Should stop child on failure when started`() {
         val childMailboxStats: TestMailboxStatistics = TestMailboxStatistics { it is Stopped }
         val strategy: OneForOneStrategy = OneForOneStrategy({ _, _ -> SupervisorDirective.Stop }, 1, null)
         val childProps: Props = fromProducer { ThrowOnStartedChildActor() }.withMailbox { newUnboundedMailbox(arrayOf(childMailboxStats)) }

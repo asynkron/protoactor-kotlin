@@ -11,19 +11,21 @@ import java.time.Duration
 import kotlin.test.assertEquals
 
 class FutureTests {
-    @Test fun `given actor when requestAwait should return reply`() {
+    @Test
+    fun `given actor when requestAwait should return reply`() {
         val pid: PID = spawn(fromFunc { msg ->
             if (msg is String) {
                 respond("hey")
             }
         })
         runBlocking {
-            val reply: Any = requestAwait(pid,"hello", Duration.ofMillis(200))
+            val reply: Any = requestAwait(pid, "hello", Duration.ofMillis(200))
             Assert.assertEquals("hey", reply)
         }
     }
 
-    @Test fun `given actor when await context_requestAwait should get reply`() {
+    @Test
+    fun `given actor when await context_requestAwait should get reply`() {
         val pid1: PID = spawn(fromFunc { msg ->
             if (msg is String) {
                 respond("hey")
@@ -36,7 +38,7 @@ class FutureTests {
             }
         })
         runBlocking {
-            val reply2 = requestAwait<String>(pid2,"hello", Duration.ofMillis(200))
+            val reply2 = requestAwait<String>(pid2, "hello", Duration.ofMillis(200))
             assertEquals("hellohey", reply2)
         }
     }

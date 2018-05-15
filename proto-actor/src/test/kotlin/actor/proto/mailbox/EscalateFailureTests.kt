@@ -3,8 +3,6 @@ package actor.proto.mailbox
 import actor.proto.fixture.ExceptionalMessage
 import actor.proto.fixture.ExceptionalSystemMessage
 import actor.proto.fixture.TestMailboxHandler
-import actor.proto.fixture.TestSystemMessage
-import kotlinx.coroutines.experimental.*
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -16,7 +14,8 @@ open class EscalateFailureTests {
 
     class MessageHandlerTestException : Exception("Handler Exception")
 
-    @Test fun `Should escalate failure when a User message is completed exceptionally`() {
+    @Test
+    fun `Should escalate failure when a User message is completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
@@ -30,7 +29,8 @@ open class EscalateFailureTests {
         assertEquals(taskException, escalatedFailure)
     }
 
-    @Test fun `Should escalate failure when a System message is completed exceptionally`() {
+    @Test
+    fun `Should escalate failure when a System message is completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
@@ -44,7 +44,8 @@ open class EscalateFailureTests {
         assertEquals(taskException, escalatedFailure)
     }
 
-    @Test fun `Should escalate failure when waiting for a User message to be completed exceptionally`() {
+    @Test
+    fun `Should escalate failure when waiting for a User message to be completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)
@@ -59,7 +60,8 @@ open class EscalateFailureTests {
         assertEquals(taskException, escalatedFailure)
     }
 
-    @Test fun `Should escalate failure when waiting for a System message to be completed exceptionally`() {
+    @Test
+    fun `Should escalate failure when waiting for a System message to be completed exceptionally`() {
         val mailboxHandler = TestMailboxHandler()
         val mailbox = newUnboundedMailbox()
         mailbox.registerHandlers(mailboxHandler, mailboxHandler)

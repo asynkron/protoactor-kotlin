@@ -11,12 +11,13 @@ import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 class LocalContextTests {
-    @Test fun `given context ctor should set required fields`() {
+    @Test
+    fun `given context ctor should set required fields`() {
         val producer: () -> Actor = { NullActor }
-        val supervisorStrategyMock: DoNothingSupervisorStrategy = DoNothingSupervisorStrategy()
-        val parent: PID = PID("test", "test")
+        val supervisorStrategyMock = DoNothingSupervisorStrategy()
+        val parent = PID("test", "test")
         val self = PID("abc", "def")
-        val context: ActorContext = ActorContext(producer, self, supervisorStrategyMock, listOf(), listOf(), parent)
+        val context = ActorContext(producer, self, supervisorStrategyMock, listOf(), listOf(), parent)
         assertEquals(parent, context.parent)
         assertNull(context.sender)
         assertNotNull(context.children)

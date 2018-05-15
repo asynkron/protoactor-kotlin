@@ -1,5 +1,6 @@
 @file:JvmName("Actors")
 @file:JvmMultifileClass
+
 package actor.proto.java
 
 import actor.proto.*
@@ -17,15 +18,15 @@ fun fromProducer(producer: () -> Actor): Props {
     return actor.proto.fromProducer {
         val actor = producer()
         val ctx = ContextImpl(actor)
-        object : actor.proto.Actor  {
-            suspend override fun actor.proto.Context.receive(msg: Any) {
+        object : actor.proto.Actor {
+            override suspend fun actor.proto.Context.receive(msg: Any) {
                 actor.receive(ctx.wrap(this)).await()
             }
         }
     }
 }
 
-fun fromFunc(receive : (Context) -> CompletableFuture<*>) {
+fun fromFunc(receive: (Context) -> CompletableFuture<*>) {
     val actor = object : Actor {
         override fun receive(context: Context): CompletableFuture<*> = receive(context)
     }

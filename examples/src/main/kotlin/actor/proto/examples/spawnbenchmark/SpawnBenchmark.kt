@@ -32,8 +32,8 @@ private fun spawnManager(): Pair<CountDownLatch, PID> {
             }
             is Long -> {
                 val millis = System.currentTimeMillis() - start
-                println("Elapsed " + millis)
-                println("Result " + msg)
+                println("Elapsed $millis")
+                println("Result $msg")
                 cd.countDown()
             }
         }
@@ -55,7 +55,7 @@ class SpawnActor : Actor {
     private lateinit var replyTo: PID
     private var sum: Long = 0
 
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Request -> when {
                 msg.size == 1L -> {

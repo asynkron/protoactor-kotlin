@@ -5,11 +5,13 @@ import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.stub.StreamObserver
-import java.util.concurrent.TimeUnit
 import mu.KotlinLogging
+import java.util.concurrent.TimeUnit
 
 private val logger = KotlinLogging.logger {}
-class EndpointWriter(private val address : String, private val config : RemoteConfig) : Actor {
+class EndpointWriter(private val address: String, private val config: RemoteConfig) : Actor {
+
+
     private var serializerId: Int = 0
     private lateinit var channel: ManagedChannel
     private lateinit var client: RemotingGrpc.RemotingStub
@@ -88,18 +90,19 @@ class EndpointWriter(private val address : String, private val config : RemoteCo
             override fun onNext(value: RemoteProtos.Unit?) {
                 //never called
             }
+
             override fun onCompleted() {
                 //never called
             }
+
             override fun onError(t: Throwable?) {
                 //According to gRPC docs any call to error is the final call and signals termination
-                //val status = Status.fromThrowable(t)
+                // val status = Status.fromThrowable(t).code.name
                 val terminated: EndpointTerminatedEvent = EndpointTerminatedEvent(address)
                 EventStream.publish(terminated)
-                println("Lost connection to address $address")
+                logger.error("Lost connection to address $address", t)
             }
         })
-
         logger.info("Connected to address $address")
     }
 }

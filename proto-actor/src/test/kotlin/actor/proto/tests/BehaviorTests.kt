@@ -10,7 +10,8 @@ import kotlin.test.assertEquals
 class BehaviorTests {
     private val timeout = Duration.ofMillis(200)
 
-    @Test fun `can change states`() = runBlocking {
+    @Test
+    fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         Assert.assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, timeout))
@@ -19,7 +20,8 @@ class BehaviorTests {
         Assert.assertEquals("Cold", requestAwait<String>(actor, Touch, timeout))
     }
 
-    @Test fun `can use global behaviour`() = runBlocking {
+    @Test
+    fun `can use global behaviour`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
         assertEquals("Turning on", requestAwait(actor, PressSwitch, timeout))
@@ -28,8 +30,9 @@ class BehaviorTests {
         assertEquals("OW!", requestAwait(actor, Touch, timeout))
     }
 
-    @Test fun `pop behavior should restore pushed behavior`() = runBlocking {
-        val behavior: Behavior = Behavior()
+    @Test
+    fun `pop behavior should restore pushed behavior`() = runBlocking {
+        val behavior = Behavior()
         behavior.become { msg ->
             if (msg is String) {
                 behavior.becomeStacked {
@@ -42,10 +45,10 @@ class BehaviorTests {
         }
 
         val timeout = timeout
-        val pid: PID = spawn(fromFunc({ msg -> behavior.receive(this,msg)}))
-        assertEquals("number", requestAwait(pid,"number", timeout))
-        assertEquals(42, requestAwait(pid,123, timeout))
-        assertEquals("answertolifetheuniverseandeverything", requestAwait(pid,"answertolifetheuniverseandeverything", timeout))
+        val pid: PID = spawn(fromFunc({ msg -> behavior.receive(this, msg) }))
+        assertEquals("number", requestAwait(pid, "number", timeout))
+        assertEquals(42, requestAwait(pid, 123, timeout))
+        assertEquals("answertolifetheuniverseandeverything", requestAwait(pid, "answertolifetheuniverseandeverything", timeout))
     }
 }
 
@@ -77,7 +80,7 @@ class LightBulb : Actor {
         }
     }
 
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is HitWithHammer -> {
                 respond("Smashed!")
@@ -93,10 +96,10 @@ class LightBulb : Actor {
                 return
             }
         }
-        behavior.receive(this,msg)
+        behavior.receive(this, msg)
     }
 
-    init{
+    init {
         behavior.become { off() }
     }
 }

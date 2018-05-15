@@ -9,7 +9,7 @@ open class EventStreamImpl {
     private val subscriptions: ConcurrentHashMap<UUID, EventSubscription> = ConcurrentHashMap()
     fun subscribe(action: (Any) -> Unit, dispatcher: Dispatcher = Dispatchers.SYNCHRONOUS_DISPATCHER): EventSubscription {
         val sub = EventSubscription(this, dispatcher, action)
-        subscriptions.put(sub.id, sub)
+        subscriptions[sub.id] = sub
         return sub
     }
 
