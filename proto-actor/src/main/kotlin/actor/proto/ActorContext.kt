@@ -4,7 +4,7 @@ import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.ResumeMailbox
 import actor.proto.mailbox.SuspendMailbox
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import java.time.Duration
 import java.util.*

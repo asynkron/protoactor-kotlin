@@ -4,7 +4,7 @@ import actor.proto.PID
 import actor.proto.fromFunc
 import actor.proto.requestAwait
 import actor.proto.spawn
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import java.time.Duration

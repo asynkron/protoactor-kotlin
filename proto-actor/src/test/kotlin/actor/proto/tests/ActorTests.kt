@@ -3,8 +3,8 @@ package actor.proto.tests
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
-import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.CountDownLatch
@@ -15,7 +15,7 @@ import kotlin.test.assertSame
 class ActorTests {
     private fun spawnActorFromFunc(receive: suspend Context.(msg: Any) -> Unit): PID = spawn(fromFunc(receive))
     @Test
-    fun requestActorAsync(): Unit {
+    fun requestActorAsync() {
         val pid: PID = spawnActorFromFunc { msg ->
             when (msg) {
                 is String -> respond("hey")
@@ -29,7 +29,7 @@ class ActorTests {
     }
 
     @Test
-    fun `request actor async should raise timeout exception when timeout is reached`(): Unit {
+    fun `request actor async should raise timeout exception when timeout is reached`() {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
         assertFailsWith<CancellationException> {
             runBlocking {
@@ -39,7 +39,7 @@ class ActorTests {
     }
 
     @Test
-    fun `request actor async should not raise timeout exception when result is first`(): Unit {
+    fun `request actor async should not raise timeout exception when result is first`() {
         val pid: PID = spawnActorFromFunc { msg ->
             when (msg) {
                 is String -> respond("hey")
@@ -53,7 +53,7 @@ class ActorTests {
     }
 
     @Test
-    fun actorLifeCycle(): Unit {
+    fun actorLifeCycle() {
         val messages: MutableList<Any> = mutableListOf()
         val prop = fromFunc { msg ->
             messages.add(msg)

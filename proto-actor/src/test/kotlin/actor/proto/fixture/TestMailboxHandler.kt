@@ -4,19 +4,19 @@ import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.Mailbox
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 
 class TestMailboxHandler : MessageInvoker, Dispatcher {
     var escalatedFailures: MutableList<Exception> = mutableListOf()
 
-    suspend override fun invokeSystemMessage(msg: SystemMessage) {
+    override suspend fun invokeSystemMessage(msg: SystemMessage) {
         when (msg) {
             is TestSystemMessage -> msg.taskCompletionSource.complete(1)
             is ExceptionalSystemMessage -> throw msg.exception
         }
     }
 
-    suspend override fun invokeUserMessage(msg: Any) {
+    override suspend fun invokeUserMessage(msg: Any) {
         when (msg) {
             is TestMessage -> msg.taskCompletionSource.complete(1)
             is ExceptionalMessage -> throw msg.exception

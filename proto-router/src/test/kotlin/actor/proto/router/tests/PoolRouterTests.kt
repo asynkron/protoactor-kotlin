@@ -4,7 +4,8 @@ import actor.proto.*
 import actor.proto.router.fixture.DoNothingActor
 import actor.proto.router.fixture.TestMailbox
 import actor.proto.router.*
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
+
 import org.junit.Test
 import java.time.Duration
 import kotlin.test.assertEquals

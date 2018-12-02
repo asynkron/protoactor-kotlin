@@ -1,18 +1,17 @@
 package actor.proto
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 class AsyncTimer(private val callback: () -> Unit, private val tick: Duration) {
     private var job: Job? = null
     fun start() {
-        job = launch(CommonPool) {
+        job = GlobalScope.launch {
             while (true) {
-                delay(tick.toNanos(), TimeUnit.NANOSECONDS)
+                delay(tick.toMillis())
                 callback()
             }
         }

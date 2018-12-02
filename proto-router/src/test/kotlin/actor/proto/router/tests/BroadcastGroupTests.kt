@@ -3,8 +3,9 @@ package actor.proto.router.tests
 import actor.proto.*
 import actor.proto.router.fixture.TestMailbox
 import actor.proto.router.*
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
+
 import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.TimeUnit
@@ -13,7 +14,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class BroadcastGroupTests {
-    private val MyActorProps: Props = fromProducer { MyTestActor() }
+    private val _props: Props = fromProducer { MyTestActor() }
     private val _timeout: Duration = Duration.ofMillis(1000)
 
     @Test fun `broadcast group router, all routees receive messages`() {
@@ -60,7 +61,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, routees can be added`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            val routee4 = spawn(MyActorProps)
+            val routee4 = spawn(_props)
             send(router,RouterAddRoutee(routee4))
             val routees = requestAwait<Routees>(router,RouterGetRoutees, _timeout)
             assertTrue(routees.pids.contains(routee1))
@@ -85,7 +86,7 @@ class BroadcastGroupTests {
     @Test fun `broadcast group router, added routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
-            val routee4 = spawn(MyActorProps)
+            val routee4 = spawn(_props)
             send(router,RouterAddRoutee(routee4))
             send(router,"a message")
             assertEquals("a message", requestAwait(routee1,"received?", _timeout))
@@ -99,7 +100,7 @@ class BroadcastGroupTests {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             send(router,RouterBroadcastMessage("hello"))
-            delay(100, TimeUnit.MILLISECONDS)
+            delay(100)
             assertEquals("hello", requestAwait(routee1,"received?", _timeout))
             assertEquals("hello", requestAwait(routee2,"received?", _timeout))
             assertEquals("hello", requestAwait(routee3,"received?", _timeout))
@@ -107,17 +108,17 @@ class BroadcastGroupTests {
     }
 
     private fun createBroadcastGroupRouterWith3Routees(): Array<PID> {
-        val routee1 = spawn(MyActorProps)
-        val routee2 = spawn(MyActorProps)
-        val routee3 = spawn(MyActorProps)
+        val routee1 = spawn(_props)
+        val routee2 = spawn(_props)
+        val routee3 = spawn(_props)
         val props = newBroadcastGroup(setOf(routee1, routee2, routee3)).withMailbox { TestMailbox() }
         val router = spawn(props)
         return arrayOf(router, routee1, routee2, routee3)
     }
 
-    open internal class MyTestActor : Actor {
+    internal open class MyTestActor : Actor {
         private lateinit var _received: String
-        suspend override fun Context.receive(msg: Any) {
+        override suspend fun Context.receive(msg: Any) {
             val tmp = msg
             when (tmp) {
                 "received?" -> respond(_received)

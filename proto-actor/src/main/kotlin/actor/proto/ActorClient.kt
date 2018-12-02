@@ -1,6 +1,6 @@
 package actor.proto
 
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import java.time.Duration
 
 class ActorClient(messageHeader: MessageHeader = EmptyMessageHeader, senderMiddleware: List<SenderMiddleware> = listOf()) : SenderContext {

@@ -1,7 +1,7 @@
 package actor.proto.tests
 
 import actor.proto.*
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import java.time.Duration
@@ -45,7 +45,7 @@ class BehaviorTests {
         }
 
         val timeout = timeout
-        val pid: PID = spawn(fromFunc({ msg -> behavior.receive(this, msg) }))
+        val pid: PID = spawn(fromFunc { msg -> behavior.receive(this, msg) })
         assertEquals("number", requestAwait(pid, "number", timeout))
         assertEquals(42, requestAwait(pid, 123, timeout))
         assertEquals("answertolifetheuniverseandeverything", requestAwait(pid, "answertolifetheuniverseandeverything", timeout))

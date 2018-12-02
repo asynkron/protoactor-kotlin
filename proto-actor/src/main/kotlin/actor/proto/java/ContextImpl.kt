@@ -2,10 +2,8 @@ package actor.proto.java
 
 import actor.proto.PID
 import actor.proto.Props
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.future.asCompletableFuture
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
+
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
@@ -36,16 +34,18 @@ class ContextImpl(private val actor: Actor) : Context {
     override fun request(target: PID, message: Any) = runBlocking { ctx.request(target, message) }
     override fun respond(message: Any) = runBlocking { ctx.respond(message) }
     override fun <T> requestAwait(target: PID, message: Any, timeout: Duration): CompletableFuture<T> {
-        val d = async(CommonPool) {
-            ctx.requestAwait<T>(target, message, timeout)
-        }
-        return d.asCompletableFuture()
+        //val d = GlobalScope.async {
+        //    ctx.requestAwait<T>(target, message, timeout)
+        //}
+        null!!
+        //return d.asCompletableFuture()
     }
 
     override fun <T> requestAwait(target: PID, message: Any): CompletableFuture<T> {
-        val d = async(CommonPool) {
-            ctx.requestAwait<T>(target, message)
-        }
-        return d.asCompletableFuture()
+        //val d = GlobalScope.async {
+        //    ctx.requestAwait<T>(target, message)
+        //}
+        null!!
+        //return d.asCompletableFuture()
     }
 }

@@ -3,7 +3,8 @@ package actor.proto.tests
 import actor.proto.*
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
+
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.time.Duration

@@ -1,11 +1,11 @@
 package actor.proto
 
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.time.Duration
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class ExponentialBackoffStrategy(private val backoffWindow: Duration, private val initialBackoff: Duration) : SupervisorStrategy {
     private val random: Random = Random()
@@ -15,8 +15,8 @@ class ExponentialBackoffStrategy(private val backoffWindow: Duration, private va
         val backoff: Long = rs.failureCount * initialBackoff.toNanos()
         val noise: Int = random.nextInt(500)
         val duration: Duration = Duration.ofNanos(backoff + noise)
-        launch(CommonPool) {
-            delay(duration.toNanos(), TimeUnit.NANOSECONDS)
+        GlobalScope.launch {
+            delay(duration.toMillis())
             supervisor.restartChildren(reason, child)
         }
     }

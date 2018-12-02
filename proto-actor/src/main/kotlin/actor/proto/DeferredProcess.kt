@@ -1,8 +1,8 @@
 package actor.proto
 
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.CompletableDeferred
-import kotlinx.coroutines.experimental.withTimeout
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.withTimeout
 import java.time.Duration
 import java.util.concurrent.TimeUnit
 
@@ -22,7 +22,7 @@ class DeferredProcess<out T>(private val timeout: Duration = Duration.ofMillis(5
 
     suspend fun await(): T {
         try {
-            val result = withTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS) { cd.await() }
+            val result = withTimeout(timeout.toMillis()) { cd.await() }
             ProcessRegistry.remove(pid)
             return result;
         } catch (exception: Exception) {

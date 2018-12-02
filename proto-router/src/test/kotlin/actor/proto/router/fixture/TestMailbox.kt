@@ -4,12 +4,13 @@ import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.Mailbox
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
+
 
 class TestMailbox : Mailbox {
     private lateinit var _invoker: MessageInvoker
-    val userMessages: MutableList<Any> = mutableListOf()
-    val systemMessages: MutableList<Any> = mutableListOf()
+    private val userMessages: MutableList<Any> = mutableListOf()
+    private val systemMessages: MutableList<Any> = mutableListOf()
     override fun postUserMessage(msg: Any) {
         userMessages.add(msg)
         runBlocking { _invoker.invokeUserMessage(msg) }

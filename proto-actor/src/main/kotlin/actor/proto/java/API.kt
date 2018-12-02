@@ -4,10 +4,10 @@
 package actor.proto.java
 
 import actor.proto.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.future.asCompletableFuture
-import kotlinx.coroutines.experimental.future.await
+import kotlinx.coroutines.GlobalScope
+
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 
@@ -20,7 +20,10 @@ fun fromProducer(producer: () -> Actor): Props {
         val ctx = ContextImpl(actor)
         object : actor.proto.Actor {
             override suspend fun actor.proto.Context.receive(msg: Any) {
-                actor.receive(ctx.wrap(this)).await()
+                val context = this;
+                coroutineScope {
+                    actor.receive(ctx.wrap(context)).get()
+                }
             }
         }
     }
@@ -32,8 +35,11 @@ fun fromFunc(receive: (Context) -> CompletableFuture<*>) {
     }
     val ctx = ContextImpl(actor)
     object : actor.proto.Actor {
-        suspend override fun actor.proto.Context.receive(msg: Any) {
-            actor.receive(ctx.wrap(this)).await()
+        override suspend fun actor.proto.Context.receive(msg: Any) {
+            val context = this;
+            coroutineScope {
+                actor.receive(ctx.wrap(context)).get()
+            }
         }
     }
 }
@@ -55,8 +61,9 @@ fun spawnNamed(props: Props, name: String): PID {
 fun send(target: PID, message: Any) = DefaultActorClient.send(target, message)
 fun request(target: PID, message: Any, sender: PID) = DefaultActorClient.request(target, message, sender)
 fun <T> requestAwait(target: PID, message: Any, timeout: Duration): CompletableFuture<T> {
-    val d = async(CommonPool) {
-        DefaultActorClient.requestAwait<T>(target, message, timeout)
-    }
-    return d.asCompletableFuture()
+    //val d = GlobalScope.async {
+    //    DefaultActorClient.requestAwait<T>(target, message, timeout)
+    //}
+    null!!
+    //return d.asCompletableFuture()
 }

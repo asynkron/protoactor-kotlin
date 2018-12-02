@@ -4,15 +4,16 @@ import actor.proto.mailbox.Dispatcher
 import actor.proto.mailbox.Mailbox
 import actor.proto.mailbox.MessageInvoker
 import actor.proto.mailbox.SystemMessage
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
+
 
 class TestMailboxHandler : MessageInvoker, Dispatcher {
-    var escalatedFailures: MutableList<Exception> = mutableListOf()
-    suspend override fun invokeSystemMessage(msg: SystemMessage) {
+    private var escalatedFailures: MutableList<Exception> = mutableListOf()
+    override suspend fun invokeSystemMessage(msg: SystemMessage) {
         return //(TestMessagemsg).taskCompletionSource.task
     }
 
-    suspend override fun invokeUserMessage(msg: Any) {
+    override suspend fun invokeUserMessage(msg: Any) {
         return //(msg as TestMessage).taskCompletionSource.
     }
 
