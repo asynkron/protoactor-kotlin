@@ -94,14 +94,14 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
     }
 
     private fun sendBatch(context: Context, sender: PID): Boolean {
-        when (messageCount) {
-            0 -> return false
+        return when (messageCount) {
+            0 -> false
             else -> {
                 val m = Msg(context.self())
                 repeat(batchSize) { send(sender,m) }
                 messageCount -= batchSize
                 batch = batchSize
-                return true
+                true
             }
         }
     }

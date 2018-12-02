@@ -7,7 +7,7 @@ fun main(args: Array<String>) {
         when (msg) {
             is Started -> println("Started")
             is String -> {
-                println("Hello " + msg)
+                println("Hello $msg")
                 stop(self)
             }
             is Stopping -> println("Stopping")

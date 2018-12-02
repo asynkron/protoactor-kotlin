@@ -31,7 +31,7 @@ object Recoverable
 
 class ParentActor : Actor {
     private lateinit var child: PID
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Started -> child = spawnChild(fromProducer { ChildActor() })
             is Hello -> send(child, msg)
@@ -43,7 +43,7 @@ class ParentActor : Actor {
 }
 
 class ChildActor : Actor {
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Hello -> println("Hello ${msg.who}")
             is Recoverable -> throw RecoverableException()

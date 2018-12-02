@@ -26,10 +26,18 @@ class OneForOneStrategy(private val decider: (PID, Exception) -> SupervisorDirec
     }
 
     private fun requestRestartPermission(rs: RestartStatistics): Boolean {
-        if (maxNrOfRetries == 0) return false
-        rs.fail()
-        if (withinTimeSpan == null || rs.isWithinDuration(withinTimeSpan)) return rs.failureCount <= maxNrOfRetries
-        rs.reset()
-        return true
+        return when (maxNrOfRetries) {
+            0 -> false
+            else -> {
+                rs.fail()
+                when {
+                    withinTimeSpan == null || rs.isWithinDuration(withinTimeSpan) -> rs.failureCount <= maxNrOfRetries
+                    else -> {
+                        rs.reset()
+                        true
+                    }
+                }
+            }
+        }
     }
 }

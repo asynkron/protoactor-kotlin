@@ -66,7 +66,7 @@ data class Msg(val ping: PID, val pong: PID)
 data class Start(val msg : Msg)
 
 class EchoActor : Actor {
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Msg -> send(msg.ping, msg)
         }
@@ -74,7 +74,7 @@ class EchoActor : Actor {
 }
 
 class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
-    suspend override fun Context.receive(msg: Any) {
+    override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Start -> sendBatch(msg.msg)
             is Msg -> {

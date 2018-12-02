@@ -95,14 +95,14 @@ class ActorTests {
         messageCount.await()
         assertEquals(8, messages.count())
 
-        assertSame(messages[0], Started)
-        assertSame(messages[1], Restarting)
-        assertSame(messages[2], Started)
-        assertSame(messages[3], Restarting)
-        assertSame(messages[4], Started)
-        assertEquals(messages[5], "hello")
-        assertSame(messages[6], Stopping)
-        assertSame(messages[7], Stopped)
+        assertSame(Started,messages[0])
+        assertSame(Restarting,messages[1])
+        assertSame(Started,messages[2])
+        assertSame(Restarting,messages[3])
+        assertSame(Started,messages[4])
+        assertEquals("hello", messages[5])
+        assertSame(Stopping, messages[6])
+        assertSame(Stopped,messages[7])
     }
 }
 
