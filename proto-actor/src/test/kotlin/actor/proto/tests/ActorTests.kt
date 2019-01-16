@@ -1,8 +1,18 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Restarting
+import actor.proto.Started
+import actor.proto.Stopped
+import actor.proto.Stopping
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
+import actor.proto.fromFunc
+import actor.proto.requestAwait
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import org.awaitility.Awaitility
@@ -90,11 +100,11 @@ class ActorTests {
 
         Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted {
             assertEquals(6, messages.count())
-            assertSame(Started,messages[0])
-            assertSame(Restarting,messages[1])
-            assertSame(Started,messages[2])
-            assertSame(Restarting,messages[3])
-            assertSame(Started,messages[4])
+            assertSame(Started, messages[0])
+            assertSame(Restarting, messages[1])
+            assertSame(Started, messages[2])
+            assertSame(Restarting, messages[3])
+            assertSame(Started, messages[4])
             assertEquals("hello", messages[5])
         }
 
@@ -104,7 +114,7 @@ class ActorTests {
         Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted {
             messages.count() >= 6
             assertSame(Stopping, messages[6])
-            assertSame(Stopped,messages[7])
+            assertSame(Stopped, messages[7])
         }
     }
 }

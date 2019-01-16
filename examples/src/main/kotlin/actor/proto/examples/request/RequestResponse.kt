@@ -1,7 +1,5 @@
 package actor.proto.examples.request
 
-
-
 import actor.proto.fromFunc
 import actor.proto.requestAwait
 import actor.proto.spawn
@@ -19,6 +17,6 @@ fun main(args: Array<String>): Unit = runBlocking {
     }
 
     val pid = spawn(prop)
-    val res = requestAwait<String>(pid,"Proto.Actor", Duration.ofMillis(200))
+    val res = requestAwait<String>(pid, "Proto.Actor", Duration.ofMillis(200))
     println("Got response $res")
 }

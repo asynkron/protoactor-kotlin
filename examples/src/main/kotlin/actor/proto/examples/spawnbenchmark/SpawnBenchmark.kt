@@ -1,6 +1,14 @@
 package actor.proto.examples.spawnbenchmark
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Props
+import actor.proto.fromFunc
+import actor.proto.fromProducer
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
 import java.util.concurrent.CountDownLatch
 
 
@@ -28,7 +36,7 @@ private fun spawnManager(): Pair<CountDownLatch, PID> {
             is Begin -> {
                 val root = spawn(SpawnActor.props)
                 start = System.currentTimeMillis()
-                send(root,Request(10, 0, 1_000_000, self))
+                send(root, Request(10, 0, 1_000_000, self))
             }
             is Long -> {
                 val millis = System.currentTimeMillis() - start
@@ -59,7 +67,7 @@ class SpawnActor : Actor {
         when (msg) {
             is Request -> when {
                 msg.size == 1L -> {
-                     send(msg.respondTo, msg.num)
+                    send(msg.respondTo, msg.num)
                     stop(self)
                 }
                 else -> {
@@ -68,18 +76,21 @@ class SpawnActor : Actor {
                     for (i in 0 until msg.div) {
                         val child: PID = spawn(props)
                         val s = msg.size / msg.div
-                        send(child,Request(
+                        send(
+                            child, Request(
                                 msg.div,
                                 msg.num + i * s,
                                 s,
-                                self))
+                                self
+                            )
+                        )
                     }
                 }
             }
             is Long -> {
                 sum += msg
                 replies--
-                if (replies == 0L) send(replyTo,sum)
+                if (replies == 0L) send(replyTo, sum)
             }
         }
     }

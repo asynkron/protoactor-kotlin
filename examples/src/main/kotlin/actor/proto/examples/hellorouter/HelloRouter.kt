@@ -1,7 +1,11 @@
 package actor.proto.examples.hellorouter
 
-import actor.proto.*
+import actor.proto.Started
+import actor.proto.fromFunc
 import actor.proto.router.newRoundRobinPool
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.toShortString
 
 fun main(args: Array<String>) {
     val prop = fromFunc { msg ->
