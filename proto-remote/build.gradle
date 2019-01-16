@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 artifact {
     name 'Proto.Actor Remote'
@@ -11,13 +11,15 @@ jar {
 }
 
 dependencies {
-    compile group: 'io.grpc', name: 'grpc-netty', version:'1.9.0'
-    compile group: 'io.grpc', name: 'grpc-protobuf', version:'1.9.0'
-    compile group: 'io.grpc', name: 'grpc-stub', version:'1.9.0'
-    compile 'io.github.microutils:kotlin-logging:1.4.9'
+    api group: 'io.grpc', name: 'grpc-netty', version:'1.9.0'
+    api group: 'io.grpc', name: 'grpc-protobuf', version:'1.9.0'
+    api group: 'io.grpc', name: 'grpc-stub', version:'1.9.0'
+    api group: 'org.jctools', name: 'jctools-core', version:'2.1.1'
+    implementation 'io.github.microutils:kotlin-logging:1.4.9'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
-    compile project(':proto-actor')
-    compile project(':proto-mailbox')
+    api project(':proto-actor')
+    api project(':proto-mailbox')
 
-    testCompile 'org.slf4j:slf4j-simple:1.7.7'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.7'
 }

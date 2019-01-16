@@ -1,16 +1,16 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'application'
 
 mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 
 dependencies {
-    compile 'org.jctools:jctools-core:2.1.1'
-    compile 'com.google.protobuf:protobuf-java:+'
-    compile 'org.slf4j:slf4j-simple:1.7.7'
+    implementation 'org.jctools:jctools-core:2.1.1'
+    implementation 'com.google.protobuf:protobuf-java:+'
+    implementation 'org.slf4j:slf4j-simple:1.7.7'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1"
 
-    compile project(':proto-actor')
-    compile project(':proto-router')
-    compile project(':proto-remote')
-    compile project(':proto-mailbox')
+    implementation project(':proto-actor')
+    implementation project(':proto-router')
+    implementation project(':proto-remote')
+    implementation project(':proto-mailbox')
 }
