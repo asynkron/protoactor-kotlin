@@ -5,9 +5,11 @@ import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
+import org.awaitility.Awaitility
 import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
@@ -71,38 +73,38 @@ class ActorTests {
 
     @Test
     fun actorStartedException() {
-        val exceptionCount = CountDownLatch(2)
-        val messageCount = CountDownLatch(8)
-        val messages: MutableList<Any> = mutableListOf()
+        val triggerExceptionsCount = CountDownLatch(2)
+        var messages: List<Any> = emptyList()
         val prop = fromFunc { msg ->
-            messages.add(msg)
-            messageCount.countDown()
+            messages += msg
             when (msg) {
                 is Started -> {
-                    val shouldThrow = exceptionCount.count > 0
-                    exceptionCount.countDown()
+                    val shouldThrow = triggerExceptionsCount.count > 0
+                    triggerExceptionsCount.countDown()
                     if (shouldThrow) throw Exception()
-                }
-                else -> {
-
                 }
             }
         }
         val pid: PID = spawn(prop)
         send(pid, "hello")
-        exceptionCount.await()
-        stop(pid)
-        messageCount.await()
-        assertEquals(8, messages.count())
 
-        assertSame(Started,messages[0])
-        assertSame(Restarting,messages[1])
-        assertSame(Started,messages[2])
-        assertSame(Restarting,messages[3])
-        assertSame(Started,messages[4])
-        assertEquals("hello", messages[5])
-        assertSame(Stopping, messages[6])
-        assertSame(Stopped,messages[7])
+        Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted {
+            assertEquals(6, messages.count())
+            assertSame(Started,messages[0])
+            assertSame(Restarting,messages[1])
+            assertSame(Started,messages[2])
+            assertSame(Restarting,messages[3])
+            assertSame(Started,messages[4])
+            assertEquals("hello", messages[5])
+        }
+
+        stop(pid)
+
+        // Wait until the first 6 messages (where the "hello" is also included) arrived
+        Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted {
+            messages.count() >= 6
+            assertSame(Stopping, messages[6])
+            assertSame(Stopped,messages[7])
+        }
     }
 }
-
