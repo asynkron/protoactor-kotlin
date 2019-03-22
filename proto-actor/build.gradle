@@ -14,6 +14,8 @@ dependencies {
     compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
     compile project(':proto-mailbox')
     compile 'io.github.microutils:kotlin-logging:1.4.9'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.2.0'
     testCompile 'org.slf4j:slf4j-simple:1.7.7'
+    testImplementation 'org.awaitility:awaitility:3.1.5'
 }
