@@ -4,10 +4,10 @@ apply plugin: 'application'
 mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 
 dependencies {
-    implementation 'org.jctools:jctools-core:2.1.1'
-    implementation 'com.google.protobuf:protobuf-java:+'
-    implementation 'org.slf4j:slf4j-simple:1.7.7'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1"
+    implementation 'org.jctools:jctools-core:2.1.2'
+    implementation 'com.google.protobuf:protobuf-java:3.7.1'
+    implementation 'org.slf4j:slf4j-simple:1.7.26'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
 
     implementation project(':proto-actor')
     implementation project(':proto-router')
