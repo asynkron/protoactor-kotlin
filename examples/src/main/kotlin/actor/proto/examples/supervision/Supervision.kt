@@ -1,6 +1,20 @@
 package actor.proto.examples.supervision
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.OneForOneStrategy
+import actor.proto.PID
+import actor.proto.Restarting
+import actor.proto.Started
+import actor.proto.Stopped
+import actor.proto.Stopping
+import actor.proto.SupervisorDirective
+import actor.proto.Terminated
+import actor.proto.fromProducer
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
+import actor.proto.toShortString
 
 fun main(args: Array<String>) {
     val decide = { pid: PID, reason: Exception ->
@@ -15,9 +29,9 @@ fun main(args: Array<String>) {
     val props = fromProducer { ParentActor() }.withChildSupervisorStrategy(OneForOneStrategy(decide, 10))
 
     val actor = spawn(props)
-    send(actor,Hello("ProtoActor"))
-    send(actor,Recoverable)
-    send(actor,Fatal)
+    send(actor, Hello("ProtoActor"))
+    send(actor, Recoverable)
+    send(actor, Fatal)
     Thread.sleep(2000)
     stop(actor)
     readLine()

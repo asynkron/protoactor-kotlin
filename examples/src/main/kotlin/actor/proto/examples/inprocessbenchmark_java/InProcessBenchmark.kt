@@ -1,9 +1,13 @@
 package actor.proto.examples.inprocessbenchmark_java
 
 
-
 import actor.proto.PID
-import actor.proto.java.*
+import actor.proto.java.Actor
+import actor.proto.java.Context
+import actor.proto.java.done
+import actor.proto.java.fromProducer
+import actor.proto.java.send
+import actor.proto.java.spawn
 import actor.proto.mailbox.DefaultDispatcher
 import actor.proto.mailbox.newMpscUnboundedArrayMailbox
 import actor.proto.stop
@@ -30,23 +34,23 @@ fun run() {
         val clientCount = getRuntime().availableProcessors() * 20
 
         val echoProps =
-                fromProducer { EchoActor() }
-                        .withDispatcher(d)
-                        .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
+            fromProducer { EchoActor() }
+                .withDispatcher(d)
+                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
         val latch = CountDownLatch(clientCount)
         val clientProps =
-                fromProducer { PingActor(latch, messageCount, batchSize) }
-                        .withDispatcher(d)
-                        .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
+            fromProducer { PingActor(latch, messageCount, batchSize) }
+                .withDispatcher(d)
+                .withMailbox { newMpscUnboundedArrayMailbox(chunkSize = 4000) }
 
         val pairs = (0 until clientCount)
-                .map { Pair(spawn(clientProps), spawn(echoProps)) }
-                .toTypedArray()
+            .map { Pair(spawn(clientProps), spawn(echoProps)) }
+            .toTypedArray()
 
         val sw = nanoTime()
         for ((client, echo) in pairs) {
-            send(client,Start(echo))
+            send(client, Start(echo))
         }
         latch.await()
 
@@ -71,13 +75,18 @@ class EchoActor : Actor {
     override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
-            is Msg -> send(msg.sender,msg)
+            is Msg -> send(msg.sender, msg)
         }
         return done()
     }
 }
 
-class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
+class PingActor(
+    private val latch: CountDownLatch,
+    private var messageCount: Int,
+    private val batchSize: Int,
+    private var batch: Int = 0
+) : Actor {
     override fun receive(context: Context): CompletableFuture<*> {
         val msg = context.message()
         when (msg) {
@@ -98,7 +107,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
             0 -> false
             else -> {
                 val m = Msg(context.self())
-                repeat(batchSize) { send(sender,m) }
+                repeat(batchSize) { send(sender, m) }
                 messageCount -= batchSize
                 batch = batchSize
                 true

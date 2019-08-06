@@ -3,9 +3,10 @@ artifact {
 }
 
 dependencies {
-    compile project(':proto-actor')
-    compile project(':proto-mailbox')
-    compile 'com.google.protobuf:protobuf-java:+'
+    api project(':proto-actor')
+    api project(':proto-mailbox')
+    api 'com.google.protobuf:protobuf-java:3.7.1'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
 
-    testCompile 'org.slf4j:slf4j-simple:1.7.7'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.26'
 }

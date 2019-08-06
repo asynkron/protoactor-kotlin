@@ -1,6 +1,12 @@
 package actor.proto.examples.helloworld
 
-import actor.proto.*
+import actor.proto.Started
+import actor.proto.Stopped
+import actor.proto.Stopping
+import actor.proto.fromFunc
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
 
 fun main(args: Array<String>) {
     val prop = fromFunc { msg ->

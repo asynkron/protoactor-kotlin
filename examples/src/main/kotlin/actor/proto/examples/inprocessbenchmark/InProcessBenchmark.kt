@@ -1,9 +1,14 @@
 package actor.proto.examples.inprocessbenchmark
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.fromProducer
 import actor.proto.mailbox.DefaultDispatcher
-import actor.proto.mailbox.newMpscArrayMailbox
 import actor.proto.mailbox.newSpecifiedMailbox
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
 import org.jctools.queues.spec.ConcurrentQueueSpec
 import org.jctools.queues.spec.Ordering
 import org.jctools.queues.spec.Preference
@@ -20,7 +25,7 @@ fun main(args: Array<String>) {
 }
 
 fun run() {
-    val mailboxSpec = ConcurrentQueueSpec(1,1,5000, Ordering.PRODUCER_FIFO , Preference.NONE)
+    val mailboxSpec = ConcurrentQueueSpec(1, 1, 5000, Ordering.PRODUCER_FIFO, Preference.NONE)
     val messageCount = 1_000_000
     val batchSize = 400
     println("Dispatcher\t\tElapsed\t\tMsg/sec")
@@ -30,29 +35,29 @@ fun run() {
         val clientCount = getRuntime().availableProcessors() * 20
 
         val echoProps =
-                fromProducer { EchoActor() }
+            fromProducer { EchoActor() }
                 .withDispatcher(d)
                 .withMailbox { newSpecifiedMailbox(mailboxSpec) }
 
         val latch = CountDownLatch(clientCount)
         val clientProps =
-                fromProducer { PingActor(latch, messageCount, batchSize) }
+            fromProducer { PingActor(latch, messageCount, batchSize) }
                 .withDispatcher(d)
-                .withMailbox {  newSpecifiedMailbox(mailboxSpec)}
+                .withMailbox { newSpecifiedMailbox(mailboxSpec) }
 
         val pairs = (0 until clientCount)
-                .map { Pair(spawn(clientProps), spawn(echoProps)) }
-                .toTypedArray()
+            .map { Pair(spawn(clientProps), spawn(echoProps)) }
+            .toTypedArray()
 
         val sw = nanoTime()
         for ((ping, pong) in pairs) {
-            send(ping, Start(Msg(ping,pong)))
+            send(ping, Start(Msg(ping, pong)))
         }
         latch.await()
         val elapsedNanos = (nanoTime() - sw).toDouble()
         val elapsedMillis = (elapsedNanos / 1_000_000).toInt()
         val totalMessages = messageCount * 2 * clientCount
-        val x = ((totalMessages.toDouble() / elapsedNanos * 1_000_000_000.0 ).toInt())
+        val x = ((totalMessages.toDouble() / elapsedNanos * 1_000_000_000.0).toInt())
         println("$t\t\t\t\t$elapsedMillis\t\t\t$x")
         for ((client, echo) in pairs) {
             stop(client)
@@ -63,7 +68,7 @@ fun run() {
 }
 
 data class Msg(val ping: PID, val pong: PID)
-data class Start(val msg : Msg)
+data class Start(val msg: Msg)
 
 class EchoActor : Actor {
     override suspend fun Context.receive(msg: Any) {
@@ -73,7 +78,12 @@ class EchoActor : Actor {
     }
 }
 
-class PingActor(private val latch: CountDownLatch, private var messageCount: Int, private val batchSize: Int, private var batch: Int = 0) : Actor {
+class PingActor(
+    private val latch: CountDownLatch,
+    private var messageCount: Int,
+    private val batchSize: Int,
+    private var batch: Int = 0
+) : Actor {
     override suspend fun Context.receive(msg: Any) {
         when (msg) {
             is Start -> sendBatch(msg.msg)
@@ -87,7 +97,7 @@ class PingActor(private val latch: CountDownLatch, private var messageCount: Int
         }
     }
 
-    private fun Context.sendBatch(msg : Msg): Boolean = when (messageCount) {
+    private fun Context.sendBatch(msg: Msg): Boolean = when (messageCount) {
         0 -> false
         else -> {
 
