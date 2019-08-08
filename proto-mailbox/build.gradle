@@ -3,7 +3,7 @@ artifact {
 }
 
 dependencies {
-    api 'org.jctools:jctools-core:2.1.2'
-    implementation 'org.slf4j:slf4j-api:1.7.26'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
+    api "org.jctools:jctools-core:${jctools_version}"
+    implementation "org.slf4j:slf4j-api:${slf4j_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"
 }

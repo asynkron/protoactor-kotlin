@@ -11,11 +11,12 @@ jar {
 }
 
 dependencies {
-    api group: 'com.google.protobuf', name: 'protobuf-java', version:'3.7.1'
-    api project(':proto-mailbox')
-    implementation 'io.github.microutils:kotlin-logging:1.6.26'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.2.0'
-    testImplementation 'org.slf4j:slf4j-simple:1.7.26'
-    testImplementation 'org.awaitility:awaitility:3.1.6'
+    api "com.google.protobuf:protobuf-java:${protobuf_version}"
+    api project(":proto-mailbox")
+    implementation "io.github.microutils:kotlin-logging:${kotlin_logging_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:${coroutines_version}"
+
+    testImplementation "org.slf4j:slf4j-simple:${slf4j_version}"
+    testImplementation "org.awaitility:awaitility:${awaitility_version}"
 }
