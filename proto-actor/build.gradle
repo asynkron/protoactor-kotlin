@@ -1,4 +1,4 @@
-apply plugin: 'java'
+apply plugin: 'java-library'
 
 artifact {
     name 'Proto.Actor Core'
@@ -11,11 +11,11 @@ jar {
 }
 
 dependencies {
-    compile group: 'com.google.protobuf', name: 'protobuf-java', version:'+'
-    compile project(':proto-mailbox')
-    compile 'io.github.microutils:kotlin-logging:1.4.9'
+    api group: 'com.google.protobuf', name: 'protobuf-java', version:'3.7.1'
+    api project(':proto-mailbox')
+    implementation 'io.github.microutils:kotlin-logging:1.6.26'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.2.0'
-    testCompile 'org.slf4j:slf4j-simple:1.7.7'
-    testImplementation 'org.awaitility:awaitility:3.1.5'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.26'
+    testImplementation 'org.awaitility:awaitility:3.1.6'
 }
