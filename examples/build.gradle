@@ -4,13 +4,13 @@ apply plugin: 'application'
 mainClassName = "actor.proto.examples.inprocessbenchmark.InProcessBenchmarkKt"
 
 dependencies {
-    implementation 'org.jctools:jctools-core:2.1.2'
-    implementation 'com.google.protobuf:protobuf-java:3.7.1'
-    implementation 'org.slf4j:slf4j-simple:1.7.26'
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.0"
+    implementation "org.jctools:jctools-core:${jctools_version}"
+    implementation "com.google.protobuf:protobuf-java:${protobuf_version}"
+    implementation "org.slf4j:slf4j-simple:${slf4j_version}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"
 
-    implementation project(':proto-actor')
-    implementation project(':proto-router')
-    implementation project(':proto-remote')
-    implementation project(':proto-mailbox')
+    implementation project(":proto-actor")
+    implementation project(":proto-router")
+    implementation project(":proto-remote")
+    implementation project(":proto-mailbox")
 }

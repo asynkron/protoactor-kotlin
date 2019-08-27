@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - oraclejdk8
+  - openjdk8
 install: true
 script: "./build-via-travis.sh"
 before_cache:
