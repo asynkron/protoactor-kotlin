@@ -6,4 +6,6 @@ dependencies {
     api "org.jctools:jctools-core:${jctools_version}"
     implementation "org.slf4j:slf4j-api:${slf4j_version}"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${coroutines_version}"
+    testImplementation "org.slf4j:slf4j-simple:${slf4j_version}"
+    testImplementation "org.awaitility:awaitility:${awaitility_version}"
 }
