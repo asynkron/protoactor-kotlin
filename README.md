@@ -23,7 +23,8 @@ Other implementations:
 
 **Minimalistic API** - The API should be small and easy to use. Avoid enterprisey containers and configurations.
 
-**Build on existing technologies** - There are already a lot of great technologies for e.g. networking and clustering. Build on those instead of reinventing them. E.g. gRPC streams for networking, Consul for clustering.
+**Build on existing technologies** - There are already a lot of great technologies for e.g. networking and clustering. 
+Build on those instead of reinventing them. E.g. gRPC streams for networking, Consul for clustering.
 
 **Pass data, not objects** - Serialization is an explicit concern - don't try to hide it. Protobuf all the way.
 
@@ -40,9 +41,16 @@ Dispatcher		Elapsed		Msg/sec
 800			83		381552772 <-- 380+ mil msg/sec
 ```
 
+## Modules
+
+Dependencies
+
+![Package dependencies](docs/diagrams/proto-actor-packages.png)
+
 ## Getting started
 
-The best place currently for learning how to use Proto.Actor is the [examples](https://github.com/AsynkronIT/protoactor-kotlin/tree/master/examples). Documentation and guidance is under way, but not yet complete, and can be found on the [website](http://proto.actor/docs/kotlin/).
+The best place currently for learning how to use Proto.Actor is the [examples](https://github.com/AsynkronIT/protoactor-kotlin/tree/master/examples). 
+Documentation and guidance is under way, but not yet complete, and can be found on the [website](http://proto.actor/docs/kotlin/).
 
 ### Hello world
 
