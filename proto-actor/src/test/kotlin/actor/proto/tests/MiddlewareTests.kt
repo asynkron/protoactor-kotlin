@@ -3,8 +3,8 @@ package actor.proto.tests
 import actor.proto.*
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
-import org.junit.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 class MiddlewareTests {
     @Test

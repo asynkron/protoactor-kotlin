@@ -4,10 +4,10 @@ import actor.proto.*
 import actor.proto.fixture.TestMailboxStatistics
 import actor.proto.mailbox.ResumeMailbox
 import actor.proto.mailbox.newUnboundedMailbox
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class SupervisionTests_OneForOne {
     companion object {

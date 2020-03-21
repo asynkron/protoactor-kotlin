@@ -3,8 +3,8 @@ package actor.proto.mailbox
 import actor.proto.fixture.ExceptionalMessage
 import actor.proto.fixture.ExceptionalSystemMessage
 import actor.proto.fixture.TestMailboxHandler
-import org.junit.Test
-import kotlin.test.assertEquals
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
 open class EscalateFailureTests {
     private inline fun <reified T> Iterable<Exception>.singleExceptionOf(): T {

@@ -2,10 +2,9 @@ package actor.proto.tests
 
 import actor.proto.*
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.Duration
-import kotlin.test.assertEquals
 
 class BehaviorTests {
     private val timeout = Duration.ofMillis(200)
@@ -14,10 +13,10 @@ class BehaviorTests {
     fun `can change states`() = runBlocking {
         val testActorProps: Props = fromProducer { LightBulb() }
         val actor: PID = spawn(testActorProps)
-        Assert.assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, timeout))
-        Assert.assertEquals("Hot!", requestAwait<String>(actor, Touch, timeout))
-        Assert.assertEquals("Turning off", requestAwait<String>(actor, PressSwitch, timeout))
-        Assert.assertEquals("Cold", requestAwait<String>(actor, Touch, timeout))
+        assertEquals("Turning on", requestAwait<String>(actor, PressSwitch, timeout))
+        assertEquals("Hot!", requestAwait<String>(actor, Touch, timeout))
+        assertEquals("Turning off", requestAwait<String>(actor, PressSwitch, timeout))
+        assertEquals("Cold", requestAwait<String>(actor, Touch, timeout))
     }
 
     @Test

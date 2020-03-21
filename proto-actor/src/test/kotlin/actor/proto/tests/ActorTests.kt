@@ -1,28 +1,18 @@
 package actor.proto.tests
 
-import actor.proto.Context
-import actor.proto.PID
-import actor.proto.Restarting
-import actor.proto.Started
-import actor.proto.Stopped
-import actor.proto.Stopping
+import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
-import actor.proto.fromFunc
-import actor.proto.requestAwait
-import actor.proto.send
-import actor.proto.spawn
-import actor.proto.stop
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import org.awaitility.Awaitility
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.Duration
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
-import kotlin.test.assertSame
 
 class ActorTests {
     private fun spawnActorFromFunc(receive: suspend Context.(msg: Any) -> Unit): PID = spawn(fromFunc(receive))
@@ -43,7 +33,7 @@ class ActorTests {
     @Test
     fun `request actor async should raise timeout exception when timeout is reached`() {
         val pid: PID = spawnActorFromFunc(EmptyReceive)
-        assertFailsWith<CancellationException> {
+        assertThrows<CancellationException> ("Should throw an exception") {
             runBlocking {
                 requestAwait<Any>(pid, "", Duration.ofMillis(10))
             }

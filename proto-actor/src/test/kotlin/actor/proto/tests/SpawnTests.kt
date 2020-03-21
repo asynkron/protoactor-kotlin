@@ -2,8 +2,8 @@ package actor.proto.tests
 
 import actor.proto.*
 import actor.proto.fixture.EmptyReceive
-import org.junit.Assert.assertSame
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Test
 
 class SpawnTests {
     @Test

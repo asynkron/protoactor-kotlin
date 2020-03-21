@@ -5,10 +5,9 @@ import actor.proto.fromFunc
 import actor.proto.requestAwait
 import actor.proto.spawn
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.time.Duration
-import kotlin.test.assertEquals
 
 class FutureTests {
     @Test
@@ -20,7 +19,7 @@ class FutureTests {
         })
         runBlocking {
             val reply: Any = requestAwait(pid, "hello", Duration.ofMillis(200))
-            Assert.assertEquals("hey", reply)
+            assertEquals("hey", reply)
         }
     }
 
