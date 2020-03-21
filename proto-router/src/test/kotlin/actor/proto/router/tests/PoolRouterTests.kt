@@ -5,15 +5,16 @@ import actor.proto.router.fixture.DoNothingActor
 import actor.proto.router.fixture.TestMailbox
 import actor.proto.router.*
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-import org.junit.Test
 import java.time.Duration
-import kotlin.test.assertEquals
 
 class PoolRouterTests {
     private val MyActorProps: Props = fromProducer { DoNothingActor() }
     private val _timeout: Duration = Duration.ofMillis(1000)
-    @Test fun `broadcast group pool, creates routees`() {
+    @Test
+    fun `broadcast group pool, creates routees`() {
         runBlocking {
             val props = newBroadcastPool(MyActorProps, 3).withMailbox { TestMailbox() }
             val router = spawn(props)
@@ -22,7 +23,8 @@ class PoolRouterTests {
         }
     }
 
-    @Test fun `round robin pool, creates routees`() {
+    @Test
+    fun `round robin pool, creates routees`() {
         runBlocking {
             val props = newRoundRobinPool(MyActorProps, 3).withMailbox { TestMailbox() }
             val router = spawn(props)
@@ -31,7 +33,8 @@ class PoolRouterTests {
         }
     }
 
-    @Test fun `consistent hash pool, creates routees`() {
+    @Test
+    fun `consistent hash pool, creates routees`() {
         runBlocking {
             val props = newConsistentHashPool(MyActorProps, 3, { 0 }, 1).withMailbox { TestMailbox() }
             val router = spawn(props)
@@ -40,7 +43,8 @@ class PoolRouterTests {
         }
     }
 
-    @Test fun `random pool, creates routees`() {
+    @Test
+    fun `random pool, creates routees`() {
         runBlocking {
             val props = newRandomPool(MyActorProps, 3, 0).withMailbox { TestMailbox() }
             val router = spawn(props)

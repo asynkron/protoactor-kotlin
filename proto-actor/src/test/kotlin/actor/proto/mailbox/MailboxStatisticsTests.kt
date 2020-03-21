@@ -1,9 +1,9 @@
 package actor.proto.mailbox
 
 import actor.proto.fixture.*
-import org.junit.Test
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 
 open class MailboxStatisticsTests {
     @Test

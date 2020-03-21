@@ -5,11 +5,11 @@ import actor.proto.PID
 import actor.proto.ProcessNameExistException
 import actor.proto.ProcessRegistry
 import actor.proto.fixture.TestProcess
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertSame
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.util.*
-import kotlin.test.assertFailsWith
 
 class ProcessRegistryTests {
     @Test
@@ -28,7 +28,7 @@ class ProcessRegistryTests {
         val reg = ProcessRegistry
         reg.put(id, p)
 
-        assertFailsWith<ProcessNameExistException> {
+        assertThrows<ProcessNameExistException> ("Should throw an exception") {
             reg.put(id, p)
         }
     }

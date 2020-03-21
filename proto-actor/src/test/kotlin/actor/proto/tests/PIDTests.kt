@@ -4,10 +4,9 @@ import actor.proto.*
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
 import actor.proto.fixture.TestProcess
-import org.junit.Assert.assertSame
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import java.util.*
-import kotlin.test.assertNotNull
 
 class PIDTests {
     @Test

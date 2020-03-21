@@ -4,11 +4,9 @@ import actor.proto.Actor
 import actor.proto.ActorContext
 import actor.proto.PID
 import actor.proto.fixture.DoNothingSupervisorStrategy
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 import java.time.Duration
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 class LocalContextTests {
     @Test
@@ -21,7 +19,7 @@ class LocalContextTests {
         assertEquals(parent, context.parent)
         assertNull(context.sender)
         assertNotNull(context.children)
-        assertEquals(context.children, setOf())
+        assertEquals(context.children, setOf<PID>())
         assertEquals(Duration.ZERO, context.getReceiveTimeout())
     }
 }

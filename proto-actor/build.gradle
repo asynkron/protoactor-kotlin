@@ -20,3 +20,8 @@ dependencies {
     testImplementation "org.slf4j:slf4j-simple:${slf4j_version}"
     testImplementation "org.awaitility:awaitility:${awaitility_version}"
 }
+
+test {
+    useJUnitPlatform {
+    }
+}

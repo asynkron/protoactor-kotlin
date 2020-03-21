@@ -4,8 +4,8 @@ import actor.proto.ExponentialBackoffStrategy
 import actor.proto.PID
 import actor.proto.RestartStatistics
 import actor.proto.Supervisor
-import org.junit.Assert
-import org.junit.Test
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import java.time.Duration
 
 class SupervisionTests_ExponentialBackoff {
@@ -17,7 +17,7 @@ class SupervisionTests_ExponentialBackoff {
 
         strategy.handleFailure(DummySupervisor(), dummyPID(), rs, Exception())
 
-        Assert.assertEquals(0, rs.failureCount)
+        Assertions.assertEquals(0, rs.failureCount)
     }
 
 
@@ -29,7 +29,7 @@ class SupervisionTests_ExponentialBackoff {
 
         strategy.handleFailure(DummySupervisor(), dummyPID(), rs, Exception())
 
-        Assert.assertEquals(11, rs.failureCount)
+        Assertions.assertEquals(11, rs.failureCount)
     }
 }
 

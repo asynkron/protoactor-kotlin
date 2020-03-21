@@ -5,19 +5,17 @@ import actor.proto.router.fixture.TestMailbox
 import actor.proto.router.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
-import org.junit.Test
 import java.time.Duration
-import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 class BroadcastGroupTests {
     private val _props: Props = fromProducer { MyTestActor() }
     private val _timeout: Duration = Duration.ofMillis(1000)
 
-    @Test fun `broadcast group router, all routees receive messages`() {
+    @Test
+    fun `broadcast group router, all routees receive messages`() {
         runBlocking {
             val (router, routee1, routee2, routee3) = createBroadcastGroupRouterWith3Routees()
             send(router,"hello")

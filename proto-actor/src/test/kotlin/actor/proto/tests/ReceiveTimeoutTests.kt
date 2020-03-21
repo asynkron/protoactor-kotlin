@@ -1,7 +1,7 @@
 package actor.proto.tests
 
 import actor.proto.*
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

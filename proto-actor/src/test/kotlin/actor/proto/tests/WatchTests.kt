@@ -4,9 +4,9 @@ import actor.proto.*
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.Assertions.assertTrue
 
-import org.junit.Assert.assertTrue
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import java.time.Duration
 
 class WatchTests {

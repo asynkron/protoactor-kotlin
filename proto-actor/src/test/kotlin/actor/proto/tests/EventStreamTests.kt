@@ -2,10 +2,10 @@ package actor.proto.tests
 
 import actor.proto.EventStreamImpl
 import actor.proto.mailbox.Dispatchers
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
-import kotlin.test.assertEquals
 
 class EventStreamTests {
     @Test
@@ -15,7 +15,6 @@ class EventStreamTests {
         eventStream.subscribe({ theString -> received = theString as String })
         eventStream.publish("hello")
         assertEquals("hello", received)
-
     }
 
     @Test

@@ -5,9 +5,9 @@ import actor.proto.fixture.DoNothingSupervisorStrategy
 import actor.proto.fixture.TestDispatcher
 import actor.proto.fixture.TestMailbox
 import actor.proto.mailbox.Mailbox
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotEquals
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Test
 
 object NullActor : Actor {
     suspend override fun Context.receive(msg: Any) {
