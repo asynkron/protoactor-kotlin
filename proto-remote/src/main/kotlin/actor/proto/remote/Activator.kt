@@ -1,6 +1,11 @@
 package actor.proto.remote
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.ProcessRegistry
+import actor.proto.Props
+import actor.proto.spawnNamed
 
 
 class Activator : Actor {

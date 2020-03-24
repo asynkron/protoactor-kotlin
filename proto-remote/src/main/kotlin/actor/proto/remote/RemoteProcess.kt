@@ -1,7 +1,11 @@
 package actor.proto.remote
 
-import actor.proto.*
+import actor.proto.PID
+import actor.proto.Process
+import actor.proto.Unwatch
+import actor.proto.Watch
 import actor.proto.mailbox.SystemMessage
+import actor.proto.send
 
 class RemoteProcess(private val pid: PID) : Process() {
     override fun sendUserMessage(pid: PID, message: Any) = send(message)

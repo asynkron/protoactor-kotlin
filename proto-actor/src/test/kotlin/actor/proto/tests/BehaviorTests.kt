@@ -1,6 +1,14 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Behavior
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Props
+import actor.proto.fromFunc
+import actor.proto.fromProducer
+import actor.proto.requestAwait
+import actor.proto.spawn
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test

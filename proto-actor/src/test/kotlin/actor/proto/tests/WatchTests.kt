@@ -1,11 +1,18 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Started
+import actor.proto.Terminated
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
+import actor.proto.fromProducer
+import actor.proto.requestAwait
+import actor.proto.spawn
+import actor.proto.stop
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertTrue
-
 import org.junit.jupiter.api.Test
 import java.time.Duration
 

@@ -3,7 +3,11 @@
 
 package actor.proto.java
 
-import actor.proto.*
+import actor.proto.DefaultActorClient
+import actor.proto.PID
+import actor.proto.ProcessRegistry
+import actor.proto.Props
+import actor.proto.spawn
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.future.asCompletableFuture

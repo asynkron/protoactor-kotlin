@@ -4,7 +4,6 @@ import actor.proto.mailbox.SystemMessage
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.withTimeout
 import java.time.Duration
-import java.util.concurrent.TimeUnit
 
 class DeferredProcess<out T>(private val timeout: Duration = Duration.ofMillis(5000)) : Process() {
     val pid = ProcessRegistry.put(ProcessRegistry.nextId(), this)

@@ -1,8 +1,13 @@
 package actor.proto.mailbox
 
-import org.jctools.queues.*
+import org.jctools.queues.MpscArrayQueue
+import org.jctools.queues.MpscGrowableArrayQueue
+import org.jctools.queues.MpscLinkedQueue8
+import org.jctools.queues.MpscUnboundedArrayQueue
 import org.jctools.queues.QueueFactory.newQueue
-import org.jctools.queues.atomic.*
+import org.jctools.queues.atomic.MpscAtomicArrayQueue
+import org.jctools.queues.atomic.MpscGrowableAtomicArrayQueue
+import org.jctools.queues.atomic.MpscUnboundedAtomicArrayQueue
 import org.jctools.queues.spec.ConcurrentQueueSpec
 import java.util.concurrent.ConcurrentLinkedQueue
 

@@ -3,9 +3,9 @@ package actor.proto.mailbox
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import org.awaitility.Awaitility
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertNotSame
 import org.junit.jupiter.api.Assertions.assertSame
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit

@@ -1,6 +1,10 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Props
+import actor.proto.ReceiveTimeout
+import actor.proto.Started
+import actor.proto.fromFunc
+import actor.proto.spawn
 import org.junit.jupiter.api.Test
 import java.time.Duration
 import java.util.concurrent.CountDownLatch

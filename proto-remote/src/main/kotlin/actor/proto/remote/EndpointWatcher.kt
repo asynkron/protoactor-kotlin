@@ -1,6 +1,14 @@
 package actor.proto.remote
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Behavior
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.ProcessRegistry
+import actor.proto.Terminated
+import actor.proto.Unwatch
+import actor.proto.Watch
+import actor.proto.sendSystemMessage
 
 class EndpointWatcher(address: String) : Actor {
     private val behavior: Behavior = Behavior({ connectedAsync(it) })

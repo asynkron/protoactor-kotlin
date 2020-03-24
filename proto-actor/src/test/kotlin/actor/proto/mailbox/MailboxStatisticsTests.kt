@@ -1,6 +1,10 @@
 package actor.proto.mailbox
 
-import actor.proto.fixture.*
+import actor.proto.fixture.ExceptionalMessage
+import actor.proto.fixture.ExceptionalSystemMessage
+import actor.proto.fixture.TestMailboxHandler
+import actor.proto.fixture.TestMailboxStatistics
+import actor.proto.fixture.TestMessage
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test

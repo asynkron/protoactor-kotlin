@@ -1,6 +1,11 @@
 package actor.proto.remote
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.EventStream
+import actor.proto.Restarting
+import actor.proto.Started
+import actor.proto.Stopped
 import com.google.protobuf.ByteString
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder

@@ -1,13 +1,20 @@
 package actor.proto.router.tests
 
-import actor.proto.*
+import actor.proto.Props
+import actor.proto.fromProducer
+import actor.proto.requestAwait
+import actor.proto.router.Routees
+import actor.proto.router.RouterGetRoutees
 import actor.proto.router.fixture.DoNothingActor
 import actor.proto.router.fixture.TestMailbox
-import actor.proto.router.*
+import actor.proto.router.newBroadcastPool
+import actor.proto.router.newConsistentHashPool
+import actor.proto.router.newRandomPool
+import actor.proto.router.newRoundRobinPool
+import actor.proto.spawn
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-
 import java.time.Duration
 
 class PoolRouterTests {

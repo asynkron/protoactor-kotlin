@@ -1,7 +1,8 @@
 @file:JvmName("Router")
 package actor.proto.router
 
-import actor.proto.*
+import actor.proto.PID
+import actor.proto.Props
 
 fun newBroadcastGroup(routees: Set<PID>): Props = BroadcastGroupRouterConfig(routees).props
 fun newConsistentHashGroup(routees: Set<PID>): Props = ConsistentHashGroupRouterConfig(MD5Hasher::hash, 100, routees).props

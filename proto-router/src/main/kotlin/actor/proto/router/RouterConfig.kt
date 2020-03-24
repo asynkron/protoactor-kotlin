@@ -1,6 +1,11 @@
 package actor.proto.router
 
-import actor.proto.*
+import actor.proto.ActorContext
+import actor.proto.Context
+import actor.proto.ProcessRegistry
+import actor.proto.Props
+import actor.proto.Started
+import actor.proto.withSpawner
 import java.util.concurrent.CountDownLatch
 
 abstract class RouterConfig {

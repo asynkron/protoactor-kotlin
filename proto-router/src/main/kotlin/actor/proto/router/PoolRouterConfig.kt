@@ -1,6 +1,7 @@
 package actor.proto.router
 
-import actor.proto.*
+import actor.proto.Context
+import actor.proto.Props
 
 abstract class PoolRouterConfig(private val poolSize: Int, private val routeeProps:Props) : RouterConfig() {
     override fun onStarted(context: Context, router: RouterState) {

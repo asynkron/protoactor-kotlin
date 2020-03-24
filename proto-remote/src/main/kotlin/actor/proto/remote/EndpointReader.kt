@@ -1,7 +1,12 @@
 package actor.proto.remote
 
-import actor.proto.*
+import actor.proto.PID
+import actor.proto.ProcessRegistry
+import actor.proto.Terminated
 import actor.proto.mailbox.SystemMessage
+import actor.proto.request
+import actor.proto.send
+import actor.proto.sendSystemMessage
 import io.grpc.stub.StreamObserver
 import mu.KotlinLogging
 
