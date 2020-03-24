@@ -1,6 +1,13 @@
 package actor.proto.remote
 
-import actor.proto.mailbox.*
+import actor.proto.mailbox.Dispatcher
+import actor.proto.mailbox.Mailbox
+import actor.proto.mailbox.MailboxQueue
+import actor.proto.mailbox.MailboxStatus
+import actor.proto.mailbox.MessageInvoker
+import actor.proto.mailbox.ResumeMailbox
+import actor.proto.mailbox.SuspendMailbox
+import actor.proto.mailbox.SystemMessage
 import org.jctools.queues.MpscUnboundedArrayQueue
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.atomic.AtomicInteger

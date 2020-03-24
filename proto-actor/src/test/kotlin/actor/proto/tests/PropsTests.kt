@@ -1,10 +1,15 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Actor
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Props
 import actor.proto.fixture.DoNothingSupervisorStrategy
 import actor.proto.fixture.TestDispatcher
 import actor.proto.fixture.TestMailbox
 import actor.proto.mailbox.Mailbox
+import actor.proto.withProducer
+import actor.proto.withSpawner
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.Test

@@ -1,8 +1,14 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Props
 import actor.proto.fixture.DoNothingActor
 import actor.proto.fixture.TestMailbox
+import actor.proto.fromFunc
+import actor.proto.fromProducer
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.withReceiveMiddleware
+import actor.proto.withSenderMiddleware
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

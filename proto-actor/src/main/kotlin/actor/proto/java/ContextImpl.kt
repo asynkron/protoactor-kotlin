@@ -2,9 +2,10 @@ package actor.proto.java
 
 import actor.proto.PID
 import actor.proto.Props
-import kotlinx.coroutines.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.future.asCompletableFuture
-
+import kotlinx.coroutines.runBlocking
 import java.time.Duration
 import java.util.concurrent.CompletableFuture
 

@@ -1,8 +1,18 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.Context
+import actor.proto.PID
+import actor.proto.Restarting
+import actor.proto.Started
+import actor.proto.Stopped
+import actor.proto.Stopping
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
+import actor.proto.fromFunc
+import actor.proto.requestAwait
+import actor.proto.send
+import actor.proto.spawn
+import actor.proto.stop
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.runBlocking
 import org.awaitility.Awaitility

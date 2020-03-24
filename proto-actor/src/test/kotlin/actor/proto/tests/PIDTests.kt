@@ -1,10 +1,16 @@
 package actor.proto.tests
 
-import actor.proto.*
+import actor.proto.PID
+import actor.proto.ProcessRegistry
+import actor.proto.cachedProcess
 import actor.proto.fixture.EmptyReceive
 import actor.proto.fixture.TestMailbox
 import actor.proto.fixture.TestProcess
-import org.junit.jupiter.api.Assertions.*
+import actor.proto.fromFunc
+import actor.proto.spawn
+import actor.proto.stop
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.*
 
