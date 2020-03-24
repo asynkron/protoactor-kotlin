@@ -46,9 +46,8 @@ subprojects {
     dependencies {
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-        testCompile "org.junit.jupiter:junit-jupiter-api:${junit_platform_version}"
-        testCompile "org.junit.jupiter:junit-jupiter-params:${junit_platform_version}"
-        testRuntime "org.junit.jupiter:junit-jupiter-engine:${junit_platform_version}"
+        testImplementation("org.junit.jupiter:junit-jupiter-api:${junit_platform_version}")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junit_platform_version}")
     }
 
     compileKotlin {
