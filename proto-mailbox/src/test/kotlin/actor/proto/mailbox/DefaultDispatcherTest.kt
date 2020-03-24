@@ -3,7 +3,9 @@ package actor.proto.mailbox
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.delay
 import org.awaitility.Awaitility
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.assertNotSame
+import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.Test
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
@@ -30,13 +32,13 @@ class DefaultDispatcherTest {
 
         Awaitility.ignoreExceptionsByDefault()
         Awaitility.await().atMost(5, TimeUnit.SECONDS).untilAsserted {
-            Assertions.assertTrue(mailbox1.completedRunning)
+            assertTrue(mailbox1.completedRunning)
             //if the exception in mailbox1 causes all child coroutines to cancel, then this will fail
-            Assertions.assertTrue(mailbox2.completedRunning)
+            assertTrue(mailbox2.completedRunning)
             //mailboxes using same dispatcher should have same coroutine dispatcher
-            Assertions.assertSame(mailbox1.runInContext?.get(ContinuationInterceptor.Key), mailbox2.runInContext?.get(ContinuationInterceptor.Key))
+            assertSame(mailbox1.runInContext?.get(ContinuationInterceptor.Key), mailbox2.runInContext?.get(ContinuationInterceptor.Key))
             //but mailboxes with a different dispatcher have a different coroutine dispatcher
-            Assertions.assertNotSame(mailbox1.runInContext?.get(ContinuationInterceptor.Key), mailbox3.runInContext?.get(ContinuationInterceptor.Key))
+            assertNotSame(mailbox1.runInContext?.get(ContinuationInterceptor.Key), mailbox3.runInContext?.get(ContinuationInterceptor.Key))
         }
     }
 }
