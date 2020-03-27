@@ -23,7 +23,7 @@ Other implementations:
 
 **Minimalistic API** - The API should be small and easy to use. Avoid enterprisey containers and configurations.
 
-**Build on existing technologies** - There are already a lot of great technologies for e.g. networking and clustering. 
+**Build on existing technologies** - There are already a lot of great technologies for e.g. networking and clustering.
 Build on those instead of reinventing them. E.g. gRPC streams for networking, Consul for clustering.
 
 **Pass data, not objects** - Serialization is an explicit concern - don't try to hide it. Protobuf all the way.
@@ -48,45 +48,59 @@ Dependencies
 ![Package dependencies](docs/diagrams/proto-actor-packages.png)
 
 ## Getting started
+The best place currently for learning how to use Proto.Actor is the [examples](https://github.com/AsynkronIT/protoactor-kotlin/tree/master/examples).
 
-The best place currently for learning how to use Proto.Actor is the [examples](https://github.com/AsynkronIT/protoactor-kotlin/tree/master/examples). 
-Documentation and guidance is under way, but not yet complete, and can be found on the [website](http://proto.actor/docs/kotlin/).
 
 ### Hello world
-
-Define a message type:
-
-```kotlin
-data class Hello(val who : String)
+`build.gradle.kts`
 ```
+repositories {
+    jcenter()
+}
 
-Define an actor:
-
-```kotlin
-class HelloActor : Actor
-{
-    suspend override fun receive(context : Context)
-    {
-        val msg = context.message
-        when (msg)
-        {
-            is Hello -> println("Hello " + msg.who)
-        }
-    }
+dependencies {
+	implementation("actor.proto:proto-actor:latest.release")
 }
 ```
 
-Spawn it and send a message to it:
+`App.kt`
+```
+import actor.proto.*
 
-```kotlin
-val props = fromProducer({ HelloActor() })
-val pid = spawn(props)
-pid.send(Hello("Kotlin"))
+fun main() {
+	val prop = fromFunc { msg ->
+		when (msg) {
+			is Started -> println("Started")
+			is String -> {
+				println("Hello $msg")
+				stop(self)
+			}
+			is Stopping -> println("Stopping")
+			is Stopped -> println("Stopped")
+			else -> println("Unknown message $msg")
+		}
+	}
+
+	val pid = spawn(prop)
+	send(pid, "Proto.Actor")
+	readLine()
+}
 ```
 
-You should see the output `Hello Kotlin`.
-
 ## Release management
+Stable release are published to https://bintray.com/asynkronit/protoactor-kotlin and linked to jcenter.
+Anyone of the repositories below will do.
+```
+repositories {
+   	maven("https://dl.bintray.com/asynkronit/protoactor-kotlin")
+}
+```
+```
+repositories {
+   	jcenter()
+}
+```
+
 
 ### Snapshot
 Commits on the master branch are deployed as snapshots to
@@ -104,16 +118,8 @@ dependencies {
 }
 ```
 
-### Releases
-Tagged commits e.g. `v0.0.1` or `1.0.0-rc.1` are published to bintray and linked to jcenter.
-
-```
-repositories {
-    jcenter()
-}
-```
-
-
+### Publishing a new version
+When a tag is created e.g. `v0.1.0` Travis will build and publish the packages to Bintray.
 
 ### Support
 
