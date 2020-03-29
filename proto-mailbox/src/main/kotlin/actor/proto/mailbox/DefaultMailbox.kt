@@ -1,16 +1,13 @@
 package actor.proto.mailbox
 
-import org.slf4j.LoggerFactory
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 private val emptyStats = arrayOf<MailboxStatistics>()
 typealias MailboxQueue = Queue<Any>
-class DefaultMailbox(private val systemMessages: MailboxQueue, private val userMailbox: MailboxQueue, private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
-
-    companion object {
-        private val LOGGER = LoggerFactory.getLogger(DefaultMailbox::class.java)
-    }
+class DefaultMailbox(private val systemMessages: MailboxQueue,
+                     private val userMailbox: MailboxQueue,
+                     private val stats: Array<MailboxStatistics> = emptyStats) : Mailbox {
 
     private val status = AtomicInteger(MailboxStatus.IDLE)
     private val sysCount = AtomicInteger(0)
@@ -82,27 +79,13 @@ class DefaultMailbox(private val systemMessages: MailboxQueue, private val userM
         }
 
         status.set(MailboxStatus.IDLE)
-//        if (userCount.get()==0 && userMailbox.isNotEmpty()) {
-//            LOGGER.warn("Mailbox is not empty, but count is zero")
-//        }
         if (sysCount.get() > 0 || (!suspended && userCount.get() > 0)) {
             schedule()
         } else {
             for (stat in stats) stat.mailboxEmpty()
-            //debug
-//            if (systemMessages.isNotEmpty() || (!suspended && userMailbox.isNotEmpty())) {
-//                LOGGER.warn("isNotEmpty check, but atomic counter shows no messages")
-//                LOGGER.info("Size of system mailbox" + systemMessages.size)
-//                LOGGER.info("Size of user mailbox" + userMailbox.size)
-//                LOGGER.info("System Messages is not Empty: " + systemMessages.isNotEmpty().toString())
-//                LOGGER.info("User Mailbox is not Empty: " + userMailbox.isNotEmpty().toString())
-//                LOGGER.info("System message count " + sysCount)
-//                LOGGER.info("User mailbox count " + userCount)
-//            }
         }
     }
 
-    private val r: suspend () -> Unit = { run() }
     private fun schedule() {
         val wasIdle = status.compareAndSet(MailboxStatus.IDLE, MailboxStatus.BUSY)
         if (wasIdle) {
