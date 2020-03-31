@@ -81,5 +81,5 @@ gradle.taskGraph.whenReady { graph ->
 }
 
 wrapper {
-    gradleVersion = '5.5.1'
+    gradleVersion = '6.3'
 }
